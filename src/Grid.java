@@ -89,7 +89,7 @@ public class Grid {
 	}
 
 	/*
-	 * getter to get the selelcted cell
+	 * getter to get the selected cell
 	 */
 	public Cell getSelectedCell() {
 		return selectedCell;
