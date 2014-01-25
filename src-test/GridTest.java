@@ -35,6 +35,11 @@ public class GridTest {
   public void testGetSelectedCell() {
     fail("Not yet implemented");
   }
+  
+  @Test
+  public void testRemoveCell() {
+    fail("Not yet implemented");
+  }
 
   @Test
   public void testRemoveSelectedCell() {
@@ -66,15 +71,24 @@ public class GridTest {
   
   /*** Equals Tests ***/
   
+  
   /*** Equals with tolerance Tests ***/
+  
   
   /*** True Tests ***/
   
+  
   /*** False Tests ***/
+  
   
   /*** Null Tests ***/
   
+  
   /*** Not Null Tests ***/
+  /**
+   * getCell() - Not Null
+   * 
+   */
   @Test
   public void testGetCells() {
     //fail("Not yet implemented");
@@ -82,6 +96,10 @@ public class GridTest {
     assertNotNull("getCells() is not null", testGrid.getCells("a",1));
   }
   
+  /**
+   * SelectCell() - Not Null
+   * 
+   */
   @Test
   public void testSelectCell() {
     //fail("Not yet implemented");
