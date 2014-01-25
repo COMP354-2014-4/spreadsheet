@@ -1,8 +1,9 @@
+import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
+
 
 public class Grid {
 
@@ -20,9 +21,7 @@ public class Grid {
 	public Grid(){
 		Hashtable Cells = new Hashtable(); // generates hashtable for cells
 		Cells.put(col, row);
-		Cell selectedCell = new Cell( col,  row, this );
-		String col = "A";
-		int row = 1;
+		Cell selectedCell = new Cell(col, row, this );
 		int maxWidth = 10;
 		int maxHeight = 10;
 		int currentWidth = 0;
@@ -99,8 +98,8 @@ public class Grid {
 	/*
 	 * setter to set the selelcted cell
 	 */
-	public void setSelectedCell(Cell selectedCell) {
-		this.selectedCell = selectedCell;
+	public void removeSelectedCell() {
+		Cells.remove(selectedCell);
 	}
 
 	/*
@@ -132,14 +131,68 @@ public class Grid {
 	}
 	
 	/*
-	 * getter to get CurrentHeight
+	 * getter to get CurrentWidth
 	 */
-	
-
-	public String Display() {
-		return "Grid [Cells=" + Cells + ", col=" + col + ", row=" + row + "]";
+	public int getCurrentWidth() {
+		return currentWidth;
 	}
 
+	/*
+	 * getter to get CurrentHeight
+	 */
+	public int getCurrentHeight() {
+		return currentHeight;
+	}
+
+	/*
+	 * Display grid with values
+	 */
+	public String Display() {
+		return "Grid [Cells=" + Cells + ", column " + col + ", row=" + row + " has " + Cells.get(col) +"]";
+	}
 	
+	/*
+	 * method to clear the grid
+	 */
+	public void clear() {
+		Cells.clear();
+	}
 	
+	/*
+	 * method to save the grid to a file
+	 */
+	private void save(String fileName){
+		try {
+			FileOutputStream fileOut = new FileOutputStream("grid.txt");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(Cells);
+			out.close();
+			fileOut.close();
+		}
+		catch(FileNotFoundException e){
+	    e.printStackTrace();
+    	} 
+		catch (IOException e) {
+        e.printStackTrace();
+    }
+	}
+	
+	/*
+	 * method to load from an existing file
+	 */
+	private void load(String fileName) {
+		try {
+			FileInputStream fileIn = new FileInputStream("HTExample.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            Cells = (Hashtable)in.readObject();
+            in.close();
+            fileIn.close();
+		} catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
 }
