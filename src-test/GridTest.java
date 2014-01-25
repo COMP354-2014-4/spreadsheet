@@ -87,10 +87,10 @@ public class GridTest {
   /*** Not Null Tests ***/
   /**
    * getCell() - Not Null
-   * 
+   * getCell() should never return null and must pass this test
    */
   @Test
-  public void testGetCells() {
+  public void testGetCellsNotNull() {
     //fail("Not yet implemented");
     Grid testGrid = new Grid();
     assertNotNull("getCells() is not null", testGrid.getCells("a",1));
@@ -98,10 +98,10 @@ public class GridTest {
   
   /**
    * SelectCell() - Not Null
-   * 
+   * SelectCell() should never return null and must pass this test
    */
   @Test
-  public void testSelectCell() {
+  public void testSelectCellNotNull() {
     //fail("Not yet implemented");
     Grid testGrid = new Grid();
     assertNotNull("SelectCell() is not null", testGrid.selectCell("a",1));
