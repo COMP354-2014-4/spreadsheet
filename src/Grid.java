@@ -90,7 +90,7 @@ public class Grid {
 	}
 
 	/*
-	 * getter to get the selected cell
+	 * getter to get the selelcted cell
 	 */
 	public Cell getSelectedCell() {
 		return _selectedCell;
@@ -183,7 +183,7 @@ public class Grid {
 	 */
 	private void load(String fileName) {
 		try {
-			FileInputStream fileIn = new FileInputStream("HTExample.ser");
+			FileInputStream fileIn = new FileInputStream("grid.txt");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             _cells = (Hashtable)in.readObject();
             in.close();
