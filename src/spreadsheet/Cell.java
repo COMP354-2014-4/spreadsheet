@@ -34,7 +34,7 @@ public class Cell extends Observable implements Observer{
 	@Override public void update(Observable o, Object arg){
 		this.evaluate();
 		Cell cell = (Cell) o;
-		System.out.println(cell.getCol() + cell.getRow() + " called update on " + _col+_row);
+		//System.out.println(cell.getCol() + cell.getRow() + " called update on " + _col+_row);
 	}
 	
 	//getters and setters
