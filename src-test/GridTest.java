@@ -36,10 +36,6 @@ public class GridTest {
     fail("Not yet implemented");
   }
   
-  @Test
-  public void testRemoveCell() {
-    fail("Not yet implemented");
-  }
 
   @Test
   public void testRemoveSelectedCell() {
@@ -55,7 +51,7 @@ public class GridTest {
   @Test(expected = IllegalArgumentException.class)
   public void testGetCellsException() {
     Grid testGrid = new Grid();
-    testGrid.getCells("a",1);
+    testGrid.getCell("a",1);
   }
 
   /**
@@ -90,10 +86,10 @@ public class GridTest {
    * getCell() should never return null and must pass this test
    */
   @Test
-  public void testGetCellsNotNull() {
+  public void testGetCellNotNull() {
     //fail("Not yet implemented");
     Grid testGrid = new Grid();
-    assertNotNull("getCells() is not null", testGrid.getCells("a",1));
+    assertNotNull("getCells() is not null", testGrid.getCell("a",1));
   }
   
   /**
@@ -105,6 +101,19 @@ public class GridTest {
     //fail("Not yet implemented");
     Grid testGrid = new Grid();
     assertNotNull("SelectCell() is not null", testGrid.selectCell("a",1));
+  }
+
+  /**
+   * RemoveCell() - Not Null
+   * RemoveCell() should be removing a cell from the HashTable
+   */
+  @Test
+  public void testRemoveCellNotNull() {
+    //fail("Not yet implemented");
+    Grid testGrid = new Grid();
+    testGrid.removeCell("a",1);  //This should remove the cell
+    //check hashtable to see if this element exists
+    
   }
 
   

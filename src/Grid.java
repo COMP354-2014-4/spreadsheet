@@ -39,7 +39,7 @@ public class Grid {
 	 * getter to get a cell, will take column and a row and 
 	set the values in the hashtable, then return that cell
 	*/
-	public Hashtable getCells(String col, int row) {
+	public Hashtable getCell(String col, int row) {
 		this.col = col;
 		this.row = row;
 		Cells.put(col, row);
