@@ -80,10 +80,11 @@ public class Grid {
 	 */
 	@SuppressWarnings("rawtypes")
 	public Hashtable selectCell(String col, int row){
-		if(stringToNumber(col)< maxWidth && row < maxHeight) {
+		if(stringToNumber(col)< _maxWidth && row < _maxHeight) {
 			_selectedCell = new Cell (col, row, this);
 			currentHeight = stringToNumber(col);
 			currentWidth = row;
+			return null;
 		}		
 		else 
 			return null;
@@ -100,35 +101,35 @@ public class Grid {
 	 * method to remove the selelcted cell
 	 */
 	public void removeSelectedCell() {
-		_cells.remove(selectedCell);
+		_cells.remove(_selectedCell);
 	}
 
 	/*
 	 * getter to get MaxWidth
 	 */
 	public int getMaxWidth() {
-		return maxWidth;
+		return _maxWidth;
 	}
 
 	/*
 	 * setter to set MaxWidth
 	 */
 	public void setMaxWidth(int maxWidth) {
-		this.maxWidth = maxWidth;
+		this._maxWidth = maxWidth;
 	}
 
 	/*
 	 * getter to get MaxHeight
 	 */
 	public int getMaxHeight() {
-		return maxHeight;
+		return _maxHeight;
 	}
 
 	/*
 	 * setter to set MaxHeight
 	 */
 	public void setMaxHeight(int maxHeight) {
-		this.maxHeight = maxHeight;
+		this._maxHeight = maxHeight;
 	}
 	
 	/*
@@ -162,7 +163,7 @@ public class Grid {
 	/*
 	 * method to save the grid to a file
 	 */
-	private void save(String fileName){
+	public void save(String fileName){
 		try {
 			FileOutputStream fileOut = new FileOutputStream("grid.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -181,7 +182,7 @@ public class Grid {
 	/*
 	 * method to load from an existing file
 	 */
-	private void load(String fileName) {
+	public void load(String fileName) {
 		try {
 			FileInputStream fileIn = new FileInputStream("HTExample.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
