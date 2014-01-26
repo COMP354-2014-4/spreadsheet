@@ -11,17 +11,17 @@ public class Cell
 {
 
 	//variables
-	private String value = "0";
-	private double evaluatedValue = 0.0;
-	private String col;
-	private int row;
-	private Grid grid;
+	private String _value = "0";
+	private double _evaluatedValue = 0.0;
+	private String _col;
+	private int _row;
+	private Grid _grid;
     
 	// constructor 
 	public Cell( String col, int row, Object grid)
 	{
-		col = col;
-		row = row;
+		this._col = col;
+		this._row = row;
 		
 		//test if the object is type of Grid
 		if(grid instanceof Grid)
@@ -29,7 +29,7 @@ public class Cell
 			grid = (Grid)grid;
 		}
 		else
-		System.out.println("Wrong object parameter!");
+		System.out.println("Wrong object parameter.");
 		
 	}
     
@@ -42,7 +42,7 @@ public class Cell
 	 */
 	public String getValue()
 	{
-		return this.value;
+		return this._value;
 	}
 	
 	/* 
@@ -50,7 +50,7 @@ public class Cell
 	 */
 	public String getCol()
 	{
-		return this.col;
+		return this._col;
 	}
 	
 	
@@ -59,7 +59,7 @@ public class Cell
 	 */
 	public int getRow()
 	{
-		return this.row;
+		return this._row;
 	}
     
 	
@@ -68,7 +68,7 @@ public class Cell
 	 */
 	public Grid getGrid()
 	{
-		return this.grid;
+		return this._grid;
 	}
 	
 	
@@ -78,7 +78,7 @@ public class Cell
 	 */
 	public void setValue(String value)
 	{
-		this.value = value;
+		this._value = value;
 	}
     
     
@@ -92,7 +92,7 @@ public class Cell
 	public boolean validateValue()
 	{
 		
-		String str = value.trim(); // take off all the spaces for easier calculation
+		String str = _value.trim(); // take off all the spaces for easier calculation
 
 		if(isNumeric(str))
 		{
@@ -113,16 +113,16 @@ public class Cell
 	public double evaluate()
 	{
 		//if the string is an integer
-		if (this.isNumeric(value)) 
+		if (this.isNumeric(_value)) 
 		{
-			return Integer.parseInt( value );
+			return Integer.parseInt( _value );
 		}
 		
 		//else call the formula function
 		else
 		{
 			// call the Formula.evaluateFormula function
-			return Formula.evaluateFormula(this.value, this.grid);
+			return Formula.evaluateFormula(this._value, this._grid);
 		}
 		
 		
@@ -135,7 +135,7 @@ public class Cell
 	 */
 	public void display() 
 	{
-		System.out.println(evaluatedValue);
+		System.out.println(_evaluatedValue);
 	}
 	
 	
