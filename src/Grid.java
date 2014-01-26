@@ -8,31 +8,31 @@ import java.util.Map;
 public class Grid {
 
 	// Attributes
-	private Hashtable Cells;
-	private Cell selectedCell;
+	private Hashtable _cells;
+	private Cell _selectedCell;
 	private String col;
 	private int row;
-	private int maxWidth;
-	private int maxHeight;
+	private int _maxWidth;
+	private int _maxHeight;
 	private int currentWidth;
 	private int currentHeight;
 	
 	// Constructor
 	public Grid(){
-		Hashtable Cells = new Hashtable(); // generates hashtable for cells
-		Cells.put(col, row);
-		Cell selectedCell = new Cell(col, row, this );
-		int maxWidth = 10;
-		int maxHeight = 10;
-		int currentWidth = 0;
-		int currentHeight = 0;
+		_cells = new Hashtable(); // generates hashtable for cells
+		_cells.put(col, row);
+		_selectedCell = new Cell(col, row, this );
+		_maxWidth = 10;
+		_maxHeight = 10;
+		currentWidth = 0;
+		currentHeight = 0;
 	}
 	
 	// parameterized constructor 
-	public Grid(int maxWidth, int maxHeight) {
+	public Grid(int _maxWidth, int _maxHeight) {
 		super();
-		this.maxWidth = maxWidth;
-		this.maxHeight = maxHeight;
+		this._maxWidth = _maxWidth;
+		this._maxHeight = _maxHeight;
 	}
 
 	/* 
@@ -42,16 +42,17 @@ public class Grid {
 	public Hashtable getCell(String col, int row) {
 		this.col = col;
 		this.row = row;
-		Cells.put(col, row);
-		return Cells;
+		_cells.put(col, row);
+		return _cells;
+	}
+	
+	/*
+	 * method to remove cell
+	 */
+	public void removeCell(String col, int row){
+		_cells.remove(col);
 	}
 
-	/*
-	 * setter to set the cells in hashtable
-	 */
-	public void setCells(@SuppressWarnings("rawtypes") Hashtable cells) {
-		Cells = cells;
-	}
 	
 	/*
 	 * method to change string "column" to int
@@ -80,7 +81,7 @@ public class Grid {
 	@SuppressWarnings("rawtypes")
 	public Hashtable selectCell(String col, int row){
 		if(stringToNumber(col)< maxWidth && row < maxHeight) {
-			selectedCell = new Cell (col, row, this);
+			_selectedCell = new Cell (col, row, this);
 			currentHeight = stringToNumber(col);
 			currentWidth = row;
 		}		
@@ -92,14 +93,14 @@ public class Grid {
 	 * getter to get the selected cell
 	 */
 	public Cell getSelectedCell() {
-		return selectedCell;
+		return _selectedCell;
 	}
 
 	/*
-	 * setter to set the selelcted cell
+	 * method to remove the selelcted cell
 	 */
 	public void removeSelectedCell() {
-		Cells.remove(selectedCell);
+		_cells.remove(selectedCell);
 	}
 
 	/*
@@ -148,14 +149,14 @@ public class Grid {
 	 * Display grid with values
 	 */
 	public String Display() {
-		return "Grid [Cells=" + Cells + ", column " + col + ", row=" + row + " has " + Cells.get(col) +"]";
+		return "Grid [Cells=" + _cells + ", column " + col + ", row=" + row + " has " + _cells.get(col) +"]";
 	}
 	
 	/*
 	 * method to clear the grid
 	 */
 	public void clear() {
-		Cells.clear();
+		_cells.clear();
 	}
 	
 	/*
@@ -165,7 +166,7 @@ public class Grid {
 		try {
 			FileOutputStream fileOut = new FileOutputStream("grid.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(Cells);
+			out.writeObject(_cells);
 			out.close();
 			fileOut.close();
 		}
@@ -184,7 +185,7 @@ public class Grid {
 		try {
 			FileInputStream fileIn = new FileInputStream("HTExample.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            Cells = (Hashtable)in.readObject();
+            _cells = (Hashtable)in.readObject();
             in.close();
             fileIn.close();
 		} catch (ClassNotFoundException e) {
