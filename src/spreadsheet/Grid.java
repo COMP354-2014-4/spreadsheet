@@ -44,7 +44,7 @@ public class Grid {
 	* getter to get a cell, will take column and a row and 
 	set the values in the hashtable, then return that cell
 	*/
-	public Cell getCells(String col, int row) {
+	private Cell getCell(String col, int row) {
 		int intCol = colToNumber(col);
 		if(intCol <= _maxWidth && intCol >= 1 && row <= _maxHeight && row >= 1 ){
 			Cell foundCell = _cells.get( col + row );
@@ -97,7 +97,7 @@ public class Grid {
 	* return null
 	*/
 	public Cell selectCell(String col, int row){
-		Cell selectedCell = this.getCells(col, row);
+		Cell selectedCell = this.getCell(col, row);
 		if( selectedCell != null )
 			return _selectedCell = selectedCell;
 		return null;
@@ -111,13 +111,17 @@ public class Grid {
 		return _selectedCell;
 	}
 	
-	/*
-	* setter to set the selelcted cell
-	*/
+	
 	public void removeSelectedCell() {
-		_cells.remove( _selectedCell.getCol() + _selectedCell.getRow() );
+		_cells.remove( _selectedCell.getCol() + _selectedCell.getRow() );        /////TO MODIFY (NEED TO CORRECTLY INTERACT WITH CELLS TO AVOID DESYNC)
+		_selectedCell = null;
 	}
 	
+	public void removeCell(String col, int row) {                                /////TO MODIFY (NEED TO CORRECTLY INTERACT WITH CELLS TO AVOID DESYNC)
+		_cells.remove( col + row );
+		if(_selectedCell == this.getCell(col, row))
+			_selectedCell = null;
+	}
 	
 	public int getMaxWidth() {return _maxWidth;}
 	public int getMaxHeight() {return _maxHeight;}
