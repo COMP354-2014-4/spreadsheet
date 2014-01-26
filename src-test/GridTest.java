@@ -1,15 +1,21 @@
 import static org.junit.Assert.*;  //import assert methods
 
+import org.junit.*;                //import JUnit Annotations
+import org.junit.runner.*;
+import org.junit.runners.*;
+import org.junit.runners.Parameterized.Parameters;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Hashtable;
 
-import org.junit.*;                //import JUnit Annotations
-
+import spreadsheet.*;
 
 public class GridTest {
   
@@ -40,37 +46,28 @@ public class GridTest {
   /**** Testing Methods ****/
   
   /*** Waiting for implementation ***/
-  @Test
+  @Ignore @Test
   public void testGetSelectedCell() {
     fail("Not yet implemented");
   }
   
 
-  @Test
+  @Ignore @Test
   public void testRemoveSelectedCell() {
     fail("Not yet implemented");
   }
   
-  @Test
+  @Ignore @Test
   public void testClear() {
 	    fail("Not yet implemented");
   }
   
-  @Test
+  @Ignore @Test
   public void testDisplay() {
 	    fail("Not yet implemented");
   }
   
   /*** Exception Tests ***/
-  /**
-   * getCell() - Exceptions
-   * 
-   */
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetCellsException() {
-    Grid testGrid = new Grid();
-    testGrid.getCell("a",1);
-  }
 
   /**
    * selectCell() - Exceptions
@@ -96,7 +93,6 @@ public class GridTest {
    */
   @Test
   public void testLoadSaveEquals() {
-	  
 	    Grid testGrid = new Grid();
 	    //testGrid.getCell("a", 1).setValue("1");
 	    testGrid.save("testSave.test");
@@ -136,6 +132,8 @@ public class GridTest {
 		//assertEquals("1",testGrid.getCell("A", 1).getValue());
 		file.delete();
   }
+
+  
   /*** Equals with tolerance Tests ***/
   
   
@@ -156,29 +154,61 @@ public class GridTest {
   
   
   /*** Null Tests ***/
+  /**
+   * SelectCell() - Null
+   * SelectCell() should return null when provided column and row are outside range
+   */
+  @Test
+  public void testSelectCellNull() {
+    //fail("Not yet implemented");
+    /// test beyond upper bound column
+    Grid testGrid01 = new Grid();
+    assertNull("SelectCell() is null", testGrid01.selectCell("m",1));
+    /// test beyond lower bound row
+    Grid testGrid02 = new Grid();
+    assertNull("SelectCell() is null", testGrid02.selectCell("a",testGrid02.getMaxHeight()-1));
+    /// test beyond upper bound row
+    Grid testGrid03 = new Grid();
+    assertNull("SelectCell() is null", testGrid03.selectCell("a",testGrid03.getMaxHeight()+1));
+    
+  }
   
   
   /*** Not Null Tests ***/
   /**
    * getCell() - Not Null
-   * getCell() should never return null and must pass this test
+   * getCell() should never return null 
+   * Cannot test, this is PRIVATE method. See selectCell() instead
    */
-  @Test
+  @Ignore @Test
   public void testGetCellNotNull() {
     //fail("Not yet implemented");
-    Grid testGrid = new Grid();
-    assertNotNull("getCells() is not null", testGrid.getCell("a",1));
+    //Grid testGrid = new Grid();
+    //assertNotNull("getCell() is not null", testGrid.getCell("a",1));
   }
   
   /**
    * SelectCell() - Not Null
-   * SelectCell() should never return null and must pass this test
+   * SelectCell() should return not null when provided col and row are within range
+   *   must pass this test
    */
   @Test
   public void testSelectCellNotNull() {
-    //fail("Not yet implemented");
-    Grid testGrid = new Grid();
-    assertNotNull("SelectCell() is not null", testGrid.selectCell("a",1));
+    /// test lower bound column and row
+    Grid testGrid01 = new Grid();
+    assertNull("SelectCell() is null", testGrid01.selectCell("a",1));
+    /// test middle bound column
+    Grid testGrid02 = new Grid();
+    assertNull("SelectCell() is null", testGrid02.selectCell("f",1));
+    /// test upper bound column
+    Grid testGrid03 = new Grid();
+    assertNull("SelectCell() is null", testGrid03.selectCell("k",1));
+    /// test middle bound row
+    Grid testGrid04 = new Grid();
+    assertNull("SelectCell() is null", testGrid04.selectCell("a",testGrid04.getMaxHeight()/2));
+    /// test upper bound row
+    Grid testGrid05 = new Grid();
+    assertNull("SelectCell() is null", testGrid05.selectCell("a",testGrid05.getMaxHeight()));
   }
 
   /**
@@ -189,8 +219,12 @@ public class GridTest {
   public void testRemoveCellNotNull() {
     //fail("Not yet implemented");
     Grid testGrid = new Grid();
+    //select cell
+    //insert value into cell
+    //remove cell
     testGrid.removeCell("a",1);  //This should remove the cell
-    //check hashtable to see if this element exists
+    //test if value of cell is default instead of what was inserted
+    
   }
   
 
