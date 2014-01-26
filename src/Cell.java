@@ -29,7 +29,7 @@ public class Cell
 			grid = (Grid)grid;
 		}
 		else
-		System.out.println("Wrong object parameter!");
+		System.out.println("Wrong object parameter.");
 		
 	}
     
