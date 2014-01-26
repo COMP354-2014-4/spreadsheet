@@ -121,9 +121,8 @@ public class Cell
 		//else call the formula function
 		else
 		{
-			// TODO call the formula function
-			
-			return 0;
+			// call the Formula.evaluateFormula function
+			return Formula.evaluateFormula(this.value, this.grid);
 		}
 		
 		
