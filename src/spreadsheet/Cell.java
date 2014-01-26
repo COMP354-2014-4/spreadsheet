@@ -20,9 +20,11 @@ public class Cell extends Observable implements Observer{
 	private int _row;
 	private Grid _grid;
 	private boolean _validValue = true;
+	private ArrayList<Cell> _observedCells;
     
 	// constructor 
 	public Cell( String col, int row, Grid grid){
+		_observedCells = new ArrayList<Cell>();
 		_col = col;
 		_row = row;
 		_grid = grid;
@@ -31,6 +33,8 @@ public class Cell extends Observable implements Observer{
     
 	@Override public void update(Observable o, Object arg){
 		this.evaluate();
+		Cell cell = (Cell) o;
+		System.out.println(cell.getCol() + cell.getRow() + " called update on " + _col+_row);
 	}
 	
 	//getters and setters
@@ -55,8 +59,11 @@ public class Cell extends Observable implements Observer{
 			_validValue = true;
 			if(!this.isNumeric(_value)){
 				try{
-					ArrayList<Cell> cells = Formula.listReferencedCells(_value, _grid);
-					for(Cell cell : cells){
+					for(Cell cell : _observedCells){
+						cell.deleteObserver(this);
+					}
+					_observedCells = Formula.listReferencedCells(_value, _grid);
+					for(Cell cell : _observedCells){
 						cell.addObserver(this);
 					}
 				}catch(Exception e){

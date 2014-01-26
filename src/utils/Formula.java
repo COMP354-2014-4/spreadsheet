@@ -13,12 +13,15 @@ public class Formula {
 	
 	public static ArrayList<Cell> listReferencedCells(String formula, Grid grid) throws Exception{
 		ArrayList<Token> tokens = new ArrayList<Token>();
-		ArrayList<Cell> cells = new ArrayList<Cell>(); 
+		ArrayList<Cell> cells = new ArrayList<Cell>();
+		ArrayList<Cell> reCells = new ArrayList<Cell>(); //Used to check if those cells contains circular ref;
 		if(Formula.tokenize(tokens, formula)){
 			for(Token tok : tokens){
 				if(tok.getType() == TokenType.CEL){
 					Cell cell = grid.getCell(tok.getCol(), tok.getRow());
-					cells.add(cell);					
+					cells.add(cell);
+					reCells.add(cell);
+					//while FINISH CIRUCULARITY CHECK
 				}
 			}
 			return cells;

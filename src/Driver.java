@@ -1,5 +1,4 @@
 import spreadsheet.Grid;
-import utils.Formula;
 
 
 public class Driver {
@@ -11,6 +10,8 @@ public class Driver {
 			grid.getSelectedCell().display();
 			grid.getCell("B", 1).setValue("=2+5");
 			grid.getCell("B", 1).display();
+			grid.getSelectedCell().setValue("=2+(C1)");
+			grid.getCell("B", 1).setValue("=3+5");
 			grid.getSelectedCell().display();
 			
 		}else{
