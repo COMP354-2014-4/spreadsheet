@@ -37,12 +37,6 @@ public class GridTest {
   }
   
 
-  @Test
-  public void testRemoveSelectedCell() {
-    fail("Not yet implemented");
-  }
-  
-  
   /*** Exception Tests ***/
   /**
    * getCell() - Exceptions
@@ -113,8 +107,20 @@ public class GridTest {
     Grid testGrid = new Grid();
     testGrid.removeCell("a",1);  //This should remove the cell
     //check hashtable to see if this element exists
-    
   }
+
+  /**
+   * RemoveSelectedCell() - Not Null
+   * RemoveSelectedCell() should be removing the current cell from the HashTable
+   */
+  @Test
+  public void testRemoveSelectedCellNotNull() {
+    //fail("Not yet implemented");
+    Grid testGrid = new Grid();
+    testGrid.removeSelectedCell();  //This should remove the cell
+    //check hashtable to see if this element exists
+  }
+  
 
   
   /*** Same Tests ***/
