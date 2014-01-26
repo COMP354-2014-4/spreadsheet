@@ -7,7 +7,7 @@ import java.util.Map;
 import spreadsheet.Cell;
 
 
-public class Grid {
+public class Grid implements  java.io.Serializable{
 
 	// Attributes
 	private Hashtable<String, Cell> _cells;
@@ -83,7 +83,7 @@ public class Grid {
 		
 		int i = 0;
 		int mul = 1;
-		for(char c: new StringBuffer(str).reverse().toString().toCharArray()) {
+		for(char c: new StringBuffer(str).reverse().toString().toUpperCase().toCharArray()) {
 			i += m.get(c) * mul;
 			mul *= ls.length;
 		}
@@ -152,7 +152,7 @@ public class Grid {
 	*/
 	public void save(String fileName){
 		try {
-			FileOutputStream fileOut = new FileOutputStream("grid.txt");
+			FileOutputStream fileOut = new FileOutputStream(fileName + ".sav");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(_cells);
 			out.close();
@@ -171,7 +171,7 @@ public class Grid {
 	*/
 	public void load(String fileName) {
 		try {
-			FileInputStream fileIn = new FileInputStream("grid.txt");
+			FileInputStream fileIn = new FileInputStream(fileName + ".sav");
 		    ObjectInputStream in = new ObjectInputStream(fileIn);
 		    _cells = (Hashtable<String, Cell>)in.readObject();
 		    in.close();
