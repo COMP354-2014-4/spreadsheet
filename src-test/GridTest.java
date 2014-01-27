@@ -148,6 +148,24 @@ public class GridTest {
   
   /*** Null Tests ***/
   /**
+   * getCell() - Null
+   * getCell() should return null when column or row is out of bounds 
+   */
+  @Test
+  public void testGetCellNull() {
+    //fail("Not yet implemented");
+    /// test beyond upper bound column
+    Grid testGrid01 = new Grid();
+    assertNull("getCell() is null", testGrid01.getCell("m",1));
+    /// test beyond lower bound row
+    Grid testGrid02 = new Grid();
+    assertNull("getCell() is null", testGrid02.getCell("a",testGrid02.getMaxHeight()-1));
+    /// test beyond upper bound row
+    Grid testGrid03 = new Grid();
+    assertNull("getCell() is null", testGrid03.getCell("a",testGrid03.getMaxHeight()+1));
+  }
+  
+  /**
    * SelectCell() - Null
    * SelectCell() should return null when provided column and row are outside range
    */
@@ -171,13 +189,25 @@ public class GridTest {
   /**
    * getCell() - Not Null
    * getCell() should never return null 
-   * Cannot test, this is PRIVATE method. See selectCell() instead
    */
   @Ignore @Test
   public void testGetCellNotNull() {
     //fail("Not yet implemented");
-    //Grid testGrid = new Grid();
-    //assertNotNull("getCell() is not null", testGrid.getCell("a",1));
+    /// test lower bound column and row
+    Grid testGrid01 = new Grid();
+    assertNotNull("getCell() is not null", testGrid01.getCell("a",1));
+    /// test middle bound column
+    Grid testGrid02 = new Grid();
+    assertNull("getCell() is null", testGrid02.getCell("f",1));
+    /// test upper bound column
+    Grid testGrid03 = new Grid();
+    assertNull("getCell() is null", testGrid03.getCell("k",1));
+    /// test middle bound row
+    Grid testGrid04 = new Grid();
+    assertNull("getCell() is null", testGrid04.getCell("a",testGrid04.getMaxHeight()/2));
+    /// test upper bound row
+    Grid testGrid05 = new Grid();
+    assertNull("getCell() is null", testGrid05.getCell("a",testGrid05.getMaxHeight()));
   }
   
   /**
