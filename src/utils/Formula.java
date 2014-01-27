@@ -16,8 +16,8 @@ public class Formula {
 		Grid grid = originCell.getGrid();
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		ArrayList<Cell> cells = new ArrayList<Cell>();
-		//ArrayList<Cell> origin = new ArrayList<Cell>(); //Used to check if those cells contains circular ref;
-		//origin.add(cell);
+		ArrayList<Cell> origin = new ArrayList<Cell>(); //Used to check if those cells contains circular ref;
+		origin.add(originCell);
 		if(Formula.tokenize(tokens, formula)){
 			for(Token tok : tokens){
 				if(tok.getType() == TokenType.CEL){
@@ -25,7 +25,14 @@ public class Formula {
 					cells.add(cell);
 				}
 			}
-			return cells;
+			if( !Formula.isCircular(origin, cells) ){
+				return cells;
+				
+			}else{
+				throw new Exception("Circular formula. The evaluator will not be able to evaluate this formula");
+				
+			}
+			
 		}else{
 			throw new Exception("Invalid formula. The evaluator will not be able to evaluate this formula");
 		}
