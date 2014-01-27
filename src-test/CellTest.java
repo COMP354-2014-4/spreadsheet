@@ -1,17 +1,13 @@
 
 import spreadsheet.*;
 
-import static org.junit.Assert.*;  //import assert methods
+import static org.junit.Assert.*;
 import org.junit.*;      //import JUnit Annotations
 import org.junit.rules.ExpectedException;	//import JUnit Error handling package
 import org.junit.Test;	//import testing package
-import dev.Cell;	//import integrated package
 import org.junit.Rule; //import JUnit Rule
 
 public class CellTest {
- 
-	//Acceptable error for comparing doubles
-	public final double ACCEPTED_ERROR = 1E-10;
 	
 	@Rule
 	public ExpectedException exceptionThrown = ExpectedException.none();
@@ -45,9 +41,9 @@ public class CellTest {
   
   //Testing default constructor - value in a cell
   @Test
-  public void testCellValue() {
+  public void testCellValue1() {
 	  Cell cell = new Cell();
-	  assertEquals("Initial cell value", 0.0, cell.getValue(),ACCEPTED_ERROR);
+	  assertEquals("Initial cell value", 0.0, cell.getValue());
   }
   
   //Testing default constructor - formula in a cell
@@ -110,7 +106,7 @@ public class CellTest {
   
   //Testing valid columns
   @Test
-  public void testGetCol)3({
+  public void testGetCol3(){
 	  Cell cell = new Cell(C,3,4.0);	//Creating a new cell
 	  assertEquals("Getting cell's column", 3, cell.getCol());
   }
@@ -124,12 +120,12 @@ public class CellTest {
   @Test
   public void testGetCol5(){
 	  Cell cell = new Cell(Z,3,4.0);	//Creating a new cell
-	  assertNull("Getting cell's column", 3, cell.getCol());
+	  assertNull("Getting cell's column", cell.getCol());
   }
   @Test
   public void testGetCol6(){
 	  Cell cell = new Cell(M,3,4.0);	//Creating a new cell
-	  assertNull("Getting cell's column", 3, cell.getCol());
+	  assertNull("Getting cell's column", cell.getCol());
   }
   //Test if value is stored in cell
   @Test
