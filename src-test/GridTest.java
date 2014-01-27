@@ -13,6 +13,7 @@ import spreadsheet.*;
 public class GridTest {
   
   /**** Before and After methods ****/
+  
   @BeforeClass
   public static void testSetup() {
     // do something before all tests
@@ -36,15 +37,10 @@ public class GridTest {
   }
 
   
+  
   /**** Testing Methods ****/
   
   /*** Waiting for implementation ***/
-  @Ignore @Test
-  public void testGetSelectedCell() {
-    fail("Not yet implemented");
-  }
-  
-
   @Ignore @Test
   public void testRemoveSelectedCell() {
     fail("Not yet implemented");
@@ -60,8 +56,10 @@ public class GridTest {
 	    fail("Not yet implemented");
   }
   
-  /*** Exception Tests ***/
 
+  
+  /*** Exception Tests ***/
+  
   /**
    * selectCell() - Exceptions
    * 
@@ -74,7 +72,7 @@ public class GridTest {
   
   
   /*** Equals Tests ***/
-  
+
   /**
    * Load(String filename) and Save(String filename) - Equals
    * dependent on:
@@ -126,27 +124,36 @@ public class GridTest {
 		file.delete();
   }
 
+
   
   /*** Equals with tolerance Tests ***/
   
   
-  /*** True Tests ***/
 
+  /*** True Tests ***/
+  
+  /**
+   * save() - true
+   * save() ?? 
+   */
   @Test
-  public void testSaveNotNull() {
+  public void testSaveTrue() {
 	    Grid testGrid = new Grid();
 	    testGrid.getCell("A", 1);//should create a cell
 	    testGrid.save("test.save");
 	    File file = new File("test.save");
 	    assertTrue(file.exists());
 	    file.delete();
-	  
   }
   
+
+
   /*** False Tests ***/
   
   
+
   /*** Null Tests ***/
+  
   /**
    * getCell() - Null
    * getCell() should return null when column or row is out of bounds 
@@ -181,11 +188,12 @@ public class GridTest {
     /// test beyond upper bound row
     Grid testGrid03 = new Grid();
     assertNull("SelectCell() is null", testGrid03.selectCell("a",testGrid03.getMaxHeight()+1));
-    
   }
   
   
+
   /*** Not Null Tests ***/
+  
   /**
    * getCell() - Not Null
    * getCell() should never return null 
@@ -198,16 +206,16 @@ public class GridTest {
     assertNotNull("getCell() is not null", testGrid01.getCell("a",1));
     /// test middle bound column
     Grid testGrid02 = new Grid();
-    assertNull("getCell() is null", testGrid02.getCell("f",1));
+    assertNotNull("getCell() is not null", testGrid02.getCell("f",1));
     /// test upper bound column
     Grid testGrid03 = new Grid();
-    assertNull("getCell() is null", testGrid03.getCell("k",1));
+    assertNotNull("getCell() is not null", testGrid03.getCell("k",1));
     /// test middle bound row
     Grid testGrid04 = new Grid();
-    assertNull("getCell() is null", testGrid04.getCell("a",testGrid04.getMaxHeight()/2));
+    assertNotNull("getCell() is not null", testGrid04.getCell("a",testGrid04.getMaxHeight()/2));
     /// test upper bound row
     Grid testGrid05 = new Grid();
-    assertNull("getCell() is null", testGrid05.getCell("a",testGrid05.getMaxHeight()));
+    assertNotNull("getCell() is not null", testGrid05.getCell("a",testGrid05.getMaxHeight()));
   }
   
   /**
@@ -219,19 +227,30 @@ public class GridTest {
   public void testSelectCellNotNull() {
     /// test lower bound column and row
     Grid testGrid01 = new Grid();
-    assertNull("SelectCell() is null", testGrid01.selectCell("a",1));
+    assertNotNull("SelectCell() is not null", testGrid01.selectCell("a",1));
     /// test middle bound column
     Grid testGrid02 = new Grid();
-    assertNull("SelectCell() is null", testGrid02.selectCell("f",1));
+    assertNotNull("SelectCell() is not null", testGrid02.selectCell("f",1));
     /// test upper bound column
     Grid testGrid03 = new Grid();
-    assertNull("SelectCell() is null", testGrid03.selectCell("k",1));
+    assertNotNull("SelectCell() is not null", testGrid03.selectCell("k",1));
     /// test middle bound row
     Grid testGrid04 = new Grid();
-    assertNull("SelectCell() is null", testGrid04.selectCell("a",testGrid04.getMaxHeight()/2));
+    assertNotNull("SelectCell() is not null", testGrid04.selectCell("a",testGrid04.getMaxHeight()/2));
     /// test upper bound row
     Grid testGrid05 = new Grid();
-    assertNull("SelectCell() is null", testGrid05.selectCell("a",testGrid05.getMaxHeight()));
+    assertNotNull("SelectCell() is not null", testGrid05.selectCell("a",testGrid05.getMaxHeight()));
+  }
+
+  /**
+   * getSelectedCell() - Not Null
+   * getSelectedCell() should always return a cell
+   */
+  @Ignore @Test
+  public void testGetSelectedCellNotNull() {
+    //fail("Not yet implemented");
+    Grid testGrid = new Grid();
+    assertNotNull("getSelectedCell() is not null", testGrid.getSelectedCell());
   }
 
   /**
@@ -262,11 +281,13 @@ public class GridTest {
     testGrid.removeSelectedCell();  //This should remove the cell
     //check hashtable to see if this element exists
   }
-  
 
   
+
   /*** Same Tests ***/
   
+
+
   /*** Not Same Tests ***/
 
 
