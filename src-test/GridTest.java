@@ -59,16 +59,7 @@ public class GridTest {
 
   
   /*** Exception Tests ***/
-  
-  /**
-   * selectCell() - Exceptions
-   * 
-   */
-  @Test(expected = IllegalArgumentException.class)
-  public void testSelectCellException() {
-    Grid testGrid = new Grid();
-    testGrid.selectCell("a",1);
-  }
+
   
   
   /*** Equals Tests ***/
@@ -166,7 +157,7 @@ public class GridTest {
     assertNull("getCell() is null", testGrid01.getCell("m",1));
     /// test beyond lower bound row
     Grid testGrid02 = new Grid();
-    assertNull("getCell() is null", testGrid02.getCell("a",testGrid02.getMaxHeight()-1));
+    assertNull("getCell() is null", testGrid02.getCell("a",0));
     /// test beyond upper bound row
     Grid testGrid03 = new Grid();
     assertNull("getCell() is null", testGrid03.getCell("a",testGrid03.getMaxHeight()+1));
@@ -184,7 +175,7 @@ public class GridTest {
     assertNull("SelectCell() is null", testGrid01.selectCell("m",1));
     /// test beyond lower bound row
     Grid testGrid02 = new Grid();
-    assertNull("SelectCell() is null", testGrid02.selectCell("a",testGrid02.getMaxHeight()-1));
+    assertNull("SelectCell() is null", testGrid02.selectCell("a",0));
     /// test beyond upper bound row
     Grid testGrid03 = new Grid();
     assertNull("SelectCell() is null", testGrid03.selectCell("a",testGrid03.getMaxHeight()+1));
@@ -233,7 +224,7 @@ public class GridTest {
     assertNotNull("SelectCell() is not null", testGrid02.selectCell("f",1));
     /// test upper bound column
     Grid testGrid03 = new Grid();
-    assertNotNull("SelectCell() is not null", testGrid03.selectCell("k",1));
+    assertNotNull("SelectCell() is not null", testGrid03.selectCell("j",1));
     /// test middle bound row
     Grid testGrid04 = new Grid();
     assertNotNull("SelectCell() is not null", testGrid04.selectCell("a",testGrid04.getMaxHeight()/2));
