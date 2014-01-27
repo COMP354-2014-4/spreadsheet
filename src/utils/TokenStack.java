@@ -2,6 +2,12 @@ package utils;
 
 import java.util.ArrayList;
 
+/**
+ * Simple class that converts an
+ * Arraylist<Token> into a stack of Token
+ * 
+ * @author http://www2.lawrence.edu/fast/GREGGJ/CMSC150/Infix/Expressions.html
+ */
 public class TokenStack{
 	private ArrayList<Token> tokens;
 	
@@ -18,7 +24,6 @@ public class TokenStack{
 		return tokens.get(tokens.size()-1);
 	}
 	
-	/** Mutator methods **/
 	public void push(Token t) {
 		tokens.add(t);
 	}

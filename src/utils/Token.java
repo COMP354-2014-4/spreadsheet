@@ -1,5 +1,12 @@
 package utils;
 
+/**
+ * Simple class that hold the information
+ * of the various operator and operands that can
+ * be contained inside of a Formula 
+ * 
+ * @author Comp354 Team 3
+ */
 public class Token {
 	public enum TokenType{PLU, MIN, MUL, DIV, MOD, LPA, RPA, NUM, CEL}
 	
