@@ -1,14 +1,13 @@
 package spreadsheet;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import spreadsheet.Cell;
 
 
-public class Grid {
+public class Grid implements  java.io.Serializable{
 
 	// Attributes
 	private Hashtable<String, Cell> _cells;
@@ -21,7 +20,7 @@ public class Grid {
 	// Constructor
 	public Grid(){
 		_cells = new Hashtable<String, Cell>(); // generates hashtable for cells
-		Cell _selectedCell = new Cell("A", 1, this );
+		_selectedCell = new Cell("A", 1, this );
 		_cells.put("A" + 1, _selectedCell);
 		_maxWidth = 10;
 		_maxHeight = 10;
@@ -32,7 +31,7 @@ public class Grid {
 	// parameterized constructor 
 	public Grid(int maxWidth, int maxHeight) {
 		_cells = new Hashtable<String, Cell>(); // generates hashtable for cells
-		Cell _selectedCell = new Cell("A", 1, this );
+		_selectedCell = new Cell("A", 1, this );
 		_cells.put("A" + 1, _selectedCell);
 		_maxWidth = maxWidth;
 		_maxHeight = maxHeight;
@@ -44,7 +43,7 @@ public class Grid {
 	* getter to get a cell, will take column and a row and 
 	set the values in the hashtable, then return that cell
 	*/
-	private Cell getCell(String col, int row) {
+	public Cell getCell(String col, int row) {
 		int intCol = colToNumber(col);
 		if(intCol <= _maxWidth && intCol >= 1 && row <= _maxHeight && row >= 1 ){
 			Cell foundCell = _cells.get( col + row );
@@ -84,7 +83,7 @@ public class Grid {
 		
 		int i = 0;
 		int mul = 1;
-		for(char c: new StringBuffer(str).reverse().toString().toCharArray()) {
+		for(char c: new StringBuffer(str).reverse().toString().toUpperCase().toCharArray()) {
 			i += m.get(c) * mul;
 			mul *= ls.length;
 		}
@@ -162,7 +161,7 @@ public class Grid {
 	*/
 	public void save(String fileName){
 		try {
-			FileOutputStream fileOut = new FileOutputStream("grid.txt");
+			FileOutputStream fileOut = new FileOutputStream(fileName + ".sav");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(_cells);
 			out.close();
@@ -181,7 +180,7 @@ public class Grid {
 	*/
 	public void load(String fileName) {
 		try {
-			FileInputStream fileIn = new FileInputStream("HTExample.ser");
+			FileInputStream fileIn = new FileInputStream(fileName + ".sav");
 		    ObjectInputStream in = new ObjectInputStream(fileIn);
 		    _cells = (Hashtable<String, Cell>)in.readObject();
 		    in.close();
