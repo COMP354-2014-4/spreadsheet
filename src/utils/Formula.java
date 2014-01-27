@@ -11,17 +11,18 @@ public class Formula {
 	//This class should never be instantiated
 	private Formula(){}
 	
-	public static ArrayList<Cell> listReferencedCells(String formula, Grid grid) throws Exception{
+	public static ArrayList<Cell> listReferencedCells(Cell originCell) throws Exception{
+		String formula = originCell.getValue();
+		Grid grid = originCell.getGrid();
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		ArrayList<Cell> cells = new ArrayList<Cell>();
-		ArrayList<Cell> reCells = new ArrayList<Cell>(); //Used to check if those cells contains circular ref;
+		//ArrayList<Cell> origin = new ArrayList<Cell>(); //Used to check if those cells contains circular ref;
+		//origin.add(cell);
 		if(Formula.tokenize(tokens, formula)){
 			for(Token tok : tokens){
 				if(tok.getType() == TokenType.CEL){
 					Cell cell = grid.getCell(tok.getCol(), tok.getRow());
 					cells.add(cell);
-					reCells.add(cell);
-					//while FINISH CIRUCULARITY CHECK
 				}
 			}
 			return cells;
@@ -30,7 +31,24 @@ public class Formula {
 		}
 	}
 	
-	public static double evaluateFormula(String formula, Grid grid) throws Exception{
+	private static boolean isCircular(ArrayList<Cell> visited, ArrayList<Cell> toVisit){		
+		for(Cell sub : toVisit){
+			if(visited.contains(sub))
+				return true;
+			ArrayList<Cell> visitedCopy = visited;
+			ArrayList<Cell> subToVisit = sub.getObservedCells();
+			if(subToVisit.size() == 0 || subToVisit == null)
+				return false;
+			visitedCopy.add(sub);
+			return isCircular(visitedCopy, subToVisit);
+			
+		}
+		return false;
+	}
+	
+	public static double evaluateFormula(Cell originCell) throws Exception{
+		String formula = originCell.getValue();
+		Grid grid = originCell.getGrid();
 		double res = 0;
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		

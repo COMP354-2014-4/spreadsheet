@@ -33,7 +33,7 @@ public class Cell extends Observable implements Observer{
     
 	@Override public void update(Observable o, Object arg){
 		this.evaluate();
-		Cell cell = (Cell) o;
+		//Cell cell = (Cell) o;
 		//System.out.println(cell.getCol() + cell.getRow() + " called update on " + _col+_row);
 	}
 	
@@ -44,7 +44,8 @@ public class Cell extends Observable implements Observer{
 	public String getCol(){return _col;}
 	public int getRow(){return _row;}
     
-	public Grid getGrid(){return this._grid;}
+	public Grid getGrid(){return _grid;}
+	public ArrayList<Cell> getObservedCells(){return _observedCells;}
 	
 	public boolean isValidValue(){return _validValue;}
 	
@@ -62,7 +63,7 @@ public class Cell extends Observable implements Observer{
 					for(Cell cell : _observedCells){
 						cell.deleteObserver(this);
 					}
-					_observedCells = Formula.listReferencedCells(_value, _grid);
+					_observedCells = Formula.listReferencedCells(this);
 					for(Cell cell : _observedCells){
 						cell.addObserver(this);
 					}
@@ -110,7 +111,7 @@ public class Cell extends Observable implements Observer{
 		}else{//else call the formula function
 			// call the Formula.evaluateFormula function
 			try{
-				_evaluatedValue = Formula.evaluateFormula(this._value, this._grid);
+				_evaluatedValue = Formula.evaluateFormula(this);
 				_validValue = true;
 				this.setChangeAndNotify();
 				return _evaluatedValue;
