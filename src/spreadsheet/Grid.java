@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+
+
 import spreadsheet.Cell;
 
 
@@ -145,8 +147,27 @@ public class Grid implements  java.io.Serializable{
 	/*
 	* Display grid with values
 	*/
-	public String Display() {
-		return "Grid [Cells=" + _cells + "]";                   //TODO///////////////////////////////////////////////////////////
+	public void Display() {
+		//System.out.print("Grid [Cells=" + _cells + "]");
+		System.out.println("GRID");
+		System.out.println("---------------------------");
+	}
+	
+	private String centerPad(String string, int size){
+		int stringLength = string.length();
+		int padding = size - stringLength;
+		int leftPad = padding - padding/2;
+		int rightPad = padding - leftPad;
+		
+		
+		return createPad(rightPad) + string + createPad(leftPad);
+	}
+	
+	private String createPad(int size){
+		String s = "";
+		for(int i = 0; i < size; i++)
+			s+=" ";
+		return s;
 	}
 	
 	/*
@@ -168,9 +189,11 @@ public class Grid implements  java.io.Serializable{
 			fileOut.close();
 		}
 		catch(FileNotFoundException e){
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} 
 		catch (IOException e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -186,11 +209,14 @@ public class Grid implements  java.io.Serializable{
 		    in.close();
 		    fileIn.close();
 		}catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
 		}catch(FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
 		}catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 }
