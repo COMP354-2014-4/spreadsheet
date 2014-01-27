@@ -1,11 +1,10 @@
 import static org.junit.Assert.*;  //import assert methods
 import org.junit.*;                //import JUnit Annotations
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 
 import spreadsheet.*;
@@ -53,7 +52,7 @@ public class GridTest {
   
   @Ignore @Test
   public void testDisplay() {
-	    fail("Not yet implemented");
+	fail("Not yet implemented");
   }
   
 
@@ -61,11 +60,20 @@ public class GridTest {
   /*** Exception Tests ***/
 
   
+  @Ignore @Test(expected = FileNotFoundException.class)
+  public void testLoadException() throws FileNotFoundException {
+	Grid testGrid = new Grid();
+	testGrid.load("dosNotExist");
+  }
+  
   
   /*** Equals Tests ***/
 
   /**
    * Load(String filename) and Save(String filename) - Equals
+   * 
+   * purpose: check basic save/load functionality
+   * 
    * dependent on:
    * 	grid.getCell(String,int)
    * 	grid.save(String)
@@ -74,19 +82,109 @@ public class GridTest {
    * 	cell.setValue(String)
    */
   @Test
-  public void testLoadSaveEquals() {
+  public void testLoadSaveEquals1() {
 	    Grid testGrid = new Grid();
 	    //testGrid.getCell("a", 1).setValue("1");
-	    testGrid.save("testSave.test");
+	    testGrid.save("testSave");
 	    testGrid = new Grid();
-	    testGrid.load("testSave.test");
+	    testGrid.load("testSave");
 	    //assertEquals("1", testGrid.getCell("a", 1).getValue());
-	    File file = new File("testSave.test");
+	    File file = new File("testSave.sav");
 	    file.delete();
   }
   
   /**
-   * Load(String filename)
+   * Load(String filename) and Save(String filename) - Equals
+   * 
+   * purpose: check is evaluated values are kept
+   * 
+   * dependent on:
+   * 	grid.getCell(String,int)
+   * 	grid.save(String)
+   * 	grid.load(String)
+   * 	cell.getValue()
+   * 	cell.setValue(String)
+   * 	cell.evaluate()
+   * 	cell.getEvaluatedValue()
+   */
+  @Test
+  public void testLoadSaveEquals2() {
+	  
+	    Grid testGrid = new Grid();
+	    Cell c = testGrid.getCell("A", 1);
+	    c.setValue("=2");
+	    c.evaluate();
+	    
+	    testGrid.save("testSave");
+	    testGrid = new Grid();
+	    testGrid.load("testSave");
+	    assertEquals(2.0, testGrid.getCell("A", 1).getEvaluatedValue(),0.00001);
+	    File file = new File("testSave.sav");
+	    file.delete();
+  }
+  
+
+
+  /**
+   * Load(String filename) and Save(String filename) - Equals
+   * 
+   * purpose: see if save overwriting works
+   * 
+   * dependent on:
+   * 	grid.getCell(String,int)
+   * 	grid.save(String)
+   * 	grid.load(String)
+   * 	cell.getValue()
+   * 	cell.setValue(String)
+   */
+  @Test
+  public void testLoadSaveEquals3() {
+	    Grid testGrid = new Grid();
+	    testGrid.getCell("A", 1);//should create a cell
+	    testGrid.save("test");
+	    testGrid.getCell("A", 1).setValue("5");//set expected value
+	    testGrid.save("test");
+	    testGrid.getCell("A", 1).setValue("10");//assure value changed
+	    testGrid.load("test");//load back previous value
+	    
+	    File file = new File("test.sav");
+	    assertEquals("5",testGrid.getCell("A", 1).getValue());
+	    file.delete();
+  }
+  
+  /**
+   * Load(String filename) and Save(String filename) - Equals
+   * 
+   * purpose: check is references to other cells are kept
+   * 
+   * dependent on:
+   * 	grid.getCell(String,int)
+   * 	grid.save(String)
+   * 	grid.load(String)
+   * 	cell.getValue()
+   * 	cell.setValue(String)
+   * 	cell.evaluate()
+   * 	cell.getEvaluatedValue()
+   */
+  @Test
+  public void testLoadSaveEquals4() {
+	  
+	    Grid testGrid = new Grid();
+	    testGrid.getCell("A", 2).setValue("8.1");
+	    Cell c = testGrid.getCell("A", 1);
+	    c.setValue("=A2");
+	    c.evaluate();
+	    
+	    testGrid.save("testSave");
+	    testGrid = new Grid();
+	    testGrid.load("testSave");
+	    assertEquals(8.1, testGrid.getCell("A", 1).getEvaluatedValue(),0.00001);
+	    File file = new File("testSave.sav");
+	    file.delete();
+  }
+  
+  /**
+   * Load(String filename) - Equals
    * Dependent on the implementation of Save(String filename) and Load((String filename)
    * Dependent on:
    * 	cell.setValue(String)
@@ -100,7 +198,7 @@ public class GridTest {
 		Cell cell = new Cell("A",1,testGrid);
 		cell.setValue("1");
 		cells.put("A1", cell);
-		File file = new File("testLoad.test");
+		File file = new File("testLoad.sav");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -110,8 +208,8 @@ public class GridTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		testGrid.load("testLoad.test");
-		//assertEquals("1",testGrid.getCell("A", 1).getValue());
+		testGrid.load("testLoad");
+		assertEquals("1",testGrid.getCell("A", 1).getValue());
 		file.delete();
   }
 
@@ -127,18 +225,22 @@ public class GridTest {
    * save() - true
    * save() ?? 
    */
+  /**
+   * Save() - True
+   * 
+   * purpose: test the creation of a file through save
+   */
   @Test
   public void testSaveTrue() {
 	    Grid testGrid = new Grid();
 	    testGrid.getCell("A", 1);//should create a cell
-	    testGrid.save("test.save");
-	    File file = new File("test.save");
+	    testGrid.save("test");
+	    File file = new File("test.sav");
 	    assertTrue(file.exists());
 	    file.delete();
   }
   
-
-
+  
   /*** False Tests ***/
   
   

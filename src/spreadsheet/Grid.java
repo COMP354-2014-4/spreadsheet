@@ -211,9 +211,6 @@ public class Grid implements  java.io.Serializable{
 		}catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 			//e.printStackTrace();
-		}catch(FileNotFoundException e) {
-			System.out.println(e.getMessage());
-			//e.printStackTrace();
 		}catch (IOException e) {
 			System.out.println(e.getMessage());
 			//e.printStackTrace();
