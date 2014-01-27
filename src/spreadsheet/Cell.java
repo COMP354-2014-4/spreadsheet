@@ -11,7 +11,7 @@ import java.util.Observable;
 import utils.Formula;
 
 
-public class Cell extends Observable implements Observer{
+public class Cell extends Observable implements Observer, java.io.Serializable{
 
 	//variables
 	private String _value = "0";
