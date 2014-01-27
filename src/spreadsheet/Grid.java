@@ -113,14 +113,23 @@ public class Grid {
 	
 	
 	public void removeSelectedCell() {
-		_cells.remove( _selectedCell.getCol() + _selectedCell.getRow() );        /////TO MODIFY (NEED TO CORRECTLY INTERACT WITH CELLS TO AVOID DESYNC)
-		_selectedCell = null;
+		this.removeCell( _selectedCell.getCol(), _selectedCell.getRow() );
 	}
 	
-	public void removeCell(String col, int row) {                                /////TO MODIFY (NEED TO CORRECTLY INTERACT WITH CELLS TO AVOID DESYNC)
-		_cells.remove( col + row );
-		if(_selectedCell == this.getCell(col, row))
-			_selectedCell = null;
+	public void removeCell(String col, int row) {
+		Cell cell = this.getCell(col, row);
+		
+		
+		for(Cell observed : cell.getObservedCells()){
+			observed.deleteObserver(cell);
+		}
+		cell.setValue("0");
+		
+		if( cell.countObservers() == 0 ){
+			_cells.remove( col + row );
+			if(_selectedCell == this.getCell(col, row))
+				_selectedCell = null;
+		}
 	}
 	
 	public int getMaxWidth() {return _maxWidth;}

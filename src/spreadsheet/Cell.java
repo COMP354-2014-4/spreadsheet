@@ -11,7 +11,7 @@ import java.util.Observable;
 import utils.Formula;
 
 
-public class Cell extends Observable implements Observer{
+public class Cell extends Observable implements Observer, java.io.Serializable{
 
 	//variables
 	private String _value = "0";
@@ -20,9 +20,11 @@ public class Cell extends Observable implements Observer{
 	private int _row;
 	private Grid _grid;
 	private boolean _validValue = true;
+	private ArrayList<Cell> _observedCells;
     
 	// constructor 
 	public Cell( String col, int row, Grid grid){
+		_observedCells = new ArrayList<Cell>();
 		_col = col;
 		_row = row;
 		_grid = grid;
@@ -31,6 +33,8 @@ public class Cell extends Observable implements Observer{
     
 	@Override public void update(Observable o, Object arg){
 		this.evaluate();
+		//Cell cell = (Cell) o;
+		//System.out.println(cell.getCol() + cell.getRow() + " called update on " + _col+_row);
 	}
 	
 	//getters and setters
@@ -40,7 +44,8 @@ public class Cell extends Observable implements Observer{
 	public String getCol(){return _col;}
 	public int getRow(){return _row;}
     
-	public Grid getGrid(){return this._grid;}
+	public Grid getGrid(){return _grid;}
+	public ArrayList<Cell> getObservedCells(){return _observedCells;}
 	
 	public boolean isValidValue(){return _validValue;}
 	
@@ -55,8 +60,11 @@ public class Cell extends Observable implements Observer{
 			_validValue = true;
 			if(!this.isNumeric(_value)){
 				try{
-					ArrayList<Cell> cells = Formula.listReferencedCells(_value, _grid);
-					for(Cell cell : cells){
+					for(Cell cell : _observedCells){
+						cell.deleteObserver(this);
+					}
+					_observedCells = Formula.listReferencedCells(this);
+					for(Cell cell : _observedCells){
 						cell.addObserver(this);
 					}
 				}catch(Exception e){
@@ -103,7 +111,7 @@ public class Cell extends Observable implements Observer{
 		}else{//else call the formula function
 			// call the Formula.evaluateFormula function
 			try{
-				_evaluatedValue = Formula.evaluateFormula(this._value, this._grid);
+				_evaluatedValue = Formula.evaluateFormula(this);
 				_validValue = true;
 				this.setChangeAndNotify();
 				return _evaluatedValue;
