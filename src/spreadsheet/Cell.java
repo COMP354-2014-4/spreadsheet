@@ -102,26 +102,31 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 *  do the calculation or simply return the value of number
 	 */
 	public double evaluate(){
-		//if the string is an integer
-		if (this.isNumeric(_value)){
-			_evaluatedValue = Double.parseDouble(_value);
-			_validValue = true;
-			this.setChangeAndNotify();
-			return _evaluatedValue;
-		}else{//else call the formula function
-			// call the Formula.evaluateFormula function
-			try{
-				_evaluatedValue = Formula.evaluateFormula(this);
+		if(_validValue){
+			//if the string is an integer
+			if (this.isNumeric(_value)){
+				_evaluatedValue = Double.parseDouble(_value);
 				_validValue = true;
 				this.setChangeAndNotify();
 				return _evaluatedValue;
-			}catch(Exception e){
-				System.out.println(e.getMessage());
-				_validValue = false;
-				_evaluatedValue = 0;
-				this.setChangeAndNotify();
-				return _evaluatedValue;
+			}else{//else call the formula function
+				// call the Formula.evaluateFormula function
+				try{
+					_evaluatedValue = Formula.evaluateFormula(this);
+					this.setChangeAndNotify();
+					_validValue = true;
+					return _evaluatedValue;
+				}catch(Exception e){
+					System.out.println(e.getMessage());
+					_validValue = false;
+					_evaluatedValue = 0;
+					this.setChangeAndNotify();
+					return _evaluatedValue;
+				}
 			}
+		}else{
+			this.setChangeAndNotify();
+			return 0;
 		}
 		
 		
@@ -133,7 +138,10 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * display the evaluatedValue
 	 */
 	public void display() {
-		System.out.println(_evaluatedValue);
+		if(_validValue)
+			System.out.println(_evaluatedValue);
+		else
+			System.out.println("INVALID VALUE: " + _value);
 	}
 	
 	
