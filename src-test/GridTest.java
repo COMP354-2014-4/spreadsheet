@@ -267,9 +267,9 @@ public class GridTest {
    */
   @Test
   public void testRemoveSelectedCellNotNull() {
-    //fail("Not yet implemented");
-    Grid testGrid = new Grid();
-    testGrid.removeSelectedCell();  //This should remove the cell
+    fail("Not yet implemented");
+    //Grid testGrid = new Grid();
+    //testGrid.removeSelectedCell();  //This should remove the currently selected cell
     //check hashtable to see if this element exists
   }
 
