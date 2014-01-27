@@ -53,10 +53,10 @@ public class Grid implements  java.io.Serializable{
 				foundCell = new Cell( col, row, this );
 				_cells.put(col + row, foundCell);
 				
-				if(intCol > _maxWidth)
-					_maxWidth = intCol;
-				if(row > _maxHeight)
-					_maxHeight = row;
+				if(intCol > _currentWidth)
+					_currentWidth = Math.min(intCol, _maxWidth);
+				if(row > _currentHeight)
+					_currentHeight = Math.min(row, _maxHeight);
 				
 			}
 			return foundCell;
@@ -76,20 +76,17 @@ public class Grid implements  java.io.Serializable{
 	* method to change string "column" to int
 	*/
 	private int colToNumber(String str) {
-		char[] ls = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-		Map<Character, Integer> m = new HashMap<Character, Integer>();
-		int j = 1;
-		for(char c: ls) {
-			m.put(c, j++);
-		}
-		
-		int i = 0;
-		int mul = 1;
-		for(char c: new StringBuffer(str).reverse().toString().toUpperCase().toCharArray()) {
-			i += m.get(c) * mul;
-			mul *= ls.length;
-		}
-		return i;
+		char[] chars = str.toUpperCase().toCharArray();
+
+	    int sum = 0;
+
+	    for (int i = 0; i < chars.length; i++)
+	    {
+	        sum *= 26;
+	        sum += (chars[i] - 'A' + 1);
+	    }
+
+	    return sum;
 	}
 	
 	/*
@@ -148,9 +145,44 @@ public class Grid implements  java.io.Serializable{
 	* Display grid with values
 	*/
 	public void Display() {
-		//System.out.print("Grid [Cells=" + _cells + "]");
 		System.out.println("GRID");
 		System.out.println("---------------------------");
+		for(int i = 0; i <= _currentHeight; i++){
+			for(int c = 0; c <= _currentWidth; c++){				
+				System.out.print("|");
+				if(i == 0){
+					if(c == 0){
+						System.out.print(centerPad("", 10));
+					}else{
+						System.out.print(centerPad(numToCol(c), 10));
+					}
+				}else{
+					if(c == 0){
+						System.out.print(centerPad(String.valueOf(i), 10));
+					}else{
+						System.out.print(centerPad(this.getCell(numToCol(c), i).getDisplay(), 10));
+						
+					}
+				}
+			}
+			System.out.print("|\n" );
+		}
+	}
+	
+	private String numToCol(int columnIndex){ 
+		if (columnIndex == 0)
+			return null;
+		columnIndex--;
+		int base = 26;
+		StringBuffer b = new StringBuffer();
+		do {
+			int digit = columnIndex % base + 65;
+			b.append(Character.valueOf((char) digit));
+			columnIndex = (columnIndex / base) - 1;
+		} while (columnIndex >= 0);
+		
+		return b.reverse().toString();
+
 	}
 	
 	private String centerPad(String string, int size){

@@ -145,6 +145,14 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	}
 	
 	
+	public String getDisplay(){
+		if(_validValue)
+			return String.valueOf(_evaluatedValue);
+		else
+			return"INVALID VALUE: " + _value;
+		
+	}
+	
 	/* 
 	 *  check if the string can be converted to a number
 	 */
