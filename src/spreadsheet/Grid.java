@@ -278,21 +278,24 @@ public class Grid implements  java.io.Serializable{
 	 * 
 	 * @param fileName	The filename without the extension
 	 */
-	public void save(String fileName){
+	public boolean save(String fileName){
 		try {
 			FileOutputStream fileOut = new FileOutputStream(fileName + ".sav");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(_cells);
 			out.close();
 			fileOut.close();
+			return true;
 		}
 		catch(FileNotFoundException e){
 			System.out.println(e.getMessage());
 			e.printStackTrace();
+			return false;
 		} 
 		catch (IOException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -301,19 +304,20 @@ public class Grid implements  java.io.Serializable{
 	 * 
 	 * @param fileName	The filename without the extension
 	 */
-	public void load(String fileName) {
+	public boolean load(String fileName) {
 		try {
 			FileInputStream fileIn = new FileInputStream(fileName + ".sav");
 		    ObjectInputStream in = new ObjectInputStream(fileIn);
 		    _cells = (Hashtable<String, Cell>)in.readObject();
 		    in.close();
 		    fileIn.close();
+			return true;
 		}catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
-			//e.printStackTrace();
+			return false;
 		}catch (IOException e) {
 			System.out.println(e.getMessage());
-			//e.printStackTrace();
+			return false;
 		}
 	}
 }

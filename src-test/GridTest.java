@@ -44,26 +44,47 @@ public class GridTest {
   public void testRemoveSelectedCell() {
     fail("Not yet implemented");
   }
-  
-  @Ignore @Test
-  public void testClear() {
-	    fail("Not yet implemented");
+  /**
+   * clear() - Equals
+   * 
+   * purpose: test to see if clear resets the grid
+   * 
+   * dependent on:
+   * 	grid.getCell(string,int)
+   * 	cell.setValue(string)
+   * 	cell.getValue()
+   */
+  @Test
+  public void testClearEquals() {
+	Grid testGrid = new Grid();
+	testGrid.getCell("A", 1).setValue("1");
+
+	testGrid.getCell("E", 5).setValue("9");
+	testGrid.clear();
+	assertEquals("0", testGrid.getCell("A", 1).getValue());
+	assertEquals("0", testGrid.getCell("E", 5).getValue());
   }
   
-  @Ignore @Test
+  /**
+   * Display() - ???
+   * 
+   * purpose: test the functionality of the display
+   * cannot automate yet, can only check for no exceptions
+   * 
+   * dependent on:
+   * 	grid.getCell(string,int)
+   * 	cell.setValue(string)
+   */
+  @Test
   public void testDisplay() {
-	fail("Not yet implemented");
+	Grid testGrid = new Grid();
+	testGrid.getCell("B", 2).setValue("2");
+	testGrid.Display();
   }
   
 
   
   /*** Exception Tests ***/
-  
-  @Ignore @Test(expected = FileNotFoundException.class)
-  public void testLoadException() throws FileNotFoundException {
-	Grid testGrid = new Grid();
-	testGrid.load("dosNotExist");
-  }
   
   
   /*** Equals Tests ***/
@@ -83,11 +104,11 @@ public class GridTest {
   @Test
   public void testLoadSaveEquals1() {
 	    Grid testGrid = new Grid();
-	    //testGrid.getCell("a", 1).setValue("1");
+	    testGrid.getCell("a", 1).setValue("1");
 	    testGrid.save("testSave");
 	    testGrid = new Grid();
 	    testGrid.load("testSave");
-	    //assertEquals("1", testGrid.getCell("a", 1).getValue());
+	    assertEquals("1", testGrid.getCell("a", 1).getValue());
 	    File file = new File("testSave.sav");
 	    file.delete();
   }
@@ -121,34 +142,6 @@ public class GridTest {
 	    File file = new File("testSave.sav");
 	    file.delete();
   }
-
-  /**
-   * Load(String filename) and Save(String filename) - Equals
-   * 
-   * purpose: see if save overwriting works
-   * 
-   * dependent on:
-   * 	grid.getCell(String,int)
-   * 	grid.save(String)
-   * 	grid.load(String)
-   * 	cell.getValue()
-   * 	cell.setValue(String)
-   */
-  @Test
-  public void testLoadSaveEquals3() {
-	    Grid testGrid = new Grid();
-	    testGrid.getCell("A", 1);//should create a cell
-	    testGrid.save("test");
-	    testGrid.getCell("A", 1).setValue("5");//set expected value
-	    testGrid.save("test");
-	    testGrid.getCell("A", 1).setValue("10");//assure value changed
-	    testGrid.load("test");//load back previous value
-	    
-	    File file = new File("test.sav");
-	    assertEquals("5",testGrid.getCell("A", 1).getValue());
-	    file.delete();
-  }
-  
   /**
    * Load(String filename) and Save(String filename) - Equals
    * 
@@ -164,10 +157,10 @@ public class GridTest {
    * 	cell.getEvaluatedValue()
    */
   @Test
-  public void testLoadSaveEquals4() {
+  public void testLoadSaveEquals3() {
 	  
 	    Grid testGrid = new Grid();
-	    testGrid.getCell("A", 2).setValue("8.1");
+	    testGrid.getCell("A", 2).setValue("3");
 	    Cell c = testGrid.getCell("A", 1);
 	    c.setValue("=A2");
 	    c.evaluate();
@@ -175,8 +168,35 @@ public class GridTest {
 	    testGrid.save("testSave");
 	    testGrid = new Grid();
 	    testGrid.load("testSave");
-	    assertEquals(8.1, testGrid.getCell("A", 1).getEvaluatedValue(),0.00001);
+	    assertEquals(3.0, testGrid.getCell("A", 1).getEvaluatedValue(),0.00001);
 	    File file = new File("testSave.sav");
+	    file.delete();
+  }
+
+  /**
+   * Load(String filename) and Save(String filename) - Equals
+   * 
+   * purpose: see if save overwriting works
+   * 
+   * dependent on:
+   * 	grid.getCell(String,int)
+   * 	grid.save(String)
+   * 	grid.load(String)
+   * 	cell.getValue()
+   * 	cell.setValue(String)
+   */
+  @Test
+  public void testLoadSaveEquals4() {
+	    Grid testGrid = new Grid();
+	    testGrid.getCell("A", 1);//should create a cell
+	    testGrid.save("test");
+	    testGrid.getCell("A", 1).setValue("5");//set expected value
+	    testGrid.save("test");
+	    testGrid = new Grid();
+	    testGrid.load("test");//load back previous value
+	    
+	    File file = new File("test.sav");
+	    assertEquals("5",testGrid.getCell("A", 1).getValue());
 	    file.delete();
   }
   
@@ -218,6 +238,7 @@ public class GridTest {
 
   /*** True Tests ***/
   
+
   /**
    * Save() - True
    * purpose: test the creation of a file through save
@@ -235,8 +256,18 @@ public class GridTest {
   
   /*** False Tests ***/
   
+  /**
+   * Load(String) - False
+   * 
+   * purpose: check if the load function behaves correctly when the file is not found
+   */
+  @Test
+  public void testLoadFalse(){
+	Grid testGrid = new Grid();
+	assertFalse(testGrid.load("dosNotExist"));
+  }
   
-
+  
   /*** Null Tests ***/
   
   /**
