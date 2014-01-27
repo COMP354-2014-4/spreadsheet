@@ -250,12 +250,12 @@ public class GridTest {
    */
   @Test
   public void testRemoveCellNotNull() {
-    //fail("Not yet implemented");
+    fail("Not yet implemented");
     Grid testGrid = new Grid();
     //select cell
     //insert value into cell
     //remove cell
-    testGrid.removeCell("a",1);  //This should remove the cell
+    //testGrid.removeCell("a",1);  //This should remove the cell
     //test if value of cell is default instead of what was inserted
     
   }
