@@ -58,7 +58,6 @@ public class GridTest {
 
   
   /*** Exception Tests ***/
-
   
   @Ignore @Test(expected = FileNotFoundException.class)
   public void testLoadException() throws FileNotFoundException {
@@ -122,8 +121,6 @@ public class GridTest {
 	    File file = new File("testSave.sav");
 	    file.delete();
   }
-  
-
 
   /**
    * Load(String filename) and Save(String filename) - Equals
@@ -222,12 +219,7 @@ public class GridTest {
   /*** True Tests ***/
   
   /**
-   * save() - true
-   * save() ?? 
-   */
-  /**
    * Save() - True
-   * 
    * purpose: test the creation of a file through save
    */
   @Test
@@ -353,7 +345,7 @@ public class GridTest {
   @Test
   public void testRemoveCellNotNull() {
     fail("Not yet implemented");
-    Grid testGrid = new Grid();
+    //Grid testGrid = new Grid();
     //select cell
     //insert value into cell
     //remove cell
