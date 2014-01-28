@@ -73,108 +73,108 @@ public class CellTest {
   /********************/
 
   /**
-   * Testing default constructor - value in a cell
+   * Evaluated value stored in a cell
+   * 
    */
   @Test
-  public void testCellValue1() {
-    Cell cell = new Cell("A",1,test_Grid);
-    assertEquals("Initial cell value", 0.0, cell.getEvaluatedValue(),ACCEPTED_ERROR);
+  public void testGetEvaluatedValueEquals() {
+    //test default constructor value
+    Cell cell01 = new Cell("A",1,test_Grid);
+    assertEquals("Get Evaluated default cell value equals", 0.0, cell01.getEvaluatedValue(), ACCEPTED_ERROR);
+    //test value from setValue
+    Cell cell02 = new Cell("A",1,test_Grid);
+    cell02.setValue("28.0");
+    assertEquals("Get Evaluated set cell value equals", 28.0, cell02.getEvaluatedValue(), ACCEPTED_ERROR);
+    //test value from formula
+    Cell cell03 = new Cell("A",1,test_Grid);
+    cell03.setValue("=1+1");
+    assertEquals("Get Evaluated cell formula equals", 2.0, cell03.getEvaluatedValue(), ACCEPTED_ERROR);
   }
   
   /**
-   * Testing default constructor - formula in a cell
+   * Evaluate Formula in a cell
    */
   @Test
-  public void testCellFormula() {
-    Cell cell = new Cell("A",1,test_Grid);
-    assertEquals("Initial cell formula", 0.0, cell.evaluate(),ACCEPTED_ERROR);
+  public void testEvaluateEquals() {
+    //test evaluate on default constructor value
+    Cell cell01 = new Cell("A",1,test_Grid);
+    assertEquals("Evaluate default cell formula equals", 0.0, cell01.evaluate(), ACCEPTED_ERROR);
+    //test evaluate on setValue
+    Cell cell02 = new Cell("A",1,test_Grid);
+    cell02.setValue("28.0");
+    assertEquals("Evaluate set cell double equals", 28.0, cell02.evaluate(), ACCEPTED_ERROR);
+    //test evaluate on formula
+    Cell cell03 = new Cell("A",1,test_Grid);
+    cell03.setValue("=1+1");
+    assertEquals("Evaluate set cell formula equals", 2.0, cell03.evaluate(), ACCEPTED_ERROR);    
   }
   
   /**
-   * Test if value is stored in cell
+   * Value stored in cell
    */
   @Test
-  public void testGetValue(){
-    Cell cell  = new Cell("B", 1, test_Grid);
-    cell.setValue("28.0");
-    assertEquals("Cell set value", "28.0", cell.getValue());
+  public void testGetValueEquals(){
+    //test value from constructor
+    Cell cell01  = new Cell("B", 1, test_Grid);
+    assertEquals("Get default value equals", "0", cell01.getValue());
+    //test value from setValue
+    Cell cell02  = new Cell("B", 1, test_Grid);
+    cell02.setValue("28.0");
+    assertEquals("Get double value equals", "28.0", cell02.getValue());
+    //test value from formula
+    Cell cell03  = new Cell("B", 1, test_Grid);
+    cell03.setValue("=1+1");
+    assertEquals("Get formula value equals", "=1+1", cell03.getValue());
   }
   
   /**
-   * Testing if the new value set in cell works
+   * Testing if setValue() for cells work
    */
   @Test
-  public void testSetValue(){
+  public void testSetValueEquals(){
     Cell cell = new Cell("B",2,test_Grid);
-    cell.setValue("29.0");
+    cell.setValue("0.0");
+    assertEquals("Cell new set value", "0.0", cell.getValue());
     cell.setValue("30.0");
     assertEquals("Cell new set value", "30.0", cell.getValue());
+    cell.setValue("100.0");
+    assertEquals("Cell new set value", "100.0", cell.getValue());
+    cell.setValue("1.000000");
+    assertEquals("Cell new set value", "1.000000", cell.getValue());
   }
-  
-  @Test
-  /***
-   * Test if value in cell is not a number
-   */
-  public void testCellValueEquals(){
-    Cell cell = new Cell("B", 4, test_Grid);
-    cell.setValue("bb");
-    assertEquals("Cell invalid value", "bb", cell.getValue());
-  }
-  
-  /*
-  //Getters And Setters
-  //Testing getRow() method
-  //Testing boundaries
-  @Test 
-  public void testGetRow() {
-    Cell cell = new Cell("A", 1, test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's row", "A",cell.getRow());  //Should return an int 
-  }
-  @Test
-  public void testGetRow2() {
-    Cell cell = new Cell("A", 10, test_Grid); //Creating a new cell
-    assertEquals("Getting cell's row", "A",cell.getRow());
-  }
-  
-  //Testing valid rows
-  @Test
-  public void testGetRow3() {
-    Cell cell = new Cell("A", 5, test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's row", "A",cell.getRow());
-  }
-  @Test
-  public void testGetRow4() {
-    Cell cell = new Cell("A", 7, test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's row", "A",cell.getRow());
-  }
-  */
 
-  /*
-  //Testing GetCol() method
-  @Test
-  //Testing boundaries
-  public void testGetCol1(){
-    Cell cell = new Cell("A",3,test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's column", 3, cell.getCol());
+  
+  /**
+   * Testing getRow() method
+   */
+  @Test 
+  public void testGetRowEquals() {
+    //Lower row boundary
+    Cell cell01 = new Cell("A", 1, test_Grid);
+    assertEquals("Getting cell's row", 1, cell01.getRow());  //Should return an int 
+    //upper row boundary
+    Cell cell02 = new Cell("A", 10, test_Grid);
+    assertEquals("Getting cell's row", 10, cell02.getRow());
+    //middle row boundary 
+    Cell cell03 = new Cell("A", 5, test_Grid);
+    assertEquals("Getting cell's row", 5, cell03.getRow());
   }
+  
+  /**
+   * Testing GetCol() method
+   */
   @Test
-  public void testGetCol2(){
-    Cell cell = new Cell("J",3,test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's column", 3, cell.getCol());
+  public void testGetColEquals(){
+    //Testing lower boundaries
+    Cell cell01 = new Cell("A", 1, test_Grid);
+    assertEquals("Getting cell's column", "A", cell01.getCol());
+    //testing upper boundary
+    Cell cell02 = new Cell("J", 1, test_Grid);
+    assertEquals("Getting cell's column", "J", cell02.getCol());
+    //testing middle boundary
+    Cell cell03 = new Cell("E", 3, test_Grid);
+    assertEquals("Getting cell's column", "E", cell03.getCol());
   }
- 
-  //Testing valid columns
-  @Test
-  public void testGetCol3(){
-    Cell cell = new Cell("C",3,test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's column", 3, cell.getCol());
-  }
-  @Test
-  public void testGetCol4(){
-    Cell cell = new Cell("D",3,test_Grid);  //Creating a new cell
-    assertEquals("Getting cell's column", 3, cell.getCol());
-  }
-  */
   
 
 
@@ -191,38 +191,30 @@ public class CellTest {
   /*** False Tests ***/
   /*******************/
 
+  /***
+   * Test if value in cell is not valid
+   */
+  @Test
+  public void testIsValidValueFalse(){
+    //mixed alphanumeric
+    Cell cell01 = new Cell("B", 4, test_Grid);
+    cell01.setValue("0a");
+    assertFalse("Cell invalid value", cell01.isValidValue());
+    //just alpha
+    Cell cell02 = new Cell("B", 4, test_Grid);
+    cell02.setValue("aa");
+    assertFalse("Cell invalid value", cell02.isValidValue());
+    //test circular reference
+    Cell cell03 = new Cell("B", 4, test_Grid);
+    cell03.setValue("=1+1+B4");
+    assertFalse("Cell invalid value", cell03.isValidValue());
+  }
+  
   
 
   /*** Null Tests ***/
   /******************/
 
-  /*
-  //Testing invalid rows
-  @Test
-  public void testGetRow5() {
-    Cell cell = new Cell("A", -1, test_Grid); //Creating a new cell
-    assertNull("Getting cell's row", cell.getRow());
-  }
-  @Test
-  public void testGetRow6() {
-    Cell cell = new Cell("A", 50, test_Grid); //Creating a new cell
-    assertNull("Getting cell's row", cell.getRow());
-  }
-  */
-  
-  /*
-  //Testing invalid columns
-  @Test
-  public void testGetCol5(){
-    Cell cell = new Cell("Z",3,test_Grid);  //Creating a new cell
-    assertNull("Getting cell's column", cell.getCol());
-  }
-  @Test
-  public void testGetCol6(){
-    Cell cell = new Cell("M",3,test_Grid);  //Creating a new cell
-    assertNull("Getting cell's column", cell.getCol());
-  }
-  */
   
   
   
