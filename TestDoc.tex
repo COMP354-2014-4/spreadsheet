@@ -85,7 +85,7 @@ Validation testing.
 
 We tested to see if each of the unit method is valid
 For instance:
-
+}
 
   @Before
 
@@ -111,7 +111,11 @@ For instance:
 
 \subsection{System Level Test Cases}
 
-For system level testing, we tested if a grid is created through saving.
+{\it Grid Testing
+}
+
+The grid has been created and tested through saving.
+
 For example:
 
   @Test
@@ -132,28 +136,103 @@ For example:
 
   }
 
+{\it Checking the grid if evaluated values are kept
+}
+For example
+
+public void testLoadSaveEquals2() {
+	  
+	    Grid testGrid = new Grid();
+
+	    Cell c = testGrid.getCell("A", 1);
+
+	    c.setValue("=2");
+
+	    c.evaluate();
+	    
+
+
+	    testGrid.save("testSave");
+
+	    testGrid = new Grid();
+
+	    testGrid.load("testSave");
+
+	    assertEquals(2.0, testGrid.getCell("A", 1).getEvaluatedValue(),0.00001);
+
+	    File file = new File("testSave.sav");
+
+	    file.delete();
+
+  }
+
 
 \subsubsection{Test Case 1} \label{tc:1}
 
 \noindent
 {\bf Purpose}\\
-State the purpose of the test.
-Indicate which requirement and which aspect of that requirement is being tested.
+Selecting a valid cell (i.e Columns A..K, Rows 1..10). The selected cell should lie in the range given.
 
 \noindent
 {\bf Input Specification}\\
-State the context for the test in terms of system state.
-State the input test data. You may need to mention operations invoked as well as data for the operation.
-You can cross-reference to actual file data specified in an appendix.
+It restricts the user to select a cell within the appropriate range. Input test data would be any cell in the range such as A2, B5, C4 and so on. 
 
 \noindent
 {\bf Expected Output}\\
-State the expected system response and output.
-You can cross-reference to actual file data specified in an appendix.
+The system should output the formula or value contained in the cell.
 
 \noindent
 {\bf Traces to Use Cases}\\
-State which requirements (at the level of use case and scenario) are tested by this test case.
+It allows the user to select a valid cell and in consequence do operations pertaining to the cell like entering a formula or a value or a calculated value due to some formula found in another cell.
+
+
+
+\subsubsection{Test Case 2} \label{tc:1}
+
+\noindent
+{\bf Purpose}\\
+Output spreadsheet as a grid while checking if the data is valid in the cell.
+
+\noindent
+{\bf Input Specification}\\
+The grid has been saved into memory and loaded back to ensure that it works correctly. Loading and saving in memory have been tested so that the user can retrieve a saved file with his previous work.
+
+\noindent
+{\bf Expected Output}\\
+The system should load the spreadsheet with all the previous modifications made to it and save it back again for later use. Appropriate error messages will be triggered for any problems encountered for example, selecting a cell out of the given range like Z55.
+
+\noindent
+{\bf Traces to Use Cases}\\
+Opening, saving the spreadsheet in memory is achieved. The user will be able to quit the application safely without any error messages being triggered.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Subsystem Level Test Cases}
 
