@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.FileNotFoundException;
 import java.util.Hashtable;
 
 import spreadsheet.*;
@@ -37,13 +36,27 @@ public class GridTest {
 
   
   
+  /*************************/
   /**** Testing Methods ****/
+  /*************************/
   
   /*** Waiting for implementation ***/
+  /**********************************/
   @Ignore @Test
   public void testRemoveSelectedCell() {
     fail("Not yet implemented");
   }
+  
+  /**
+   * RemoveCell() - Not Null
+   * RemoveCell() should be removing a cell from the HashTable
+   */
+  @Ignore @Test
+  public void testRemoveCell() {
+    fail("Not yet implemented");
+  }
+
+  
   /**
    * clear() - Equals
    * 
@@ -82,12 +95,13 @@ public class GridTest {
 	testGrid.Display();
   }
   
-
   
   /*** Exception Tests ***/
+  /***********************/
   
   
   /*** Equals Tests ***/
+  /********************/
 
   /**
    * Load(String filename) and Save(String filename) - Equals
@@ -233,12 +247,13 @@ public class GridTest {
 
   
   /*** Equals with tolerance Tests ***/
+  /***********************************/
   
   
 
   /*** True Tests ***/
+  /******************/
   
-
   /**
    * Save() - True
    * purpose: test the creation of a file through save
@@ -255,6 +270,7 @@ public class GridTest {
   
   
   /*** False Tests ***/
+  /*******************/
   
   /**
    * Load(String) - False
@@ -269,6 +285,7 @@ public class GridTest {
   
   
   /*** Null Tests ***/
+  /******************/
   
   /**
    * getCell() - Null
@@ -309,12 +326,13 @@ public class GridTest {
   
 
   /*** Not Null Tests ***/
+  /**********************/
   
   /**
    * getCell() - Not Null
    * getCell() should never return null 
    */
-  @Ignore @Test
+  @Test
   public void testGetCellNotNull() {
     //fail("Not yet implemented");
     /// test lower bound column and row
@@ -325,7 +343,7 @@ public class GridTest {
     assertNotNull("getCell() is not null", testGrid02.getCell("f",1));
     /// test upper bound column
     Grid testGrid03 = new Grid();
-    assertNotNull("getCell() is not null", testGrid03.getCell("k",1));
+    assertNotNull("getCell() is not null", testGrid03.getCell("j",1));
     /// test middle bound row
     Grid testGrid04 = new Grid();
     assertNotNull("getCell() is not null", testGrid04.getCell("a",testGrid04.getMaxHeight()/2));
@@ -362,49 +380,22 @@ public class GridTest {
    * getSelectedCell() - Not Null
    * getSelectedCell() should always return a cell
    */
-  @Ignore @Test
+  @Test
   public void testGetSelectedCellNotNull() {
     //fail("Not yet implemented");
     Grid testGrid = new Grid();
     assertNotNull("getSelectedCell() is not null", testGrid.getSelectedCell());
   }
 
-  /**
-   * RemoveCell() - Not Null
-   * RemoveCell() should be removing a cell from the HashTable
-   */
-  @Test
-  public void testRemoveCellNotNull() {
-    fail("Not yet implemented");
-    //Grid testGrid = new Grid();
-    //select cell
-    //insert value into cell
-    //remove cell
-    //testGrid.removeCell("a",1);  //This should remove the cell
-    //test if value of cell is default instead of what was inserted
-    
-  }
-  
 
-  /**
-   * RemoveSelectedCell() - Not Null
-   * RemoveSelectedCell() should be removing the current cell from the HashTable
-   */
-  @Test
-  public void testRemoveSelectedCellNotNull() {
-    fail("Not yet implemented");
-    //Grid testGrid = new Grid();
-    //testGrid.removeSelectedCell();  //This should remove the currently selected cell
-    //check hashtable to see if this element exists
-  }
-
-  
 
   /*** Same Tests ***/
+  /******************/
   
 
 
   /*** Not Same Tests ***/
+  /**********************/
 
 
 }
