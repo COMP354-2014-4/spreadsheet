@@ -20,8 +20,7 @@ public class CellTest {
   /**** Before and After methods ****/
   @BeforeClass
   public static void testSetup() {
-	// do something before all test
-	  
+    // do something before all test
   }
 
   @AfterClass
@@ -32,7 +31,6 @@ public class CellTest {
   @Before
   public void testEachSetup() {
     // do something before each test
-	test_Grid = new Grid();
     System.out.println("Prepping Test....");
   }
   
