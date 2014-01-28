@@ -1,0 +1,170 @@
+\documentclass[12pt]{article}
+
+\pagestyle{empty}
+\setcounter{secnumdepth}{2}
+
+\topmargin=0cm
+\oddsidemargin=0cm
+\textheight=22.0cm
+\textwidth=16cm
+\parindent=0cm
+\parskip=0.15cm
+\topskip=0truecm
+\raggedbottom
+\abovedisplayskip=3mm
+\belowdisplayskip=3mm
+\abovedisplayshortskip=0mm
+\belowdisplayshortskip=2mm
+\normalbaselineskip=12pt
+\normalbaselines
+
+\begin{document}
+
+\vspace*{0.5in}
+\centerline{\bf\Large Test Document}
+
+\vspace*{0.5in}
+\centerline{\bf\Large Team 3}
+
+\vspace*{0.5in}
+\centerline{\bf\Large 27 January 2014}
+
+\vspace*{1.5in}
+\begin{table}[htbp]
+\caption{Team 3}
+\begin{center}
+\begin{tabular}{|r | c|}
+\hline
+Name & ID Number \\
+\hline
+Mirotchnick, Norman & 4348885 \\
+\hline
+St-Louis-Fortier, Maxime & xxxxxxx\\
+\hline
+Rani, Jayanti & xxxxxxx \\
+\hline
+Dupuis, Justin & 9690352\\
+\hline
+Benchetrit, Sidney & 5864585 \\
+\hline
+Joyejob, Kirti & 6046002 \\
+\hline
+Crawford, Jordan & 1963031 \\
+\hline
+Lang, Jonathan & 6298389 \\
+\hline
+Grosse, Eric & 5983592 \\
+\hline
+Wei, Chang & 9755829 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\clearpage
+
+\section{Introduction}
+
+{\it
+The document provides an outline demonstrating Test cases and a few examples of how this is carried out. 
+The goal is to show that the methods run correctly with carefully selected test data.
+}
+
+\section{Test Plan}
+
+{\it
+Each method demanded approximately 5 or more tests per unit.
+
+Since we did unit testing instead of parameterized testing, it took us more time, but got to test all the methods.
+
+}
+
+\subsection{Test Case Unit Testing}
+Validation testing
+We tested to see if each of the unit method is valid
+For instance:
+
+  @Before
+  public static void testEachSetup() {
+    // do something before each test
+    System.out.println("Prepping Test....");
+  }
+  
+  @After
+  public static void testEachCleanup() {
+    // do something after each test
+    System.out.println("Test Completed!");
+  }
+
+\subsection{System Level Test Cases}
+
+{\it
+All test cases for testing at the system level.
+}
+
+\subsubsection{Test Case 1} \label{tc:1}
+
+\noindent
+{\bf Purpose}\\
+State the purpose of the test.
+Indicate which requirement and which aspect of that requirement is being tested.
+
+\noindent
+{\bf Input Specification}\\
+State the context for the test in terms of system state.
+State the input test data. You may need to mention operations invoked as well as data for the operation.
+You can cross-reference to actual file data specified in an appendix.
+
+\noindent
+{\bf Expected Output}\\
+State the expected system response and output.
+You can cross-reference to actual file data specified in an appendix.
+
+\noindent
+{\bf Traces to Use Cases}\\
+State which requirements (at the level of use case and scenario) are tested by this test case.
+
+\subsection{Subsystem Level Test Cases}
+
+{\it
+All test cases for testing at the subsystem level.
+}
+
+{\it
+One subsection per subsystem
+}
+
+\subsubsection{Subsystem X}
+
+\subsection{Unit Test cases}
+
+{\it
+All test cases for testing at the unit level.
+}
+
+{\it
+One subsection per unit
+}
+
+\subsubsection{Unit X}
+
+\section{Test Results}
+
+{\it
+List the tests, indicating which passed and which did not pass.
+List requirements indicating the percentage of tests that passed for that requirement.
+}
+
+\section{References}
+
+\appendix
+
+\section{Description of Input Files}
+
+Describe/include test data from input files.
+
+\section{Description of Output Files}
+
+Describe/include test expected output that are output files.
+
+\end{document}
