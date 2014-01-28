@@ -39,9 +39,9 @@ Name & ID Number \\
 \hline
 Mirotchnick, Norman & 4348885 \\
 \hline
-St-Louis-Fortier, Maxime & xxxxxxx\\
+St-Louis-Fortier, Maxime & 6665810\\
 \hline
-Rani, Jayanti & xxxxxxx \\
+Rani, Jayanti & 5714583 \\
 \hline
 Dupuis, Justin & 9690352\\
 \hline
@@ -80,27 +80,58 @@ Since we did unit testing instead of parameterized testing, it took us more time
 }
 
 \subsection{Test Case Unit Testing}
-Validation testing
+{\it
+Validation testing.
+
 We tested to see if each of the unit method is valid
 For instance:
 
+
   @Before
+
   public static void testEachSetup() {
+
     // do something before each test
+
     System.out.println("Prepping Test....");
+
   }
   
   @After
+
   public static void testEachCleanup() {
+
     // do something after each test
+
     System.out.println("Test Completed!");
+
   }
+
+
 
 \subsection{System Level Test Cases}
 
-{\it
-All test cases for testing at the system level.
-}
+For system level testing, we tested if a grid is created through saving.
+For example:
+
+  @Test
+
+  public void testSaveTrue() {
+
+	    Grid testGrid = new Grid();
+
+	    testGrid.getCell("A", 1);//should create a cell
+
+	    testGrid.save("test");
+
+	    File file = new File("test.sav");
+
+	    assertTrue(file.exists());
+
+	    file.delete();
+
+  }
+
 
 \subsubsection{Test Case 1} \label{tc:1}
 
