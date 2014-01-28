@@ -52,28 +52,10 @@ public class GridTest {
    * RemoveCell() should be removing a cell from the HashTable
    */
   @Ignore @Test
-  public void testRemoveCellNotNull() {
+  public void testRemoveCell() {
     fail("Not yet implemented");
-    //Grid testGrid = new Grid();
-    //select cell
-    //insert value into cell
-    //remove cell
-    //testGrid.removeCell("a",1);  //This should remove the cell
-    //test if value of cell is default instead of what was inserted
-    
   }
 
-  /**
-   * RemoveSelectedCell() - Not Null
-   * RemoveSelectedCell() should be removing the current cell from the HashTable
-   */
-  @Ignore @Test
-  public void testRemoveSelectedCellNotNull() {
-    fail("Not yet implemented");
-    //Grid testGrid = new Grid();
-    //testGrid.removeSelectedCell();  //This should remove the currently selected cell
-    //check hashtable to see if this element exists
-  }
   
   /**
    * clear() - Equals
@@ -350,7 +332,7 @@ public class GridTest {
    * getCell() - Not Null
    * getCell() should never return null 
    */
-  @Ignore @Test
+  @Test
   public void testGetCellNotNull() {
     //fail("Not yet implemented");
     /// test lower bound column and row
@@ -361,7 +343,7 @@ public class GridTest {
     assertNotNull("getCell() is not null", testGrid02.getCell("f",1));
     /// test upper bound column
     Grid testGrid03 = new Grid();
-    assertNotNull("getCell() is not null", testGrid03.getCell("k",1));
+    assertNotNull("getCell() is not null", testGrid03.getCell("j",1));
     /// test middle bound row
     Grid testGrid04 = new Grid();
     assertNotNull("getCell() is not null", testGrid04.getCell("a",testGrid04.getMaxHeight()/2));

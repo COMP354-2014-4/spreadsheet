@@ -151,7 +151,7 @@ public class CellTest {
 	  assertEquals("Cell new set value", "30.0", cell.getValue());
   }
   
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   //Test if value in cell is not a number
   public void testCellValueException(){
 	  Cell cell = new Cell("B", 4, test_Grid);
