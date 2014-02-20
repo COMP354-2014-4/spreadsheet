@@ -39,6 +39,7 @@ public class SSTable extends JTable {
 	public SSTable() {
 		this(SSTable.intDefaultRows,SSTable.intDefaultColumns);
 		//TODO: Generate Grid object for default table
+		grid = new Grid(intDefaultColumns, intDefaultRows);
 	}
 	
 	/**
