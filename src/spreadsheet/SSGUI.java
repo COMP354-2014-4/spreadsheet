@@ -155,6 +155,7 @@ public class SSGUI implements ActionListener{
 		
 		//build help menu
 		mnuHelp.add(mniAbout);
+		mniAbout.addActionListener(this);
 		
 		//add menus to menu bar
 		mnbMenu.add(mnuFile);
@@ -179,6 +180,7 @@ public class SSGUI implements ActionListener{
 		tbrToolBar.add(btnCopy);
 		tbrToolBar.add(btnCut);
 		tbrToolBar.add(btnPaste);
+		btnCopy.addActionListener(this);
 		
 		//Add primary window sections to window
 		frmWindow.setJMenuBar(this.mnbMenu);
@@ -250,6 +252,8 @@ public class SSGUI implements ActionListener{
 	 */	
 	public void copy(){
 		
+		System.out.println("row: " +(tblGrid.cellSelected.getSelected_Row()) + " column: " +tblGrid.cellSelected.getSelected_Col());
+		
 	}
 	
 	/**
@@ -272,6 +276,18 @@ public class SSGUI implements ActionListener{
 		 */
 		if(objSourceClass.equals(this.pnlCenter)){
 			//DO SOMETHING
+			
+		}
+		
+		if(objSourceClass.equals(this.mniAbout))
+		{
+			
+		}
+		
+		if(objSourceClass.equals(this.btnCopy))
+		{
+			copy();
+			
 		}
 	}
 	

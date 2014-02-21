@@ -1,6 +1,7 @@
 package spreadsheet;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -16,6 +17,8 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
 	private EmptyBorder bdrNotSelected; // The border when not selected
     private LineBorder  bdrSelected;	// The border when selected
     private Dimension   dimCellSize;	// The default dimensions of the cells
+    private int cellSelected_Row = 0;
+    private int cellSelected_Col = 0;
 
     /**
      * Constructor that accepts the height and width of the cells for rendering
@@ -58,12 +61,25 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
 		if (isSelected) {
 		  setBorder(bdrSelected);
 		  this.setBackground(new Color(240,240,255));
+		  cellSelected_Col = column + 1;
+		  cellSelected_Row = row + 1;
 		  
 		} else {
 		  setBorder(bdrNotSelected);
 		  this.setBackground(new Color(255,255,255));
 		}
 	
+		
 		return this;
+    }
+    
+    public  int getSelected_Col()
+    {
+    	return cellSelected_Col;
+    }
+    
+    public int getSelected_Row()
+    {
+    	return cellSelected_Row;
     }
 }

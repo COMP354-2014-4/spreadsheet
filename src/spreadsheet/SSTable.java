@@ -16,6 +16,8 @@ import javax.swing.table.*;
 public class SSTable extends JTable {
 	final int intCellWidth = 60;
 	final int intCellHeight = 21;
+	
+	SSCellRenderer cellSelected = null;
 
 	JViewport vptRowHeaderViewPort;
 	JViewport vptColumnHeaderViewPort;
@@ -92,7 +94,8 @@ public class SSTable extends JTable {
 
 		//Set up cell renderer
 		try {
-		    setDefaultRenderer(Class.forName("java.lang.Object" ), new SSCellRenderer(this.intCellHeight,this.intCellWidth) );
+			cellSelected = new SSCellRenderer(this.intCellHeight,this.intCellWidth);
+		    setDefaultRenderer(Class.forName("java.lang.Object" ), cellSelected );
 		} catch (ClassNotFoundException e) {
 		    System.out.println("ERROR: Renderer could not be set");
 		}
