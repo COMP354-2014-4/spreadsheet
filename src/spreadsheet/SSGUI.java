@@ -1,6 +1,7 @@
 package spreadsheet;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +15,7 @@ import java.awt.event.*;
  * A grid must be passed to create the object, but it can be blank
  *
  */
-public class SSGUI implements ActionListener{
+public class SSGUI implements ActionListener, ListSelectionListener{
 	//Tools
 	private Toolkit toolKit;
 	
@@ -22,6 +23,13 @@ public class SSGUI implements ActionListener{
 	private JFrame frmWindow;
 	private JPanel pnlCenter;
 	private JPanel pnlSouth;
+	
+	//Top Panel Components
+	JPanel panNorthPanel;
+	JTextField txtInputBox;
+	JLabel lblInput;
+	JButton btnUpdate;
+	
 	
 	//Control components
 	private JMenuBar mnbMenu;
@@ -65,7 +73,8 @@ public class SSGUI implements ActionListener{
 	private int intScreenHeight;
 	
 	//Back-end data objects
-	private Grid grid = new Grid();
+	private Grid grid = new Grid(SSTable.intDefaultColumns, SSTable.intDefaultRows);
+	private String clipBoard = "";
 
 	/**
 	 * Default constructor, which acccepts the grid to be displayed
@@ -87,6 +96,12 @@ public class SSGUI implements ActionListener{
 		tbrToolBar = new JToolBar();
 		pnlCenter = new JPanel();
 		pnlSouth = new JPanel();
+		
+		//Top Panel Components
+		lblInput = new JLabel(" Input:  ");
+		txtInputBox = new JTextField();
+		btnUpdate = new JButton("Update");
+		panNorthPanel = new JPanel();
 		
 		//Menu Bar
 		mnbMenu = new JMenuBar();	//Menu Items
@@ -117,10 +132,20 @@ public class SSGUI implements ActionListener{
 		btnCut = new JButton("Cut");
 		btnPaste = new JButton("Paste");
 		
+		//Build Center Panel
+		panNorthPanel.setLayout(new BorderLayout());
+		panNorthPanel.add(txtInputBox,BorderLayout.CENTER);
+		panNorthPanel.add(tbrToolBar,BorderLayout.NORTH);
+		panNorthPanel.add(lblInput,BorderLayout.WEST);
+		panNorthPanel.add(btnUpdate,BorderLayout.EAST);
+		
+		
 		//Build center panel		
 		tblGrid = new SSTable(gridObject);//uses the default values on load
 		tblGrid.setFillsViewportHeight(true);
 		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblGrid.getSelectionModel().addListSelectionListener(this);
+		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
 		scrTblScrollPane = new JScrollPane(tblGrid,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			    JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		//scrTblScrollPane.setColumnHeaderView(tblGrid.getTableHeader());
@@ -184,7 +209,7 @@ public class SSGUI implements ActionListener{
 		
 		//Add primary window sections to window
 		frmWindow.setJMenuBar(this.mnbMenu);
-		frmWindow.add(tbrToolBar,BorderLayout.NORTH);
+		frmWindow.add(panNorthPanel, BorderLayout.NORTH);
 		frmWindow.add(scrTblScrollPane,BorderLayout.CENTER);
 		frmWindow.add(txtMessageBox,BorderLayout.SOUTH);
 		
@@ -199,7 +224,7 @@ public class SSGUI implements ActionListener{
 	 * @param strMessage The message to display
 	 */
 	public void displayMessage(String strMessage){
-		this.txtMessageBox.setText(strMessage);	
+		this.txtMessageBox.setText(strMessage);
 	}
 	
 	/**
@@ -207,8 +232,9 @@ public class SSGUI implements ActionListener{
 	 * 
 	 * @param gridUpdate The grid to display
 	 */
-	public void updateTable(Grid gridUpdate){
-		this.grid = gridUpdate;
+	public void updateTable(){
+		
+		//this.grid = gridUpdate;
 		//TODO actually do something with the grid...
 	}
 	
@@ -244,23 +270,45 @@ public class SSGUI implements ActionListener{
 	 * cut cells
 	 */
 	public void cut(){
-		
+		clipBoard = tblGrid.cellSelected.getCellContents();
 	}
 	
 	/**
 	 * copy cells
 	 */	
 	public void copy(){
-		
-		System.out.println("row: " +(tblGrid.cellSelected.getSelected_Row()) + " column: " +tblGrid.cellSelected.getSelected_Col());
-		
+		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+			return;
+		}
+		int col = tblGrid.getSelectedColumn();
+		String colConvert = grid.numToCol(tblGrid.getSelectedColumn());
+		int row = tblGrid.getSelectedRow();
+		if(tblGrid.getValueAt(row, col) == null){
+			return;
+		}
+		if(tblGrid.getValueAt(row, col).equals("")){
+			return;
+		}
+		clipBoard = (String)tblGrid.getValueAt(row, col);
 	}
 	
 	/**
 	 * paste cells
 	 */
 	public void paste(){
-		
+		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+			return;
+		}
+		int col = tblGrid.getSelectedColumn();
+		String colConvert = grid.numToCol(tblGrid.getSelectedColumn());
+		int row = tblGrid.getSelectedRow();
+		if(tblGrid.getValueAt(row, col) == null){
+			return;
+		}
+		if(tblGrid.getValueAt(row, col).equals("")){
+			return;
+		}
+		grid.getCell(colConvert, row).setValue(clipBoard);
 	}
 	
 	/**
@@ -290,6 +338,35 @@ public class SSGUI implements ActionListener{
 			
 		}
 	}
+	/*
+	 * Captures de-selection action from the JTable cells, 
+	 * handles this by communicating the cell's current value to back-end for verification
+	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 */
+	public void valueChanged(ListSelectionEvent e) {
+		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+			return;
+		}
+		
+		
+		int col = tblGrid.getSelectedColumn();
+		String colConvert = grid.numToCol(tblGrid.getSelectedColumn());
+		int row = tblGrid.getSelectedRow();
+		System.out.println(row + "" + col  /*(String)tblGrid.getValueAt(row, col)*/);
+		if(tblGrid.getValueAt(row, col) == null)
+		{
+			return;
+		}
+		if(tblGrid.getValueAt(row, col).equals(""))
+		{
+			return;
+		}
+		//tblGrid.getSelectedColumn();
+		//tblGrid.getSelectedRow();
+		//tblGrid.getSel
+		grid.getCell(colConvert, row).setValue((String)tblGrid.getValueAt(row, col));
+		System.out.println(row + col + (String)tblGrid.getValueAt(row, col));
+	 }
 	
 	/**
 	 * Sets the look and feel to the current OS

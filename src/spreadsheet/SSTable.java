@@ -1,6 +1,7 @@
 package spreadsheet;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -33,7 +34,8 @@ public class SSTable extends JTable {
 	int intNumRows;
 	int intNumColumns;
 	
-	Border bdrHeaderBorder  = (Border)UIManager.getDefaults().get("TableHeader.cellBorder");
+	//Border for the row and column headers
+	Border bdrHeaderBorder  = BorderFactory.createLineBorder(Color.black);
 	
 	/**
 	 * Create a blank spreadsheet with the default number of rows and columns
@@ -41,7 +43,7 @@ public class SSTable extends JTable {
 	public SSTable() {
 		this(SSTable.intDefaultRows,SSTable.intDefaultColumns);
 		//TODO: Generate Grid object for default table
-		grid = new Grid(intDefaultColumns, intDefaultRows);
+		//grid = new Grid(intDefaultColumns, intDefaultRows);
 	}
 	
 	/**
@@ -54,6 +56,8 @@ public class SSTable extends JTable {
 		//---> This is because the grid is a hash and only stores what was entered. The defaults determine what COULD be entered
 		this(SSTable.intDefaultRows,SSTable.intDefaultColumns);
 		this.grid = g;
+		this.header.setBorder(this.bdrHeaderBorder);
+		g.setSSTable(this);
 		
 		setupSSTable();
 		createRowLabels();
@@ -85,10 +89,11 @@ public class SSTable extends JTable {
 		//Set up header
 		this.header = this.getTableHeader();
 		header.setDefaultRenderer(new SSTableRenderer(this));
+		header.setReorderingAllowed(false);
 		
 		//Set up JTable properties
 		this.setCellSelectionEnabled(true);
-		this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setRowHeight(this.intCellHeight);
 		this.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
 
@@ -99,6 +104,7 @@ public class SSTable extends JTable {
 		} catch (ClassNotFoundException e) {
 		    System.out.println("ERROR: Renderer could not be set");
 		}
+
 	}
 	
 	/**
@@ -108,7 +114,8 @@ public class SSTable extends JTable {
 	private void createRowLabels(){
 		// Create row header JPanel
 		JPanel pnlRowHeaders = new JPanel();
-		pnlRowHeaders.setBackground(new Color(255,255,255));
+		pnlRowHeaders.setBackground(new Color(200,200,255));
+		pnlRowHeaders.setBorder(this.bdrHeaderBorder);
 		
 		FontMetrics metrics = getFontMetrics(this.getFont());
 
@@ -124,10 +131,10 @@ public class SSTable extends JTable {
 		
 		for (int i = 1; i <= this.intNumRows; i++) {
 		  JLabel lblRow = new JLabel(Integer.toString(i), SwingConstants.CENTER);
+		  lblRow.setBorder(BorderFactory.createLineBorder(new Color(200,200,255)));
 		  lblRow.setFont(this.getFont());
-		  lblRow.setBorder(BorderFactory.createLineBorder(Color.white));
 		  lblRow.setBounds(0, i*dimPanelSize.height, dimPanelSize.width, dimPanelSize.height);
-		  lblRow.setBackground(new Color(255,255,255));
+		  //lblRow.setBackground(new Color(255,255,255));
 		  
 		  pnlRowHeaders.add(lblRow);
 		}

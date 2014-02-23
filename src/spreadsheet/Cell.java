@@ -233,6 +233,8 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 		this.setChanged();
 		this.notifyObservers();
 		
+		_grid.getSSTable().setValueAt(_evaluatedValue, _row, Grid.colToNumber(_col));
+		
 	}
 	
 	//getters

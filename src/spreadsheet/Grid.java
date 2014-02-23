@@ -28,6 +28,8 @@ public class Grid implements  java.io.Serializable{
 	private int _currentWidth;
 	private int _currentHeight;
 	
+	private SSTable tblInterface;
+	
 	/**
 	 * Default constructor. Set the max size to
 	 * 10 x 10, create the cell A1 and select it
@@ -58,6 +60,17 @@ public class Grid implements  java.io.Serializable{
 		_currentWidth = 1;
 		_currentHeight = 1;
 	}
+	
+	
+	public void setSSTable(SSTable s){
+		this.tblInterface = s;
+	}
+	
+	
+	public SSTable getSSTable(){
+		return this.tblInterface;
+	}
+	
 	
 	/**
 	 * Try to access a single cell inside of the spreadsheet.
@@ -202,7 +215,7 @@ public class Grid implements  java.io.Serializable{
 	 * @param columnIndex	the integer representation of the column
 	 * @return				the string representation of the column
 	 */
-	private String numToCol(int columnIndex){ 
+	public static String numToCol(int columnIndex){ 
 		if (columnIndex == 0)
 			return null;
 		columnIndex--;
@@ -225,7 +238,7 @@ public class Grid implements  java.io.Serializable{
 	 * @param str	the string representation of the column
 	 * @return		the integer representation of the column
 	 */
-	private int colToNumber(String str) {
+	public static int colToNumber(String str) {
 		char[] chars = str.toUpperCase().toCharArray();
 
 	    int sum = 0;

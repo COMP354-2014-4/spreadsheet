@@ -21,6 +21,7 @@ class SSTableRenderer implements TableCellRenderer {
 	public SSTableRenderer(JTable table) {
 	    this.renderer = new DefaultTableCellRenderer();
 	    this.renderer.setHorizontalAlignment(JLabel.CENTER);
+	    this.renderer.setBackground(new Color(200,200,255));
 
 		fntHeader = table.getFont();
 		fntHeader = fntHeader.deriveFont(Font.BOLD);
