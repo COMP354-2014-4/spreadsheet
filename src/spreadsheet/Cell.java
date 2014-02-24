@@ -232,8 +232,15 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	private void setChangeAndNotify(){
 		this.setChanged();
 		this.notifyObservers();
+		_grid.Display();
+		System.out.println("  " + _evaluatedValue +"   " + _row + "   "  + Grid.colToNumber(_col));
+		if(_grid == null)
+			System.out.println("GRID IS NOT THERE");
+		if(_grid.getSSTable()== null)
+			System.out.println("SSTABLE IS NOT THERE");
 		
-		_grid.getSSTable().setValueAt(_evaluatedValue, _row, Grid.colToNumber(_col));
+		_grid.getSSTable().setValueAt(_evaluatedValue, _row-1, Grid.colToNumber(_col)-1);
+	
 		
 	}
 	

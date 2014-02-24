@@ -29,7 +29,7 @@ public class SSTable extends JTable {
 	static final int intDefaultRows = 5000;
 	static final int intDefaultColumns = 26*27;//ends at ZZ (27 because the firsts 26 values are single digit)
 	
-	Grid grid;
+	private Grid grid;
 	
 	int intNumRows;
 	int intNumColumns;

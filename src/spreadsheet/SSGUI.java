@@ -3,8 +3,10 @@ package spreadsheet;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.filechooser.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.JFileChooser;
 
 
 /**
@@ -73,8 +75,11 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	private int intScreenHeight;
 	
 	//Back-end data objects
-	private Grid grid = new Grid(SSTable.intDefaultColumns, SSTable.intDefaultRows);
+	private Grid grid;
 	private String clipBoard = "";
+	
+	//Save location
+	private String strFileLocation = ""; //set to null instead?
 
 	/**
 	 * Default constructor, which acccepts the grid to be displayed
@@ -82,6 +87,10 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	 * @param gridObject The back-end data stored in the grid
 	 */
 	public SSGUI(Grid gridObject){
+		prevCellCol = 1
+		prevCellRow = 1
+		
+		grid = gridObject;
 		
 		//attempt to adopt the system look and feel
 		setLookAndFeel();
@@ -139,9 +148,22 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		panNorthPanel.add(lblInput,BorderLayout.WEST);
 		panNorthPanel.add(btnUpdate,BorderLayout.EAST);
 		
+		// Add all the action listeners
+		mniNew.addActionListener(this);
+		mniLoad.addActionListener(this);
+		mniSave.addActionListener(this);
+		mniSaveAs.addActionListener(this);
+				
+		btnNew.addActionListener(this);
+		btnLoad.addActionListener(this);
+		btnSave.addActionListener(this);
+		btnSaveAs.addActionListener(this);
+		btnCopy.addActionListener(this);
+		btnCut.addActionListener(this);
+		btnPaste.addActionListener(this);
 		
-		//Build center panel		
-		tblGrid = new SSTable(gridObject);//uses the default values on load
+		//Build center panel	
+		tblGrid = new SSTable(grid);//uses the default values on load
 		tblGrid.setFillsViewportHeight(true);
 		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tblGrid.getSelectionModel().addListSelectionListener(this);
@@ -242,28 +264,56 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	 * Create a new spreadsheet
 	 */
 	public void newSpreadsheet(){
-		//TODO: Reinitialize the grid
+		//Should work in theory
+		
+		//JOptionPane.showMessageDialog(null,"NEW SPREADSHEET");
+		grid.clear();
+		strFileLocation = ""; // clears the save file location
+		
 	}
 	
 	/**
 	 * Load a spreadsheet from a file
 	 */
 	public void loadSpreadsheet(){
-		//TODO: Allow user to select a file and then initialize the grid from it
+		
+		final JFileChooser fc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(".sav file","sav");
+		fc.setFileFilter(filter);
+		int returnVal = fc.showOpenDialog(frmWindow);
+		if(returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			strFileLocation = fc.getSelectedFile().getAbsolutePath();
+			grid.load(strFileLocation);
+			
+		}
 	}
 	
 	/**
 	 * Save the spreadsheet to a file already selected, or prompt for location if file not yet saved
 	 */
 	public void saveSpreadsheet(){
-		//TODO: Store the current grid to the selected file, or call saveAsSpreadsheet() if no file has yet been selected.
+		
+		if(strFileLocation.equals("")) // Compare to null?
+			saveAsSpreadsheet();
+		else
+			grid.save(strFileLocation);
 	}
 	
 	/**
 	 * Select a file and save the spreadsheet it
 	 */
 	public void saveAsSpreadsheet(){
-		//TODO: Store the current grid to a file
+		
+		final JFileChooser fc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(".sav file","sav");
+		fc.setFileFilter(filter);
+		int returnVal = fc.showSaveDialog(frmWindow); // Different from loadSpreadsheet()
+		if(returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			strFileLocation = fc.getSelectedFile().getAbsolutePath();
+			grid.save(strFileLocation); // Also different from loadSpreadsheet()
+		}
 	}
 	
 	/**
@@ -277,12 +327,12 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	 * copy cells
 	 */	
 	public void copy(){
-		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+		if(tblGrid.getSelectedRow()+1 < 0 || tblGrid.getSelectedColumn()+1 < 0){
 			return;
 		}
-		int col = tblGrid.getSelectedColumn();
-		String colConvert = grid.numToCol(tblGrid.getSelectedColumn());
-		int row = tblGrid.getSelectedRow();
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
 		if(tblGrid.getValueAt(row, col) == null){
 			return;
 		}
@@ -296,12 +346,12 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	 * paste cells
 	 */
 	public void paste(){
-		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+		if(tblGrid.getSelectedRow()+1 < 0 || tblGrid.getSelectedColumn()+1 < 0){
 			return;
 		}
-		int col = tblGrid.getSelectedColumn();
-		String colConvert = grid.numToCol(tblGrid.getSelectedColumn());
-		int row = tblGrid.getSelectedRow();
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
 		if(tblGrid.getValueAt(row, col) == null){
 			return;
 		}
@@ -322,20 +372,25 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		/*
 		 * Template for handling events from each component
 		 */
-		if(objSourceClass.equals(this.pnlCenter)){
-			//DO SOMETHING
-			
+		if(objSourceClass.equals(this.btnNew) || objSourceClass.equals(this.mniNew)){
+			newSpreadsheet();
 		}
-		
+		if(objSourceClass.equals(this.btnLoad) || objSourceClass.equals(this.mniLoad)){
+			loadSpreadsheet();
+		}
+		if(objSourceClass.equals(this.btnSave) || objSourceClass.equals(this.mniSave)){
+			saveSpreadsheet();
+		}
+		if(objSourceClass.equals(this.btnSaveAs) || objSourceClass.equals(this.mniSaveAs)){
+			saveAsSpreadsheet();
+		}
 		if(objSourceClass.equals(this.mniAbout))
 		{
 			
 		}
-		
 		if(objSourceClass.equals(this.btnCopy))
 		{
 			copy();
-			
 		}
 	}
 	/*
@@ -349,23 +404,23 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		}
 		
 		
-		int col = tblGrid.getSelectedColumn();
-		String colConvert = grid.numToCol(tblGrid.getSelectedColumn());
-		int row = tblGrid.getSelectedRow();
-		System.out.println(row + "" + col  /*(String)tblGrid.getValueAt(row, col)*/);
-		if(tblGrid.getValueAt(row, col) == null)
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = Grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
+		System.out.println(row + "" + colConvert  /*(String)tblGrid.getValueAt(row, col)*/);
+		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
 			return;
 		}
-		if(tblGrid.getValueAt(row, col).equals(""))
+		if(tblGrid.getValueAt(row-1, col-1).equals(""))
 		{
 			return;
 		}
 		//tblGrid.getSelectedColumn();
 		//tblGrid.getSelectedRow();
 		//tblGrid.getSel
-		grid.getCell(colConvert, row).setValue((String)tblGrid.getValueAt(row, col));
-		System.out.println(row + col + (String)tblGrid.getValueAt(row, col));
+		grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
+		System.out.println(""+row + col + tblGrid.getValueAt(row-1, col-1));
 	 }
 	
 	/**

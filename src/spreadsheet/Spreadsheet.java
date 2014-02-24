@@ -22,7 +22,7 @@ public class Spreadsheet {
 		//TODO: On open, allow the user to choose between "New" and "Open". Either a new grid should be created or one should be generated from the file.
 		
 		//Create a blank back-end grid
-		Grid grid = new Grid();
+		Grid grid = new Grid(SSTable.intDefaultColumns, SSTable.intDefaultRows);
 		
 		//Create the GUI and pass it the grid to display
 		SSGUI gui = new SSGUI(grid);

@@ -57,8 +57,13 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
 		this.setForeground(new Color(0,0,0)); //text color
 		
 		//set the text to display
-  		this.setText((String)cell);
-  		cellContents = (String)cell;
+		if(cell != null){
+	  		this.setText(""+cell);
+	  		cellContents = ""+cell;
+		}else{
+			this.setText("");
+			cellContents = "";
+		}
     	
   		//Highlights a cell when selected
 		if (isSelected) {
