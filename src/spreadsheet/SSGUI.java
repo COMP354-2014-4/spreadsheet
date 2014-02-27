@@ -87,8 +87,8 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	 * @param gridObject The back-end data stored in the grid
 	 */
 	public SSGUI(Grid gridObject){
-		prevCellCol = 1
-		prevCellRow = 1
+		//prevCellCol = 1
+		//prevCellRow = 1
 		
 		grid = gridObject;
 		

@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 
 import spreadsheet.Cell;
@@ -284,8 +285,6 @@ public class Grid implements  java.io.Serializable{
 		return s;
 	}
 	
-	
-	
 	/**
 	 * Save the grid to the file
 	 * 
@@ -293,9 +292,20 @@ public class Grid implements  java.io.Serializable{
 	 */
 	public boolean save(String fileName){
 		try {
-			FileOutputStream fileOut = new FileOutputStream(fileName + ".sav");
+			// .sav extension no longer needed, implicit in how the GUI handles load/save
+			FileOutputStream fileOut = new FileOutputStream(fileName);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(_cells);
+			
+			/* New stuff to deal with Non-Serializable exceptions */
+			Hashtable<String, String> hTemp = new Hashtable<String,String>(); 
+			Set<String> keys = _cells.keySet();
+			
+			for(String key: keys)
+				hTemp.put(key,_cells.get(key).getValue());
+			
+			out.writeObject(hTemp);
+			/* End of new stuff */
+			
 			out.close();
 			fileOut.close();
 			return true;
@@ -319,9 +329,24 @@ public class Grid implements  java.io.Serializable{
 	 */
 	public boolean load(String fileName) {
 		try {
-			FileInputStream fileIn = new FileInputStream(fileName + ".sav");
+			FileInputStream fileIn = new FileInputStream(fileName);
 		    ObjectInputStream in = new ObjectInputStream(fileIn);
-		    _cells = (Hashtable<String, Cell>)in.readObject();
+		    
+		    /* New stuff to deal with Non-Serializable exceptions */
+		    //_cells = (Hashtable<String, Cell>)in.readObject();
+		    Hashtable<String, String> hTemp = (Hashtable<String, String>)in.readObject();
+		    Set<String> keys = hTemp.keySet();
+		    
+		    for(String key: keys) {
+				
+		    	String col = colFromColRow(key);
+				int row = rowFromColRow(key);
+				String value = hTemp.get(key);
+				// Cell c = new Cell(col, row, _cells); What to put for the third argument, ie the grid?
+		    	
+		    }
+		    /* End of new stuff */
+		    
 		    in.close();
 		    fileIn.close();
 			return true;
@@ -333,4 +358,30 @@ public class Grid implements  java.io.Serializable{
 			return false;
 		}
 	}
+	
+	/* New methods for determining a row & column separately from a string with row & column mashed together */
+	public static String colFromColRow(String colrow)
+	{
+		
+		int position = 1;
+		
+		if('A' <= colrow.charAt(1) && colrow.charAt(1) <= 'Z')
+			position = 2;
+		
+		return colrow.substring(0,position);
+		
+	}
+	
+	public static int rowFromColRow(String colrow)
+	{
+		int position = 1;
+		
+		if('A' <= colrow.charAt(1) && colrow.charAt(1) <= 'Z')
+			position = 2;
+		
+		return Integer.parseInt(colrow.substring(position));
+		
+	}
+	/* End of new methods */
+	
 }
