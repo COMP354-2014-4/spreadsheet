@@ -57,7 +57,7 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
 		this.setForeground(new Color(0,0,0)); //text color
 		
 		//set the text to display
-		if(cell != null){
+		if(cell != null /*&& (double) cell != 0.0)   ignore empty value cells              */){
 	  		this.setText(""+cell);
 	  		cellContents = ""+cell;
 		}else{

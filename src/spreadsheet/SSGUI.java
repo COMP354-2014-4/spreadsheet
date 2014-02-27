@@ -4,8 +4,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.*;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.JFileChooser;
 
 
@@ -17,7 +19,7 @@ import javax.swing.JFileChooser;
  * A grid must be passed to create the object, but it can be blank
  *
  */
-public class SSGUI implements ActionListener, ListSelectionListener{
+public class SSGUI implements ActionListener, ListSelectionListener, TableModelListener{
 	//Tools
 	private Toolkit toolKit;
 	
@@ -166,6 +168,7 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		tblGrid = new SSTable(grid);//uses the default values on load
 		tblGrid.setFillsViewportHeight(true);
 		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblGrid.getModel().addTableModelListener(this);
 		tblGrid.getSelectionModel().addListSelectionListener(this);
 		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
 		scrTblScrollPane = new JScrollPane(tblGrid,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -275,7 +278,7 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	/**
 	 * Load a spreadsheet from a file
 	 */
-	public void loadSpreadsheet(){
+public void loadSpreadsheet(){
 		
 		final JFileChooser fc = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".sav file","sav");
@@ -297,7 +300,7 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		if(strFileLocation.equals("")) // Compare to null?
 			saveAsSpreadsheet();
 		else
-			grid.save(strFileLocation);
+			grid.save(strFileLocation + ".sav");
 	}
 	
 	/**
@@ -312,7 +315,7 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			strFileLocation = fc.getSelectedFile().getAbsolutePath();
-			grid.save(strFileLocation); // Also different from loadSpreadsheet()
+			grid.save(strFileLocation + ".sav"); // Also different from loadSpreadsheet()
 		}
 	}
 	
@@ -399,6 +402,29 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
 	 */
 	public void valueChanged(ListSelectionEvent e) {
+if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+			return;
+		}
+		
+		
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = Grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
+		//System.out.println(row + "" + colConvert  /*(String)tblGrid.getValueAt(row, col)*/);
+		if(tblGrid.getValueAt(row-1, col-1) == null)
+		{
+			return;
+		}
+		if(tblGrid.getValueAt(row-1, col-1).equals(""))
+		{
+			return;
+		}
+		txtInputBox.setText(grid.getCell(colConvert, row).getValue());
+	}
+	
+	
+	 public void tableChanged(TableModelEvent e) {
+		 tblGrid.getModel().removeTableModelListener(this);
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 			return;
 		}
@@ -419,8 +445,13 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 		//tblGrid.getSelectedColumn();
 		//tblGrid.getSelectedRow();
 		//tblGrid.getSel
+if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue()))))
+		{
 		grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
-		System.out.println(""+row + col + tblGrid.getValueAt(row-1, col-1));
+}
+		//txtInputBox.setText(grid.getCell(colConvert, row).getValue());
+		tblGrid.getModel().addTableModelListener(this);
+		//System.out.println(""+row + col + tblGrid.getValueAt(row-1, col-1));
 	 }
 	
 	/**
@@ -433,4 +464,5 @@ public class SSGUI implements ActionListener, ListSelectionListener{
 			//Doesn't matter if it doesn't work
 		}
 	}
+
 }

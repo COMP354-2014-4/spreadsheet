@@ -23,14 +23,14 @@ public class Grid implements  java.io.Serializable{
 	private Cell _selectedCell;
 	private int _maxWidth;
 	private int _maxHeight;
-	
+
 	//Current width and height are keeped upped to date
 	//as cell are accessed
 	private int _currentWidth;
 	private int _currentHeight;
-	
+
 	private SSTable tblInterface;
-	
+
 	/**
 	 * Default constructor. Set the max size to
 	 * 10 x 10, create the cell A1 and select it
@@ -44,7 +44,7 @@ public class Grid implements  java.io.Serializable{
 		_currentWidth = 1;
 		_currentHeight = 1;
 	}
-	
+
 	/**
 	 * Default constructor. Set the max size to
 	 * maxWidth X maxHeight, create the cell A1 and select it
@@ -61,18 +61,18 @@ public class Grid implements  java.io.Serializable{
 		_currentWidth = 1;
 		_currentHeight = 1;
 	}
-	
-	
+
+
 	public void setSSTable(SSTable s){
 		this.tblInterface = s;
 	}
-	
-	
+
+
 	public SSTable getSSTable(){
 		return this.tblInterface;
 	}
-	
-	
+
+
 	/**
 	 * Try to access a single cell inside of the spreadsheet.
 	 * If the cell doesn't exist, it will create it as long
@@ -89,19 +89,19 @@ public class Grid implements  java.io.Serializable{
 			if( foundCell == null ){
 				foundCell = new Cell( col, row, this );
 				_cells.put(col + row, foundCell);
-				
+
 				if(intCol > _currentWidth)
 					_currentWidth = Math.min(intCol, _maxWidth);
 				if(row > _currentHeight)
 					_currentHeight = Math.min(row, _maxHeight);
-				
+
 			}
 			return foundCell;
 		}else{
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Changes the hash table to the one specified
 	 * 
@@ -110,7 +110,7 @@ public class Grid implements  java.io.Serializable{
 	public void setCells( Hashtable<String, Cell> cells ) {
 		_cells = cells;
 	}
-	
+
 	/**
 	 * Select a cell if it is within bounds. If the cell
 	 * doesn't exist it will be created. If the cell is out
@@ -125,9 +125,9 @@ public class Grid implements  java.io.Serializable{
 		if( selectedCell != null )
 			return _selectedCell = selectedCell;
 		return null;
-		
+
 	}
-	
+
 	/**
 	 * Remove the selected cell from the grid as long as the
 	 * cell isn't observed by any other
@@ -135,7 +135,7 @@ public class Grid implements  java.io.Serializable{
 	public void removeSelectedCell() {
 		this.removeCell( _selectedCell.getCol(), _selectedCell.getRow() );
 	}
-	
+
 	/**
 	 * Remove the cell at location (col, row) from the grid as long as the
 	 * cell isn't observed by any other. If it is the selected cell, selected
@@ -146,41 +146,41 @@ public class Grid implements  java.io.Serializable{
 	 */
 	public void removeCell(String col, int row) {
 		Cell cell = this.getCell(col, row);
-		
-		
+
+
 		for(Cell observed : cell.getObservedCells()){
 			observed.deleteObserver(cell);
 		}
 		cell.setValue("0");
-		
+
 		if( cell.countObservers() == 0 ){
 			_cells.remove( col + row );
 			if(_selectedCell == this.getCell(col, row))
 				_selectedCell = null;
 		}
 	}
-	
+
 	/**
 	 * Empties the Grid
 	 */
 	public void clear() {
 		_cells.clear();
 	}
-	
+
 	//Basic getters
 	public Cell getSelectedCell() {return _selectedCell;}
-	
+
 	public int getMaxWidth() {return _maxWidth;}
 	public int getMaxHeight() {return _maxHeight;}
-	
+
 	public int getCurrentWidth() {return _currentWidth;}
 	public int getCurrentHeight() {return _currentHeight;}
-	
+
 	//Basic mutators
 	public void setMaxWidth(int maxWidth) {_maxWidth = maxWidth;}
 	public void setMaxHeight(int maxHeight) {_maxHeight = maxHeight;}
-	
-	
+
+
 	/**
 	 * Display the grid inside of the console
 	 */
@@ -201,14 +201,14 @@ public class Grid implements  java.io.Serializable{
 						System.out.print(centerPad(String.valueOf(i), 10));
 					}else{
 						System.out.print(centerPad(this.getCell(numToCol(c), i).getDisplay(), 10));
-						
+
 					}
 				}
 			}
 			System.out.print("|\n" );
 		}
 	}
-	
+
 	/**
 	 * Utility method to convert a number to
 	 * its equivalent column name
@@ -227,11 +227,11 @@ public class Grid implements  java.io.Serializable{
 			b.append(Character.valueOf((char) digit));
 			columnIndex = (columnIndex / base) - 1;
 		} while (columnIndex >= 0);
-		
+
 		return b.reverse().toString();
 
 	}
-	
+
 	/**
 	 * Utility method to convert a column name to
 	 * its equivalent integer
@@ -242,17 +242,17 @@ public class Grid implements  java.io.Serializable{
 	public static int colToNumber(String str) {
 		char[] chars = str.toUpperCase().toCharArray();
 
-	    int sum = 0;
+		int sum = 0;
 
-	    for (int i = 0; i < chars.length; i++)
-	    {
-	        sum *= 26;
-	        sum += (chars[i] - 'A' + 1);
-	    }
+		for (int i = 0; i < chars.length; i++)
+		{
+			sum *= 26;
+			sum += (chars[i] - 'A' + 1);
+		}
 
-	    return sum;
+		return sum;
 	}
-	
+
 	/**
 	 * Utility method to add space padding
 	 * to the left and right of a string
@@ -266,11 +266,11 @@ public class Grid implements  java.io.Serializable{
 		int padding = size - stringLength;
 		int leftPad = padding - padding/2;
 		int rightPad = padding - leftPad;
-		
-		
+
+
 		return createPad(rightPad) + string + createPad(leftPad);
 	}
-	
+
 	/**
 	 * Utility method to create a string of
 	 * x spaces where x is the size
@@ -284,7 +284,7 @@ public class Grid implements  java.io.Serializable{
 			s+=" ";
 		return s;
 	}
-	
+
 	/**
 	 * Save the grid to the file
 	 * 
@@ -295,17 +295,20 @@ public class Grid implements  java.io.Serializable{
 			// .sav extension no longer needed, implicit in how the GUI handles load/save
 			FileOutputStream fileOut = new FileOutputStream(fileName);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			
+
 			/* New stuff to deal with Non-Serializable exceptions */
 			Hashtable<String, String> hTemp = new Hashtable<String,String>(); 
 			Set<String> keys = _cells.keySet();
-			
-			for(String key: keys)
+
+			for(String key: keys) {
 				hTemp.put(key,_cells.get(key).getValue());
-			
+				System.out.println("\nKey: " + key + "\n");
+				System.out.println("Value: " + hTemp.get(key) + "\n");
+			}
+
 			out.writeObject(hTemp);
 			/* End of new stuff */
-			
+
 			out.close();
 			fileOut.close();
 			return true;
@@ -321,7 +324,7 @@ public class Grid implements  java.io.Serializable{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Load a grid from the specified file
 	 * 
@@ -330,25 +333,27 @@ public class Grid implements  java.io.Serializable{
 	public boolean load(String fileName) {
 		try {
 			FileInputStream fileIn = new FileInputStream(fileName);
-		    ObjectInputStream in = new ObjectInputStream(fileIn);
-		    
-		    /* New stuff to deal with Non-Serializable exceptions */
-		    //_cells = (Hashtable<String, Cell>)in.readObject();
-		    Hashtable<String, String> hTemp = (Hashtable<String, String>)in.readObject();
-		    Set<String> keys = hTemp.keySet();
-		    
-		    for(String key: keys) {
-				
-		    	String col = colFromColRow(key);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+
+			/* New stuff to deal with Non-Serializable exceptions */
+			Hashtable<String, String> hTemp = (Hashtable<String, String>)in.readObject();
+			Set<String> keys = hTemp.keySet();
+
+			for(String key: keys) {
+
+				String col = colFromColRow(key);
 				int row = rowFromColRow(key);
 				String value = hTemp.get(key);
-				// Cell c = new Cell(col, row, _cells); What to put for the third argument, ie the grid?
-		    	
-		    }
-		    /* End of new stuff */
-		    
-		    in.close();
-		    fileIn.close();
+				Cell c = new Cell(col, row, this);
+				c.setValue(value);
+				System.out.println("\nCell value: " + value + "\n"); // FOR DEBUGGING
+				_cells.put(key, c);
+
+			}
+			/* End of new stuff */
+
+			in.close();
+			fileIn.close();
 			return true;
 		}catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -358,30 +363,29 @@ public class Grid implements  java.io.Serializable{
 			return false;
 		}
 	}
-	
+
 	/* New methods for determining a row & column separately from a string with row & column mashed together */
 	public static String colFromColRow(String colrow)
 	{
-		
+
 		int position = 1;
-		
+
 		if('A' <= colrow.charAt(1) && colrow.charAt(1) <= 'Z')
 			position = 2;
-		
+
 		return colrow.substring(0,position);
-		
+
 	}
-	
+
 	public static int rowFromColRow(String colrow)
 	{
 		int position = 1;
-		
+
 		if('A' <= colrow.charAt(1) && colrow.charAt(1) <= 'Z')
 			position = 2;
-		
+
 		return Integer.parseInt(colrow.substring(position));
-		
+
 	}
 	/* End of new methods */
-	
 }
