@@ -406,4 +406,6 @@ public class Grid implements  java.io.Serializable{
 
 	}
 	/* End of new methods */
+	
+	public Hashtable<String,Cell> get_cells() {return _cells;}
 }

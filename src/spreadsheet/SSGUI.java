@@ -7,6 +7,7 @@ import javax.swing.filechooser.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 
@@ -243,6 +244,16 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		frmWindow.setVisible(true);		
 	}
 	
+	public void initializeTable() {
+		tblGrid = new SSTable(grid);//uses the default values on load
+		tblGrid.setFillsViewportHeight(true);
+		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblGrid.getModel().addTableModelListener(this);
+		tblGrid.getSelectionModel().addListSelectionListener(this);
+		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
+		scrTblScrollPane.setViewportView(tblGrid);
+	}
+	
 	/**
 	 * Display a message in the message bar
 	 *  
@@ -271,6 +282,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		
 		//JOptionPane.showMessageDialog(null,"NEW SPREADSHEET");
 		grid.clear();
+		initializeTable();
 		strFileLocation = ""; // clears the save file location
 		
 	}
@@ -413,6 +425,16 @@ if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 		//System.out.println(row + "" + colConvert  /*(String)tblGrid.getValueAt(row, col)*/);
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
+			
+			
+			Set<String> keys = grid.get_cells().keySet();
+			for(String key: keys) {
+				System.out.println("\nKey: " + key + " , Value: " + grid.get_cells().get(key) );
+			}
+			
+			
+			
+			
 			return;
 		}
 		if(tblGrid.getValueAt(row-1, col-1).equals(""))
