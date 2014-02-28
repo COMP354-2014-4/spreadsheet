@@ -38,7 +38,7 @@ public class Grid implements  java.io.Serializable{
 	public Grid(){
 		_cells = new Hashtable<String, Cell>(); // generates hashtable for cells
 		_selectedCell = new Cell("A", 1, this );
-		_cells.put("A" + 1, _selectedCell);
+		//_cells.put("A" + 1, _selectedCell); Not needed anymore, otherwise a loaded file shows A1 as 0.0
 		_maxWidth = 10;
 		_maxHeight = 10;
 		_currentWidth = 1;
@@ -55,7 +55,7 @@ public class Grid implements  java.io.Serializable{
 	public Grid(int maxWidth, int maxHeight) {
 		_cells = new Hashtable<String, Cell>(); // generates hashtable for cells
 		_selectedCell = new Cell("A", 1, this );
-		_cells.put("A" + 1, _selectedCell);
+		//_cells.put("A" + 1, _selectedCell);
 		_maxWidth = maxWidth;
 		_maxHeight = maxHeight;
 		_currentWidth = 1;

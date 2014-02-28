@@ -26,8 +26,9 @@ public class SSTable extends JTable {
 	
 	JTableHeader header;
 	
-	static final int intDefaultRows = 5000;
-	static final int intDefaultColumns = 26*27;//ends at ZZ (27 because the firsts 26 values are single digit)
+	// The default rows and columns have been reduced in order to increase program efficiency
+	static final int intDefaultRows = 50;
+	static final int intDefaultColumns = 25;
 	
 	private Grid grid;
 	

@@ -185,10 +185,10 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		frmWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWindow.setLayout(new BorderLayout());
 		
-		//adopt fullscreen
+		//set the spreadsheet's screen dimensions
 		intScreenWidth = ((int) toolKit.getScreenSize().getWidth());  
 		intScreenHeight = ((int) toolKit.getScreenSize().getHeight());  
-		frmWindow.setPreferredSize(new Dimension(intScreenWidth,intScreenHeight)); 
+		frmWindow.setPreferredSize(new Dimension( (int)(0.65 * intScreenWidth), (int)(0.65 *intScreenHeight) )); 
 		
 		//setup menu
 		mnbMenu.setPreferredSize(new Dimension(this.intScreenWidth,30));
