@@ -101,6 +101,20 @@ public class Grid implements  java.io.Serializable{
 			return null;
 		}
 	}
+	
+	public Cell checkCell(String col, int row) {
+		int intCol = colToNumber(col);
+		if(intCol <= _maxWidth && intCol >= 1 && row <= _maxHeight && row >= 1 ){
+			Cell foundCell = _cells.get( col + row );
+			if( foundCell == null ){
+				return null;
+
+			}
+			return foundCell;
+		}else{
+			return null;
+		}
+	}
 
 	/**
 	 * Changes the hash table to the one specified
@@ -200,7 +214,11 @@ public class Grid implements  java.io.Serializable{
 					if(c == 0){
 						System.out.print(centerPad(String.valueOf(i), 10));
 					}else{
-						System.out.print(centerPad(this.getCell(numToCol(c), i).getDisplay(), 10));
+						Cell x = this.checkCell(numToCol(c), i);
+						if(x == null)
+							System.out.print(centerPad("null", 10));
+						else
+							System.out.print(centerPad(x.getDisplay(), 10));
 
 					}
 				}
