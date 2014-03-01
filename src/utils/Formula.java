@@ -92,6 +92,7 @@ public class Formula {
 		double res = 0;
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		
+		
 		//parsing the formula into tokens
 		if(Formula.tokenize(tokens, formula)){
 			
@@ -123,10 +124,11 @@ public class Formula {
 						Cell cell = grid.getCell(tok.getCol(), tok.getRow());
 						if(cell != null && cell.isValidValue()){
 							tok = new Token(TokenType.NUM, cell.getEvaluatedValue());//convert it to a num token
+							
 						}else{
-							String message = "Invalid formula. " + tok.getCol() + tok.getRow() + " is out of bound or has an invalid value";
+							String message = "Invalid formula. " + tok.getCol() + tok.getRow() + " is out of bounds or has an invalid value";
 							originCell.getGrid().getGUI().displayMessage(message);
-							throw new Exception("Invalid formula. " + tok.getCol() + tok.getRow() + " is out of bound or has an invalid value");
+							throw new Exception(message);
 						}
 					}
 					operandStack.push(tok);//push the operand on the stack

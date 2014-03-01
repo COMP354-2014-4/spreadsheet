@@ -177,6 +177,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		tblGrid.getModel().addTableModelListener(this);
 		tblGrid.getSelectionModel().addListSelectionListener(this);
 		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
+		this.tblGrid.addKeyListener(this);
+		
 		scrTblScrollPane = new JScrollPane(tblGrid,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			    JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		//scrTblScrollPane.setColumnHeaderView(tblGrid.getTableHeader());
@@ -417,14 +419,16 @@ public void loadSpreadsheet(){
 		}else if(objSourceClass.equals(this.btnUpdate)){
 			updateFromInput();
 			
-		}else{
-			this.displayMessage("That doesn't do anything!");
 		}
 	}
 	
+	/**
+	 * Update the currently selected cell to whatever text is typed into the input box
+	 */
 	private void updateFromInput(){
 		tblGrid.setValueAt(this.txtInputBox.getText(), tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
 	}
+	
 	
 	
 	/**
@@ -437,7 +441,8 @@ public void loadSpreadsheet(){
 		//Nothing required
 	}
 	public void keyTyped(KeyEvent e){
-		if(e.getKeyChar() == '\n'){
+		
+		if(e.getKeyChar() == KeyEvent.VK_ENTER){
 			updateFromInput();
 		}
 	}
@@ -449,7 +454,7 @@ public void loadSpreadsheet(){
 	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
 	 */
 	public void valueChanged(ListSelectionEvent e) {
-if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 			return;
 		}
 		
@@ -467,7 +472,7 @@ if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 			
 			Set<String> keys = grid.get_cells().keySet();
 			for(String key: keys) {
-				System.out.println("\nKey: " + key + " , Value: " + grid.get_cells().get(key) );
+				System.out.println("\nKey: " + key + " , Value: " + grid.get_cells().get(key).getValue() );
 			}
 			
 			
@@ -486,20 +491,23 @@ if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 	 public void tableChanged(TableModelEvent e) {
 		 tblGrid.getModel().removeTableModelListener(this);
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+			tblGrid.getModel().addTableModelListener(this);
 			return;
 		}
-		
 		
 		int col = tblGrid.getSelectedColumn()+1;
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
-		System.out.println(row + "" + colConvert  /*(String)tblGrid.getValueAt(row, col)*/);
+		System.out.println(row + "" + colConvert  /*(String)tblGrid.getValueAt(row, col)*/);		
+		
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
+			tblGrid.getModel().addTableModelListener(this);
 			return;
 		}
 		if(tblGrid.getValueAt(row-1, col-1).equals(""))
 		{
+			tblGrid.getModel().addTableModelListener(this);
 			return;
 		}
 		//tblGrid.getSelectedColumn();
