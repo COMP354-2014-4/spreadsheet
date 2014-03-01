@@ -415,11 +415,15 @@ public void loadSpreadsheet(){
 			copy();
 		
 		}else if(objSourceClass.equals(this.btnUpdate)){
-			tblGrid.setValueAt(this.txtInputBox.getText(), tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
+			updateFromInput();
 			
 		}else{
 			this.displayMessage("That doesn't do anything!");
 		}
+	}
+	
+	private void updateFromInput(){
+		tblGrid.setValueAt(this.txtInputBox.getText(), tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
 	}
 	
 	
@@ -433,7 +437,9 @@ public void loadSpreadsheet(){
 		//Nothing required
 	}
 	public void keyTyped(KeyEvent e){
-		
+		if(e.getKeyChar() == '\n'){
+			updateFromInput();
+		}
 	}
 	
 	
