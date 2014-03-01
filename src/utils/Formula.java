@@ -19,7 +19,7 @@ public class Formula {
 	 * Private constructor. Should never be instantiated
 	 */
 	private Formula(){}
-	
+
 	/**
 	 * Find each cell in the formula while checking if
 	 * the syntax is right and return them. Also make sure
@@ -36,7 +36,7 @@ public class Formula {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		ArrayList<Cell> origin = new ArrayList<Cell>(); //Used to check if those cells contains circular ref
 		origin.add(originCell);
-		
+
 		if(Formula.tokenize(tokens, formula)){//Convert the string in a list of token
 			for(Token tok : tokens){
 				if(tok.getType() == TokenType.CEL){//extract the cell from the list of token
@@ -46,17 +46,17 @@ public class Formula {
 			}
 			if( !Formula.isCircular(origin, cells) ){//checks for circularity
 				return cells;
-				
+
 			}else{
 				throw new Exception("Circular formula. The evaluator will not be able to evaluate this formula");
-				
+
 			}
-			
+
 		}else{
 			throw new Exception("Invalid formula. The evaluator will not be able to evaluate this formula");
 		}
 	}
-	
+
 	/**
 	 * Depth first traversal of the implied directed graph of
 	 * observer-observed cell. Go down each sub path to check for circularity
@@ -75,7 +75,7 @@ public class Formula {
 				return false;								//there is no cycle in that sub path
 			visitedCopy.add(sub);
 			return isCircular(visitedCopy, subToVisit);//Keep on going down the graph
-			
+
 		}
 		return false;
 	}
@@ -91,15 +91,15 @@ public class Formula {
 		Grid grid = originCell.getGrid();
 		double res = 0;
 		ArrayList<Token> tokens = new ArrayList<Token>();
-		
-		
+
+
 		//parsing the formula into tokens
 		if(Formula.tokenize(tokens, formula)){
-			
+
 			//creating the stacks tha will hold all of the operators
 			TokenStack operatorStack = new TokenStack();
 			TokenStack operandStack = new TokenStack();
-			
+
 			for(Token tok : tokens){
 				//if it is an operator
 				if(tok.getType() == TokenType.PLU || tok.getType() == TokenType.MIN || tok.getType() == TokenType.DIV || tok.getType() == TokenType.MUL || tok.getType() == TokenType.MOD ){
@@ -124,7 +124,7 @@ public class Formula {
 						Cell cell = grid.getCell(tok.getCol(), tok.getRow());
 						if(cell != null && cell.isValidValue()){
 							tok = new Token(TokenType.NUM, cell.getEvaluatedValue());//convert it to a num token
-							
+
 						}else{
 							String message = "Invalid formula. " + tok.getCol() + tok.getRow() + " is out of bounds or has an invalid value";
 							originCell.getGrid().getGUI().displayMessage(message);
@@ -133,21 +133,21 @@ public class Formula {
 					}
 					operandStack.push(tok);//push the operand on the stack
 				}
-				
+
 			}
-			
+
 			while(!operatorStack.isEmpty()){//Empty the operator stack
 				double val = Formula.calculateFirst(operatorStack, operandStack);
 				operandStack.push(new Token(TokenType.NUM, val));
 			}
 			res = operandStack.pop().getValue();//get the final value on the operand stack
-			
+
 		}else{
 			throw new Exception("Invalid formula. The evaluator will not be able to evaluate this formula");
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Pop the first operator and the 2 first operand.
 	 * Do the according arithmetic operation
@@ -158,12 +158,12 @@ public class Formula {
 	 */
 	private static double calculateFirst(TokenStack operatorStack, TokenStack operandStack){
 		double val = 0;
-		
+
 		Token operator = operatorStack.pop();
 		if(operator.getType() != TokenType.LPA){
 			double operand2 = operandStack.pop().getValue();
 			double operand1 = operandStack.pop().getValue();
-			
+
 			if(operator.getType() == TokenType.PLU){
 				val = operand1 + operand2;
 			}else if(operator.getType() == TokenType.MIN){
@@ -177,9 +177,9 @@ public class Formula {
 			}
 		}
 		return val;
-		
+
 	}
-	
+
 	/**
 	 * Transform a formula string into a Token list
 	 * ready to be evaluated
@@ -198,106 +198,106 @@ public class Formula {
 		}else{
 			while(i < formulaChars.length){//Go through every char
 				switch(character = formulaChars[i]){
-					case ' ':// ingnores spaces and tabs
-					case '	':
-						break;
-					case '+':
-						if(!expectedOperator)
-							return false;
-						tokens.add( new Token(TokenType.PLU, 1) );
-						expectedOperator = false;
-						break;
-					case '-':
-						if(!expectedOperator)
-							return false;
-						tokens.add( new Token(TokenType.MIN, 1) );
-						expectedOperator = false;
-						break;
-					case '*':
-						if(!expectedOperator)
-							return false;
-						tokens.add( new Token(TokenType.MUL, 2) );
-						expectedOperator = false;
-						break;
-					case '/':
-						if(!expectedOperator)
-							return false;
-						tokens.add( new Token(TokenType.DIV, 2) );
-						expectedOperator = false;
-						break;
-					case '%':
-						if(!expectedOperator)
-							return false;
-						tokens.add( new Token(TokenType.MOD, 2) );
-						expectedOperator = false;
-						break;
-					case '(':
-						if(expectedOperator)
-							return false;
-						tokens.add( new Token(TokenType.LPA, 1) );
-						openParenthesis++;
-						break;
-					case ')':
-						if(!expectedOperator || openParenthesis <= 0)
-							return false;
-						tokens.add( new Token(TokenType.RPA, 1) );
-						openParenthesis--;
-						break;
-					default:// expect and operand(either a cell or a double)
-						if(expectedOperator)
-							return false;
-						String s = String.valueOf(character);
-						if( s.matches("[A-Z]") ){
-							String tokenColValue = "";
-							tokenColValue += s;
-							String TokenRowValue = "";
-							int c = i+1;
-							if(c < formulaChars.length){
-								String s2= String.valueOf(formulaChars[c]);
-								while( s2.matches("[A-Z]")){//Get the column name
-									tokenColValue += s2;
-									if(++c < formulaChars.length)
-										s2 = String.valueOf(formulaChars[c]);
-									else
-										break;
-								}
-								while(  s2.matches("[0-9]") ){//get the row num
-									TokenRowValue += s2;
-									if(++c < formulaChars.length)
-										s2 = String.valueOf(formulaChars[c]);
-									else
-										break;
-								}
-								i = c-1;
+				case ' ':// ingnores spaces and tabs
+				case '	':
+					break;
+				case '+':
+					if(!expectedOperator)
+						return false;
+					tokens.add( new Token(TokenType.PLU, 1) );
+					expectedOperator = false;
+					break;
+				case '-':
+					if(!expectedOperator)
+						return false;
+					tokens.add( new Token(TokenType.MIN, 1) );
+					expectedOperator = false;
+					break;
+				case '*':
+					if(!expectedOperator)
+						return false;
+					tokens.add( new Token(TokenType.MUL, 2) );
+					expectedOperator = false;
+					break;
+				case '/':
+					if(!expectedOperator)
+						return false;
+					tokens.add( new Token(TokenType.DIV, 2) );
+					expectedOperator = false;
+					break;
+				case '%':
+					if(!expectedOperator)
+						return false;
+					tokens.add( new Token(TokenType.MOD, 2) );
+					expectedOperator = false;
+					break;
+				case '(':
+					if(expectedOperator)
+						return false;
+					tokens.add( new Token(TokenType.LPA, 1) );
+					openParenthesis++;
+					break;
+				case ')':
+					if(!expectedOperator || openParenthesis <= 0)
+						return false;
+					tokens.add( new Token(TokenType.RPA, 1) );
+					openParenthesis--;
+					break;
+				default:// expect and operand(either a cell or a double)
+					if(expectedOperator)
+						return false;
+					String s = String.valueOf(character);
+					if( s.matches("[A-Z]") ){
+						String tokenColValue = "";
+						tokenColValue += s;
+						String TokenRowValue = "";
+						int c = i+1;
+						if(c < formulaChars.length){
+							String s2= String.valueOf(formulaChars[c]);
+							while( s2.matches("[A-Z]")){//Get the column name
+								tokenColValue += s2;
+								if(++c < formulaChars.length)
+									s2 = String.valueOf(formulaChars[c]);
+								else
+									break;
 							}
-							tokens.add( new Token(TokenType.CEL, tokenColValue, Integer.parseInt(TokenRowValue)) );
-						
-						//Double operand
-						}else if( s.matches("[0-9.]") ){
-							String tokenValue = "";
-							tokenValue += s;
-							int c = i+1;
-							if(c < formulaChars.length){//get the value of a double typed operand
-								String s2= String.valueOf(formulaChars[c]);
-								while( s2.matches("[0-9.]")){
-									tokenValue += s2;
-									if(++c < formulaChars.length)
-										s2 = String.valueOf(formulaChars[c]);
-									else
-										break;
-								}
-								i = c-1;
+							while(  s2.matches("[0-9]") ){//get the row num
+								TokenRowValue += s2;
+								if(++c < formulaChars.length)
+									s2 = String.valueOf(formulaChars[c]);
+								else
+									break;
 							}
-							tokens.add( new Token(TokenType.NUM, Double.parseDouble(tokenValue)) );
-						
-						}else{//Not a cell nor a double typed operand
-							return false;
-								
+							i = c-1;
 						}
-						expectedOperator = true;
-						
-						break;
-				
+						tokens.add( new Token(TokenType.CEL, tokenColValue, Integer.parseInt(TokenRowValue)) );
+
+						//Double operand
+					}else if( s.matches("[0-9.]") ){
+						String tokenValue = "";
+						tokenValue += s;
+						int c = i+1;
+						if(c < formulaChars.length){//get the value of a double typed operand
+							String s2= String.valueOf(formulaChars[c]);
+							while( s2.matches("[0-9.]")){
+								tokenValue += s2;
+								if(++c < formulaChars.length)
+									s2 = String.valueOf(formulaChars[c]);
+								else
+									break;
+							}
+							i = c-1;
+						}
+						tokens.add( new Token(TokenType.NUM, Double.parseDouble(tokenValue)) );
+
+					}else{//Not a cell nor a double typed operand
+						return false;
+
+					}
+					expectedOperator = true;
+
+					break;
+
 				}
 				i++;
 			}
@@ -306,8 +306,8 @@ public class Formula {
 		//or if the formula ends with an operator
 		if(openParenthesis > 0 || !expectedOperator)
 			return false;
-		
+
 		return true;
 	}
-	
+
 }

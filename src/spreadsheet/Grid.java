@@ -102,7 +102,7 @@ public class Grid implements  java.io.Serializable{
 			return null;
 		}
 	}
-	
+
 	public Cell checkCell(String col, int row) {
 		int intCol = colToNumber(col);
 		if(intCol <= _maxWidth && intCol >= 1 && row <= _maxHeight && row >= 1 ){
@@ -407,14 +407,14 @@ public class Grid implements  java.io.Serializable{
 
 	}
 	/* End of new methods */
-	
+
 	public void setGUI(SSGUI g){
 		this.gui = g;
 	}
-	
+
 	public SSGUI getGUI(){
 		return this.gui;
 	}
-	
+
 	public Hashtable<String,Cell> get_cells() {return _cells;}
 }
