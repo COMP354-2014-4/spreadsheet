@@ -435,16 +435,18 @@ public void loadSpreadsheet(){
 	 * Keylistener event handler
 	 */
 	public void keyPressed(KeyEvent e){
-		//Nothing required
-	}
-	public void keyReleased(KeyEvent e){
-		//Nothing required
-	}
-	public void keyTyped(KeyEvent e){
 		
 		if(e.getKeyChar() == KeyEvent.VK_ENTER){
 			updateFromInput();
 		}
+	}
+	
+	public void keyReleased(KeyEvent e){
+		//Nothing required
+	}
+	
+	public void keyTyped(KeyEvent e){
+		//Nothing required
 	}
 	
 	
@@ -468,15 +470,10 @@ public void loadSpreadsheet(){
 		
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
-			
-			
 			Set<String> keys = grid.get_cells().keySet();
 			for(String key: keys) {
 				System.out.println("\nKey: " + key + " , Value: " + grid.get_cells().get(key).getValue() );
 			}
-			
-			
-			
 			
 			return;
 		}
