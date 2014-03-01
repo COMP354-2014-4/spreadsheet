@@ -124,6 +124,8 @@ public class Formula {
 						if(cell != null && cell.isValidValue()){
 							tok = new Token(TokenType.NUM, cell.getEvaluatedValue());//convert it to a num token
 						}else{
+							String message = "Invalid formula. " + tok.getCol() + tok.getRow() + " is out of bound or has an invalid value";
+							originCell.getGrid().getGUI().displayMessage(message);
 							throw new Exception("Invalid formula. " + tok.getCol() + tok.getRow() + " is out of bound or has an invalid value");
 						}
 					}

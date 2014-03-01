@@ -30,6 +30,7 @@ public class Grid implements  java.io.Serializable{
 	private int _currentHeight;
 
 	private SSTable tblInterface;
+	private SSGUI gui;
 
 	/**
 	 * Default constructor. Set the max size to
@@ -406,6 +407,14 @@ public class Grid implements  java.io.Serializable{
 
 	}
 	/* End of new methods */
+	
+	public void setGUI(SSGUI g){
+		this.gui = g;
+	}
+	
+	public SSGUI getGUI(){
+		return this.gui;
+	}
 	
 	public Hashtable<String,Cell> get_cells() {return _cells;}
 }

@@ -20,7 +20,7 @@ import javax.swing.JFileChooser;
  * A grid must be passed to create the object, but it can be blank
  *
  */
-public class SSGUI implements ActionListener, ListSelectionListener, TableModelListener{
+public class SSGUI implements ActionListener, ListSelectionListener, TableModelListener, KeyListener{
 	//Tools
 	private Toolkit toolKit;
 	
@@ -94,6 +94,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		//prevCellRow = 1
 		
 		grid = gridObject;
+		grid.setGUI(this);
 		
 		//attempt to adopt the system look and feel
 		setLookAndFeel();
@@ -144,14 +145,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		btnCut = new JButton("Cut");
 		btnPaste = new JButton("Paste");
 		
-		//Build Center Panel
-		panNorthPanel.setLayout(new BorderLayout());
-		panNorthPanel.add(txtInputBox,BorderLayout.CENTER);
-		panNorthPanel.add(tbrToolBar,BorderLayout.NORTH);
-		panNorthPanel.add(lblInput,BorderLayout.WEST);
-		panNorthPanel.add(btnUpdate,BorderLayout.EAST);
-		
-		// Add all the action listeners
+		// Add all listeners
 		mniNew.addActionListener(this);
 		mniLoad.addActionListener(this);
 		mniSave.addActionListener(this);
@@ -164,6 +158,17 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		btnCopy.addActionListener(this);
 		btnCut.addActionListener(this);
 		btnPaste.addActionListener(this);
+		
+		btnUpdate.addActionListener(this);
+		
+		txtInputBox.addKeyListener(this);
+		
+		//Build Center Panel
+		panNorthPanel.setLayout(new BorderLayout());
+		panNorthPanel.add(txtInputBox,BorderLayout.CENTER);
+		panNorthPanel.add(tbrToolBar,BorderLayout.NORTH);
+		panNorthPanel.add(lblInput,BorderLayout.WEST);
+		panNorthPanel.add(btnUpdate,BorderLayout.EAST);
 		
 		//Build center panel	
 		tblGrid = new SSTable(grid);//uses the default values on load
@@ -393,25 +398,45 @@ public void loadSpreadsheet(){
 		 */
 		if(objSourceClass.equals(this.btnNew) || objSourceClass.equals(this.mniNew)){
 			newSpreadsheet();
-		}
-		if(objSourceClass.equals(this.btnLoad) || objSourceClass.equals(this.mniLoad)){
-			loadSpreadsheet();
-		}
-		if(objSourceClass.equals(this.btnSave) || objSourceClass.equals(this.mniSave)){
-			saveSpreadsheet();
-		}
-		if(objSourceClass.equals(this.btnSaveAs) || objSourceClass.equals(this.mniSaveAs)){
-			saveAsSpreadsheet();
-		}
-		if(objSourceClass.equals(this.mniAbout))
-		{
 			
-		}
-		if(objSourceClass.equals(this.btnCopy))
-		{
+		}else if(objSourceClass.equals(this.btnLoad) || objSourceClass.equals(this.mniLoad)){
+			loadSpreadsheet();
+		
+		}else if(objSourceClass.equals(this.btnSave) || objSourceClass.equals(this.mniSave)){
+			saveSpreadsheet();
+		
+		}else if(objSourceClass.equals(this.btnSaveAs) || objSourceClass.equals(this.mniSaveAs)){
+			saveAsSpreadsheet();
+		
+		}else if(objSourceClass.equals(this.mniAbout)){
+		
+			
+		}else if(objSourceClass.equals(this.btnCopy)){
 			copy();
+		
+		}else if(objSourceClass.equals(this.btnUpdate)){
+			tblGrid.setValueAt(this.txtInputBox.getText(), tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
+			
+		}else{
+			this.displayMessage("That doesn't do anything!");
 		}
 	}
+	
+	
+	/**
+	 * Keylistener event handler
+	 */
+	public void keyPressed(KeyEvent e){
+		//Nothing required
+	}
+	public void keyReleased(KeyEvent e){
+		//Nothing required
+	}
+	public void keyTyped(KeyEvent e){
+		
+	}
+	
+	
 	/*
 	 * Captures de-selection action from the JTable cells, 
 	 * handles this by communicating the cell's current value to back-end for verification
@@ -427,6 +452,9 @@ if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 		//System.out.println(row + "" + colConvert  /*(String)tblGrid.getValueAt(row, col)*/);
+		
+		txtInputBox.setText(grid.getCell(colConvert, row).getValue());
+		
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
 			
@@ -445,7 +473,7 @@ if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 		{
 			return;
 		}
-		txtInputBox.setText(grid.getCell(colConvert, row).getValue());
+		
 	}
 	
 	
