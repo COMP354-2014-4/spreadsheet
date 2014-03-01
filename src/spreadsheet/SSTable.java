@@ -28,7 +28,7 @@ public class SSTable extends JTable {
 	
 	// The default rows and columns have been reduced in order to increase program efficiency
 	static final int intDefaultRows = 50;
-	static final int intDefaultColumns = 25;
+	static final int intDefaultColumns = 26;
 	
 	private Grid grid;
 	
