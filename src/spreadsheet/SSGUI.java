@@ -190,6 +190,10 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		intScreenHeight = ((int) toolKit.getScreenSize().getHeight());  
 		frmWindow.setPreferredSize(new Dimension( (int)(0.65 * intScreenWidth), (int)(0.65 *intScreenHeight) )); 
 		
+		/*TO-DO: Replace with:
+			frmWindow.setPreferredSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize());
+		 */
+		
 		//setup menu
 		mnbMenu.setPreferredSize(new Dimension(this.intScreenWidth,30));
 		
