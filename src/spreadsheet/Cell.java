@@ -18,7 +18,7 @@ import utils.Formula;
 public class Cell extends Observable implements Observer, java.io.Serializable{
 
 	//Attributes
-	private String _value = "";			//The value is stored as a string to keep track of both formulas and integer
+	private String _value = "0";			//The value is stored as a string to keep track of both formulas and integer
 	private double _evaluatedValue = 0.0;	//Hold the value after the evaluation is completed
 	private String _col;
 	private int _row;
@@ -59,7 +59,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * 
 	 * @param value	The new value
 	 */
-	public String setValue(String value){
+	public void setValue(String value){
 		_value = value;
 		if(validateValue()){//Validate the value
 			_validValue = true;
@@ -72,19 +72,15 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 					for(Cell cell : _observedCells){//starts observing the new cells
 						cell.addObserver(this);
 					}
-					return "0";
 				}catch(Exception e){//Circular reference or invalid formula
 					System.out.println(e.getMessage());
 					_validValue = false;
-					return e.getMessage();
 				}
 			}
 			this.evaluate();//Start the evaluation of the cell value
 		}else{
 			_validValue = false;
-			return "This is not a valid value, please input a formula or a real number.";
 		}
-		return "";
 	}
     
     /**
@@ -236,7 +232,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	private void setChangeAndNotify(){
 		this.setChanged();
 		this.notifyObservers();
-		//_grid.Display();
+		_grid.Display();
 		//System.out.println("  " + _evaluatedValue +"   " + _row + "   "  + Grid.colToNumber(_col));
 		//if(_grid == null)
 		//	System.out.println("GRID IS NOT THERE");

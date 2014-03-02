@@ -587,7 +587,10 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue()))))
 		{
 			if(isANumber||isAcceptedChar){
+				System.out.println("before input");
 				grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
+
+				System.out.println("after input");
 			}
 			else{
 			txtMessageBox.setText("That is not valid input, please type either a formula or a number.");
