@@ -83,7 +83,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 	//Back-end data objects
 	private Grid grid;
-	private String clipBoard = "";
+	private String clipBoard = "0";
 
 	//Save location
 	private String strFileLocation = ""; //set to null instead?
@@ -405,9 +405,17 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue())))){
-				grid.getCell(colConvert, row).setValue(clipBoard);
+			if(clipBoard.equals("0")){
+			}	
+			else{
+			grid.getCell(colConvert, row).setValue(clipBoard);
+			}
 		}
+		if(clipBoard.equals("0")){
+		}
+		else{
 		grid.getCell(colConvert, row).setValue(clipBoard);
+		}
 	}
 	
 	//Is called when delete key is pressed on a selected cell.

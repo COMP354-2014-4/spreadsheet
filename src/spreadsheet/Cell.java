@@ -232,7 +232,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	private void setChangeAndNotify(){
 		this.setChanged();
 		this.notifyObservers();
-		_grid.Display();
+		//_grid.Display();
 		//System.out.println("  " + _evaluatedValue +"   " + _row + "   "  + Grid.colToNumber(_col));
 		//if(_grid == null)
 		//	System.out.println("GRID IS NOT THERE");
