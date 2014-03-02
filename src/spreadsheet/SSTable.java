@@ -30,7 +30,7 @@ public class SSTable extends JTable {
 	static final int intDefaultRows = 50;
 	static final int intDefaultColumns = 26;
 
-	private Grid grid;
+	public Grid grid;	//PRIVATE, is now public for test only
 
 	int intNumRows;
 	int intNumColumns;

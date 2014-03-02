@@ -45,37 +45,37 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	private JToolBar tbrToolBar;
 
 	//File Menu
-	private JMenu mnuFile;
-	private JMenuItem mniNew;
-	private JMenuItem mniLoad;
-	private JMenuItem mniSave;
-	private JMenuItem mniSaveAs;
+	public JMenu mnuFile;		//PRIVATE, is now public for test only
+	public JMenuItem mniNew;	//PRIVATE, is now public for test only
+	public JMenuItem mniLoad;	//PRIVATE, is now public for test only
+	public JMenuItem mniSave;	//PRIVATE, is now public for test only
+	public JMenuItem mniSaveAs;	//PRIVATE, is now public for test only
 
 	//Edit Menu
-	JMenu mnuEdit;
-	private JMenuItem mniCut;
-	private JMenuItem mniCopy;
-	private JMenuItem mniPaste;
+	public JMenu mnuEdit;		//PRIVATE, is now public for test only
+	public JMenuItem mniCut;	//PRIVATE, is now public for test only
+	public JMenuItem mniCopy;	//PRIVATE, is now public for test only
+	public JMenuItem mniPaste;	//PRIVATE, is now public for test only
 
 	//Help Menu
 	private JMenu mnuHelp;
 	private JMenuItem mniAbout;
 
 	//ToolBar buttons
-	private JButton btnNew;
-	private JButton btnLoad;
-	private JButton btnSave;
-	private JButton btnSaveAs;
-	private JButton btnCopy;
-	private JButton btnCut;
-	private JButton btnPaste;
+	public JButton btnNew;		//PRIVATE, is now public for test only
+	public JButton btnLoad;		//PRIVATE, is now public for test only
+	public JButton btnSave;		//PRIVATE, is now public for test only
+	public JButton btnSaveAs;	//PRIVATE, is now public for test only
+	public JButton btnCopy;		//PRIVATE, is now public for test only
+	public JButton btnCut;		//PRIVATE, is now public for test only
+	public JButton btnPaste;	//PRIVATE, is now public for test only
 
 	//Center panel components
 	JScrollPane scrTblScrollPane;
-	private SSTable tblGrid;
+	public SSTable tblGrid;		//PRIVATE, is now public for test only
 
 	//bottom panel components
-	private JTextField txtMessageBox;
+	public JTextField txtMessageBox;//PRIVATE, is now public for test only
 
 	//window dimensions
 	private int intScreenWidth;
@@ -83,10 +83,10 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 	//Back-end data objects
 	private Grid grid;
-	private String clipBoard = "0";
+	public String clipBoard = "0"; //PRIVATE, is now public for test only
 
 	//Save location
-	private String strFileLocation = ""; //set to null instead?
+	public String strFileLocation = ""; //set to null instead?	//PRIVATE, is now public for test only
 
 	/**
 	 * Default constructor, which acccepts the grid to be displayed
