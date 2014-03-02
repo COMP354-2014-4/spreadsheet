@@ -18,7 +18,7 @@ import utils.Formula;
 public class Cell extends Observable implements Observer, java.io.Serializable{
 
 	//Attributes
-	private String _value = "0";			//The value is stored as a string to keep track of both formulas and integer
+	private String _value = "";			//The value is stored as a string to keep track of both formulas and integer
 	private double _evaluatedValue = 0.0;	//Hold the value after the evaluation is completed
 	private String _col;
 	private int _row;
@@ -236,7 +236,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	private void setChangeAndNotify(){
 		this.setChanged();
 		this.notifyObservers();
-		_grid.Display();
+		//_grid.Display();
 		//System.out.println("  " + _evaluatedValue +"   " + _row + "   "  + Grid.colToNumber(_col));
 		//if(_grid == null)
 		//	System.out.println("GRID IS NOT THERE");

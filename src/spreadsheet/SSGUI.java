@@ -94,9 +94,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	 * @param gridObject The back-end data stored in the grid
 	 */
 	public SSGUI(Grid gridObject){
-		//prevCellCol = 1
-		//prevCellRow = 1
 
+		//instantiates and connects backend data grid.
 		grid = gridObject;
 		grid.setGUI(this);
 
@@ -157,8 +156,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		mniCut.addActionListener(this);
 		mniCopy.addActionListener(this);
 		mniPaste.addActionListener(this);
-		
-
 		btnNew.addActionListener(this);
 		btnLoad.addActionListener(this);
 		btnSave.addActionListener(this);
@@ -166,7 +163,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		btnCopy.addActionListener(this);
 		btnCut.addActionListener(this);
 		btnPaste.addActionListener(this);
-
 		btnUpdate.addActionListener(this);
 
 		//Allows keyboard input to be captured (ex: enter key)
@@ -251,7 +247,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		tbrToolBar.add(btnCopy);
 		tbrToolBar.add(btnCut);
 		tbrToolBar.add(btnPaste);
-		btnCopy.addActionListener(this);
 
 		//Add primary window sections to window
 		frmWindow.setJMenuBar(this.mnbMenu);
@@ -288,8 +283,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	}
 
 	/**
-	 * Updates to use a new Grid object
-	 * 
+	 * Updates to use a new Grid object.  Not currently used, but available for code clean-up
+	 * if group is allowed time for such.
 	 * @param gridUpdate The grid to display
 	 */
 	public void updateTable(){
@@ -334,7 +329,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	 */
 	public void saveSpreadsheet(){
 
-		if(strFileLocation.equals("")) // Compare to null?
+		if(strFileLocation.equals(""))
 			saveAsSpreadsheet();
 		else
 			grid.save(strFileLocation);
@@ -357,7 +352,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	}
 
 	/**
-	 * cut cells
+	 * cut selected cell, deleting the frontend and backend representations and updating the clipBoard object
 	 */
 	public void cut(){
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
@@ -372,15 +367,15 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(tblGrid.getValueAt(row-1, col-1).equals("")){
 			return;
 		}
-		System.out.println("CUT IS WORKIN'");
+		//System.out.println("CUT IS WORKIN'");
 		clipBoard = grid.getCell(colConvert, row).getValue();
-		grid.getCell(colConvert, row).setValue("0");
+		grid.removeCell(colConvert, row);
 		tblGrid.setValueAt("", tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
 		
 	}
 
 	/**
-	 * copy cells
+	 * copy selected cell, updating the clipBoard object.
 	 */	
 	public void copy(){
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
@@ -395,12 +390,12 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(tblGrid.getValueAt(row-1, col-1).equals("")){
 			return;
 		}
-		System.out.println("COPY IS WORKIN'");
+		//System.out.println("COPY IS WORKIN'");
 		clipBoard = grid.getCell(colConvert, row).getValue();
 	}
 
 	/**
-	 * paste cells
+	 * paste to selected cell, setting the cell to the clipBoard object's value and inputting the value.
 	 */
 	public void paste(){
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
@@ -409,11 +404,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		int col = tblGrid.getSelectedColumn()+1;
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
-		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue()))))
-		{
-				System.out.println("PASTE IS SETTING VALUE LIKE IT SHOULD");
+		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue())))){
 				grid.getCell(colConvert, row).setValue(clipBoard);
-			
 		}
 		grid.getCell(colConvert, row).setValue(clipBoard);
 	}
@@ -430,7 +422,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		int row = tblGrid.getSelectedRow()+1;
 		
 		grid.removeCell(colConvert, row);
-		System.out.println("Value at (" + colConvert + ", " + row + ") deleted!");
+		tblGrid.setValueAt("", tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
+		//System.out.println("Value at (" + colConvert + ", " + row + ") deleted!");
 	}
 
 	/**
@@ -441,9 +434,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	public void actionPerformed(ActionEvent e){
 		final Object objSourceClass = e.getSource(); //store the class of the source
 
-		/*
-		 * Template for handling events from each component
-		 */
 		if(objSourceClass.equals(this.btnNew) || objSourceClass.equals(this.mniNew)){
 			newSpreadsheet();
 
@@ -457,7 +447,13 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 			saveAsSpreadsheet();
 
 		}else if(objSourceClass.equals(this.mniAbout)){
-
+			JOptionPane.showMessageDialog(new JFrame(),
+					   					  "This is Team 3's Spreadsheet.  We have included a number of features for manipulating spreadsheet data.\n"
+					   					  + "These include: New, Load, Save, Save As, Cut, Copy, Paste, Update, and Delete.\n"
+					   					  + "Please enjoy the functionality!",
+					   					  
+					   					  "Team 3, 2014, proprietary copyright all rights included.",
+					   					  JOptionPane.PLAIN_MESSAGE);
 
 		}else if(objSourceClass.equals(this.btnCopy) || objSourceClass.equals(this.mniCopy)){
 			copy();
@@ -480,9 +476,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	private void updateFromInput(){
 		tblGrid.setValueAt(this.txtInputBox.getText(), tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
 	}
-
-
-
+	
 	/**
 	 * KeyListener key press event handler
 	 */
@@ -504,14 +498,14 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		}
 	}
 	/**
-	 * KeyListener key release event handler
+	 * KeyListener key release event handler, not used.
 	 */
 	public void keyReleased(KeyEvent e){
 		//Nothing required
 	}
 	
 	/**
-	 * KeyListener key typed event handler
+	 * KeyListener key typed event handler, not used.
 	 */
 	public void keyTyped(KeyEvent e){
 		//Nothing required
@@ -534,8 +528,13 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 
-		txtInputBox.setText(grid.getCell(colConvert, row).getValue());
-
+		Cell x = grid.checkCell(colConvert, row);
+		if(x == null){
+			txtInputBox.setText("");
+		}
+		else{
+			txtInputBox.setText("" + grid.checkCell(colConvert, row).getValue());
+		}
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
 			//Set<String> keys = grid.get_cells().keySet();
@@ -565,7 +564,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		int col = tblGrid.getSelectedColumn()+1;
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;		
-
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
 			tblGrid.getModel().addTableModelListener(this);
@@ -582,24 +580,27 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 			tblGrid.getModel().addTableModelListener(this);
 			return;
 		}
+		boolean isANumber = Cell.isNumeric(""+tblGrid.getValueAt(row-1, col-1));
+		boolean isAcceptedChar = Cell.isValidChar(""+tblGrid.getValueAt(row-1, col-1));
+		
 
 		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue()))))
 		{
-			if(Cell.isNumeric(""+tblGrid.getValueAt(row-1, col-1))){
+			if(isANumber||isAcceptedChar){
 				grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
 			}
-			else if(Cell.isValidChar(""+tblGrid.getValueAt(row-1, col-1))){
+			else{
+			txtMessageBox.setText("That is not valid input, please type either a formula or a number.");
+			}
+			if(isAcceptedChar){
 				try{
 				Formula.listReferencedCells(grid.getCell(colConvert, row));
-				grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
 				}
 				catch(Exception a){
 				txtMessageBox.setText(a.getMessage());
 				}
 			}
-			else{
-			txtMessageBox.setText("That is not valid input, please type either a formula or a number.");
-			}
+			
 		}
 
 		tblGrid.getModel().addTableModelListener(this);
