@@ -274,6 +274,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		tblGrid.getModel().addTableModelListener(this);
 		tblGrid.getSelectionModel().addListSelectionListener(this);
 		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
+		tblGrid.addKeyListener(this);
 		scrTblScrollPane.setViewportView(tblGrid);
 	}
 
@@ -416,6 +417,21 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		}
 		grid.getCell(colConvert, row).setValue(clipBoard);
 	}
+	
+	//Is called when delete key is pressed on a selected cell.
+	//The cell is then deleted.
+	public void deleteCell()
+	{
+		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+			return;
+		}
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = Grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
+		
+		grid.removeCell(colConvert, row);
+		System.out.println("Value at (" + colConvert + ", " + row + ") deleted!");
+	}
 
 	/**
 	 * Capture GUI interactions. need to add the actionlistener to anything that triggers events
@@ -472,8 +488,19 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	 */
 	public void keyPressed(KeyEvent e){
 
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = Grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
+
 		if(e.getKeyChar() == KeyEvent.VK_ENTER){
 			updateFromInput();
+		}
+		
+		if(e.getKeyChar() == KeyEvent.VK_DELETE){
+			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) //Only delete if cell is non-empty
+			{
+				deleteCell();
+			}
 		}
 	}
 	/**
@@ -511,10 +538,10 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
-			Set<String> keys = grid.get_cells().keySet();
-			for(String key: keys) {
+			//Set<String> keys = grid.get_cells().keySet();
+			//for(String key: keys) {
 				//System.out.println("\nKey: " + key + " , Value: " + grid.get_cells().get(key).getValue() );
-			}
+			//}
 
 			return;
 		}
@@ -546,6 +573,12 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		}
 		if(tblGrid.getValueAt(row-1, col-1).equals(""))
 		{
+			//If the user removes the content of a cell, the backend grid is checked
+			//and if that cell had a value, it is deleted.
+			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0)
+			{
+				deleteCell();
+			}
 			tblGrid.getModel().addTableModelListener(this);
 			return;
 		}
