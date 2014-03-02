@@ -59,7 +59,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * 
 	 * @param value	The new value
 	 */
-	public void setValue(String value){
+	public String setValue(String value){
 		_value = value;
 		if(validateValue()){//Validate the value
 			_validValue = true;
@@ -72,15 +72,19 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 					for(Cell cell : _observedCells){//starts observing the new cells
 						cell.addObserver(this);
 					}
+					return "0";
 				}catch(Exception e){//Circular reference or invalid formula
 					System.out.println(e.getMessage());
 					_validValue = false;
+					return e.getMessage();
 				}
 			}
 			this.evaluate();//Start the evaluation of the cell value
 		}else{
 			_validValue = false;
+			return "This is not a valid value, please input a formula or a real number.";
 		}
+		return "";
 	}
     
     /**
@@ -172,7 +176,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * @param s The string
 	 * @return	True if it is a number, false otherwise
 	 */
-	public boolean isNumeric(String s) {  
+	public static boolean isNumeric(String s) {  
 	    return s.matches("[-+]?\\d*\\.?\\d+");  
 	} 
 	
@@ -184,7 +188,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * @param temp	The string
 	 * @return		True if the value is valid, false otherwise
 	 */
-	public boolean isValidChar(String temp) {
+	public static boolean isValidChar(String temp) {
 		int counter = 0; // "(", " )" counter
 		
 		int len = temp.length();
@@ -233,11 +237,11 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 		this.setChanged();
 		this.notifyObservers();
 		_grid.Display();
-		System.out.println("  " + _evaluatedValue +"   " + _row + "   "  + Grid.colToNumber(_col));
-		if(_grid == null)
-			System.out.println("GRID IS NOT THERE");
-		if(_grid.getSSTable()== null)
-			System.out.println("SSTABLE IS NOT THERE");
+		//System.out.println("  " + _evaluatedValue +"   " + _row + "   "  + Grid.colToNumber(_col));
+		//if(_grid == null)
+		//	System.out.println("GRID IS NOT THERE");
+		//if(_grid.getSSTable()== null)
+		//	System.out.println("SSTABLE IS NOT THERE");
 		
 		_grid.getSSTable().setValueAt(_evaluatedValue, _row-1, Grid.colToNumber(_col)-1);
 	

@@ -55,6 +55,7 @@ public class Formula {
 		}else{
 			throw new Exception("Invalid formula. The evaluator will not be able to evaluate this formula");
 		}
+		
 	}
 
 	/**

@@ -225,7 +225,7 @@ public class GridTest {
   public void testLoadEquals() {
 	  Grid testGrid = new Grid();
 	  
-		Hashtable<String, Cell> cells = new Hashtable<>();
+		Hashtable<String, Cell> cells = new Hashtable<String, Cell>();
 		Cell cell = new Cell("A",1,testGrid);
 		cell.setValue("1");
 		cells.put("A1", cell);

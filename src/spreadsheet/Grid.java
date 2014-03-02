@@ -321,8 +321,8 @@ public class Grid implements  java.io.Serializable{
 
 			for(String key: keys) {
 				hTemp.put(key,_cells.get(key).getValue());
-				System.out.println("\nKey: " + key + "\n");
-				System.out.println("Value: " + hTemp.get(key) + "\n");
+				//System.out.println("\nKey: " + key + "\n");
+				//System.out.println("Value: " + hTemp.get(key) + "\n");
 			}
 
 			out.writeObject(hTemp);
