@@ -63,16 +63,13 @@ public class Grid implements  java.io.Serializable{
 		_currentHeight = 1;
 	}
 
-
 	public void setSSTable(SSTable s){
 		this.tblInterface = s;
 	}
 
-
 	public SSTable getSSTable(){
 		return this.tblInterface;
 	}
-
 
 	/**
 	 * Try to access a single cell inside of the spreadsheet.
@@ -109,7 +106,6 @@ public class Grid implements  java.io.Serializable{
 			Cell foundCell = _cells.get( col + row );
 			if( foundCell == null ){
 				return null;
-
 			}
 			return foundCell;
 		}else{
@@ -140,7 +136,6 @@ public class Grid implements  java.io.Serializable{
 		if( selectedCell != null )
 			return _selectedCell = selectedCell;
 		return null;
-
 	}
 
 	/**
@@ -161,7 +156,6 @@ public class Grid implements  java.io.Serializable{
 	 */
 	public void removeCell(String col, int row) {
 		Cell cell = this.getCell(col, row);
-
 
 		for(Cell observed : cell.getObservedCells()){
 			observed.deleteObserver(cell);
@@ -191,11 +185,15 @@ public class Grid implements  java.io.Serializable{
 	public int getCurrentWidth() {return _currentWidth;}
 	public int getCurrentHeight() {return _currentHeight;}
 
+	public SSGUI getGUI(){return this.gui;}
+	public Hashtable<String,Cell> get_cells() {return _cells;}
+	
 	//Basic mutators
 	public void setMaxWidth(int maxWidth) {_maxWidth = maxWidth;}
 	public void setMaxHeight(int maxHeight) {_maxHeight = maxHeight;}
 
-
+	public void setGUI(SSGUI g){this.gui = g;}
+	
 	/**
 	 * Display the grid inside of the console
 	 */
@@ -220,7 +218,6 @@ public class Grid implements  java.io.Serializable{
 							System.out.print(centerPad("null", 10));
 						else
 							System.out.print(centerPad(x.getDisplay(), 10));
-
 					}
 				}
 			}
@@ -248,7 +245,6 @@ public class Grid implements  java.io.Serializable{
 		} while (columnIndex >= 0);
 
 		return b.reverse().toString();
-
 	}
 
 	/**
@@ -286,7 +282,6 @@ public class Grid implements  java.io.Serializable{
 		int leftPad = padding - padding/2;
 		int rightPad = padding - leftPad;
 
-
 		return createPad(rightPad) + string + createPad(leftPad);
 	}
 
@@ -311,22 +306,18 @@ public class Grid implements  java.io.Serializable{
 	 */
 	public boolean save(String fileName){
 		try {
-			// .sav extension no longer needed, implicit in how the GUI handles load/save
 			FileOutputStream fileOut = new FileOutputStream(fileName);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-
-			/* New stuff to deal with Non-Serializable exceptions */
+			
+			// Creates a hashtable with key rowColNumber (string) and value corresponding to the value of the
+			// cell at the given row and column (string)
 			Hashtable<String, String> hTemp = new Hashtable<String,String>(); 
 			Set<String> keys = _cells.keySet();
 
-			for(String key: keys) {
+			for(String key: keys)
 				hTemp.put(key,_cells.get(key).getValue());
-				//System.out.println("\nKey: " + key + "\n");
-				//System.out.println("Value: " + hTemp.get(key) + "\n");
-			}
 
-			out.writeObject(hTemp);
-			/* End of new stuff */
+			out.writeObject(hTemp); // Writes the hashtable to the file
 
 			out.close();
 			fileOut.close();
@@ -353,8 +344,10 @@ public class Grid implements  java.io.Serializable{
 		try {
 			FileInputStream fileIn = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-
-			/* New stuff to deal with Non-Serializable exceptions */
+			
+			// The load method is essentially the save method in reverse: Read from the file a
+			// Hashtable<String, String> and convert it to a Hashtable<String, Cell> (what the Grid class uses).
+			
 			Hashtable<String, String> hTemp = (Hashtable<String, String>)in.readObject();
 			Set<String> keys = hTemp.keySet();
 
@@ -365,11 +358,9 @@ public class Grid implements  java.io.Serializable{
 				String value = hTemp.get(key);
 				Cell c = new Cell(col, row, this);
 				c.setValue(value);
-				System.out.println("\nCell value: " + value + "\n"); // FOR DEBUGGING
 				_cells.put(key, c);
 
 			}
-			/* End of new stuff */
 
 			in.close();
 			fileIn.close();
@@ -383,7 +374,12 @@ public class Grid implements  java.io.Serializable{
 		}
 	}
 
-	/* New methods for determining a row & column separately from a string with row & column mashed together */
+	/**
+	 *  Determine a column number from a string with row & column mashed together 
+	 *  
+	 *  @param colrow	The column and row number appended as a string (Ex/ A9, BB17)
+	 *  @return		Column number as a string
+	 */
 	public static String colFromColRow(String colrow)
 	{
 
@@ -396,6 +392,12 @@ public class Grid implements  java.io.Serializable{
 
 	}
 
+	/**
+	 *  Determine a row number from a string with row & column mashed together 
+	 *  
+	 *  @param colrow	The column and row number appended as a string (Ex/ A9, BB17)
+	 *  @return		Row number as an int
+	 */
 	public static int rowFromColRow(String colrow)
 	{
 		int position = 1;
@@ -406,15 +408,4 @@ public class Grid implements  java.io.Serializable{
 		return Integer.parseInt(colrow.substring(position));
 
 	}
-	/* End of new methods */
-
-	public void setGUI(SSGUI g){
-		this.gui = g;
-	}
-
-	public SSGUI getGUI(){
-		return this.gui;
-	}
-
-	public Hashtable<String,Cell> get_cells() {return _cells;}
 }

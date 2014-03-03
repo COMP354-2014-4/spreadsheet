@@ -43,8 +43,6 @@ public class SSTable extends JTable {
 	 */
 	public SSTable() {
 		this(SSTable.intDefaultRows,SSTable.intDefaultColumns);
-		//TODO: Generate Grid object for default table
-		//grid = new Grid(intDefaultColumns, intDefaultRows);
 	}
 
 	/**
@@ -53,8 +51,6 @@ public class SSTable extends JTable {
 	 * @param g The grid object to be used when generating the spreadsheet
 	 */
 	public SSTable(Grid g){
-		//TODO: This generates the table using default values but then should be filled in with the specified grid
-		//---> This is because the grid is a hash and only stores what was entered. The defaults determine what COULD be entered
 		this(SSTable.intDefaultRows,SSTable.intDefaultColumns);
 		this.grid = g;
 		this.header.setBorder(this.bdrHeaderBorder);
@@ -145,7 +141,6 @@ public class SSTable extends JTable {
 		this.vptRowHeaderViewPort = new JViewport();
 		this.vptRowHeaderViewPort.setViewSize(dimPanelSize);
 		this.vptRowHeaderViewPort.setView(pnlRowHeaders);
-
 	}
 
 	/**
