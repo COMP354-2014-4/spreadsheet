@@ -45,11 +45,8 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
     /**
      * returns the table cell renderer
      */
-    public Component getTableCellRendererComponent (JTable table,
-    		  				Object cell,
-						    boolean isSelected,
-						    boolean hasFocus,
-						    int row, int column) {
+    public Component getTableCellRendererComponent (JTable table, Object cell, boolean isSelected,
+	    boolean hasFocus, int row, int column) {
     	
     	//Set formatting for all cells
   	  	this.setToolTipText("Double-click to edit.");
@@ -77,7 +74,6 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
 		  this.setBackground(new Color(255,255,255));
 		}
 	
-		
 		return this;
     }
     

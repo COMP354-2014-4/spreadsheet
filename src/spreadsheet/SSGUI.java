@@ -39,7 +39,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	JLabel lblInput;
 	JButton btnUpdate;
 
-
 	//Control components
 	private JMenuBar mnbMenu;
 	private JToolBar tbrToolBar;
@@ -86,7 +85,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	public String clipBoard = "0"; //PRIVATE, is now public for test only
 
 	//Save location
-	public String strFileLocation = ""; //set to null instead?	//PRIVATE, is now public for test only
+	public String strFileLocation = ""; //PRIVATE, is now public for test only
 
 	/**
 	 * Default constructor, which acccepts the grid to be displayed
@@ -199,12 +198,9 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 		//set the spreadsheet's screen dimensions
 		intScreenWidth = ((int) toolKit.getScreenSize().getWidth());  
-		intScreenHeight = ((int) toolKit.getScreenSize().getHeight());  
-		frmWindow.setPreferredSize(new Dimension( (int)(0.65 * intScreenWidth), (int)(0.65 *intScreenHeight) )); 
-
-		/*TO-DO: Replace with:
-			frmWindow.setPreferredSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize());
-		 */
+		intScreenHeight = ((int) toolKit.getScreenSize().getHeight());   
+		
+		frmWindow.setPreferredSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize());
 
 		//setup menu
 		mnbMenu.setPreferredSize(new Dimension(this.intScreenWidth,30));
@@ -283,27 +279,12 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	}
 
 	/**
-	 * Updates to use a new Grid object.  Not currently used, but available for code clean-up
-	 * if group is allowed time for such.
-	 * @param gridUpdate The grid to display
-	 */
-	public void updateTable(){
-
-		//this.grid = gridUpdate;
-		//TODO actually do something with the grid...
-	}
-
-	/**
 	 * Create a new spreadsheet
 	 */
 	public void newSpreadsheet(){
-		//Should work in theory
-
-		//JOptionPane.showMessageDialog(null,"NEW SPREADSHEET");
 		grid.clear();
 		initializeTable();
 		strFileLocation = ""; // clears the save file location
-
 	}
 
 	/**
@@ -319,8 +300,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		{
 			newSpreadsheet();// To erase previous spreadsheet data before loading new data
 			strFileLocation = fc.getSelectedFile().getAbsolutePath();
-			grid.load(strFileLocation);
-
+			for(int i = 0; i != 10; ++i) // Looping ensures nested references get processed correctly
+				grid.load(strFileLocation);
 		}
 	}
 
@@ -367,7 +348,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(tblGrid.getValueAt(row-1, col-1).equals("")){
 			return;
 		}
-		//System.out.println("CUT IS WORKIN'");
 		clipBoard = grid.getCell(colConvert, row).getValue();
 		grid.removeCell(colConvert, row);
 		tblGrid.setValueAt("", tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
@@ -390,7 +370,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(tblGrid.getValueAt(row-1, col-1).equals("")){
 			return;
 		}
-		//System.out.println("COPY IS WORKIN'");
 		clipBoard = grid.getCell(colConvert, row).getValue();
 	}
 
@@ -431,7 +410,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		
 		grid.removeCell(colConvert, row);
 		tblGrid.setValueAt("", tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
-		//System.out.println("Value at (" + colConvert + ", " + row + ") deleted!");
 	}
 
 	/**
@@ -456,12 +434,10 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 		}else if(objSourceClass.equals(this.mniAbout)){
 			JOptionPane.showMessageDialog(new JFrame(),
-					   					  "This is Team 3's Spreadsheet.  We have included a number of features for manipulating spreadsheet data.\n"
-					   					  + "These include: New, Load, Save, Save As, Cut, Copy, Paste, Update, and Delete.\n"
-					   					  + "Please enjoy the functionality!",
-					   					  
-					   					  "Team 3, 2014, proprietary copyright all rights included.",
-					   					  JOptionPane.PLAIN_MESSAGE);
+				"This is Team 3's Spreadsheet.  We have included a number of features for manipulating spreadsheet data.\n"
+				+ "These include: New, Load, Save, Save As, Cut, Copy, Paste, Update, and Delete.\n"
+				+ "Please enjoy the functionality!", "Team 3, 2014, proprietary copyright all rights included.",
+				JOptionPane.PLAIN_MESSAGE);
 
 		}else if(objSourceClass.equals(this.btnCopy) || objSourceClass.equals(this.mniCopy)){
 			copy();
@@ -474,7 +450,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 		}else if(objSourceClass.equals(this.btnUpdate)){
 			updateFromInput();
-
 		}
 	}
 
@@ -531,7 +506,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 			return;
 		}
 
-
 		int col = tblGrid.getSelectedColumn()+1;
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
@@ -545,18 +519,12 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		}
 		if(tblGrid.getValueAt(row-1, col-1) == null)
 		{
-			//Set<String> keys = grid.get_cells().keySet();
-			//for(String key: keys) {
-				//System.out.println("\nKey: " + key + " , Value: " + grid.get_cells().get(key).getValue() );
-			//}
-
 			return;
 		}
 		if(tblGrid.getValueAt(row-1, col-1).equals(""))
 		{
 			return;
 		}
-
 	}
 
 	/**
@@ -595,10 +563,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue()))))
 		{
 			if(isANumber||isAcceptedChar){
-				System.out.println("before input");
 				grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
-
-				System.out.println("after input");
 			}
 			else{
 			txtMessageBox.setText("That is not valid input, please type either a formula or a number.");
@@ -611,7 +576,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 				txtMessageBox.setText(a.getMessage());
 				}
 			}
-			
 		}
 
 		tblGrid.getModel().addTableModelListener(this);
@@ -624,7 +588,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}catch(Exception e){
-			//Doesn't matter if it doesn't work
+			//Doesn't matter if it doesn't work, the spreadsheet will simply have a different aesthetic
 		}
 	}
 
