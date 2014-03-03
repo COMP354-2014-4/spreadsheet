@@ -26,15 +26,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 import org.junit.Assert.*;
 
 public class testNew {
 
 
-	private static Robot robot;
+	private static Robot _rob;
 	
-	private static Grid grid;
-	private static SSGUI gui;
+	private static Grid _grid;
+	private static SSGUI _ui;
 	
 	
 	/**
@@ -42,10 +43,10 @@ public class testNew {
 	 * 
 	 */
 	public void click(){
-	//	robot.delay(500);
-		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.delay(500);
-	    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+		_rob.waitForIdle();
+		_rob.mousePress(InputEvent.BUTTON1_MASK);
+		_rob.delay(50); // Click one second
+		_rob.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 	
 	
@@ -54,27 +55,53 @@ public class testNew {
 	 * 
 	 */
 	public static void inputString(String s){
-        char[] charArray = s.toCharArray();
-        robot.waitForIdle();
-        for(char c : charArray){
-                if (Character.isUpperCase(c)) {
-                	robot.keyPress(KeyEvent.VK_SHIFT);
-        }
-                robot.keyPress(Character.toUpperCase(c));
-                robot.keyRelease(Character.toUpperCase(c));
-
-        if (Character.isUpperCase(c)) {
-        	robot.keyRelease(KeyEvent.VK_SHIFT);
-        }
-        robot.waitForIdle();
-        }
-       
+		char[] charArray = s.toCharArray();
+		_rob.waitForIdle();
+		for(char c : charArray){
+			if (Character.isUpperCase(c) || c == '+' || c == '*' ) {//|| c == '/'
+	            _rob.keyPress(KeyEvent.VK_SHIFT);
+	        }
+			
+			
+			
+			switch(c){
+				case '+':
+					_rob.keyPress(KeyEvent.VK_EQUALS);
+					_rob.keyRelease(KeyEvent.VK_EQUALS);
+					break;
+				case '-':
+					_rob.keyPress(KeyEvent.VK_MINUS);
+					_rob.keyRelease(KeyEvent.VK_MINUS);
+					break;
+				case '*':
+					_rob.keyPress(KeyEvent.VK_8);
+					_rob.keyRelease(KeyEvent.VK_8);
+					break;
+			//	case '/':
+			//		_rob.keyPress(KeyEvent.VK_3);
+			//		_rob.keyRelease(KeyEvent.VK_3);
+			//		break;
+			
+				default:
+					char C = Character.toUpperCase(c);
+					_rob.keyPress(C);
+					_rob.keyRelease(C);
+			
+			}
+			
+	
+	        if (Character.isUpperCase(c) || c == '+' || c == '*' || c == '/') {
+	        	_rob.keyRelease(KeyEvent.VK_SHIFT);
+	        }
+	        _rob.waitForIdle();
+		}
+		
 	}
 	
 	public static void waiting(){
 		int i = 0;
-        while( gui.clipBoard.equals("0") && i < 100){
-                robot.delay(10);
+        while( _ui.clipBoard.equals("0") && i < 100){
+        	_rob.delay(10);
                 i++;
         }
 	}
@@ -86,9 +113,9 @@ public class testNew {
 	@BeforeClass
 	public static void testSetup() throws Exception{
 		// do something before all tests
-		robot = new Robot();
-		grid = new Grid();
-		gui = new SSGUI(grid);
+		_rob = new Robot();
+		_grid = new Grid();
+		_ui = new SSGUI(_grid);
 	}
 
 	@AfterClass
@@ -100,262 +127,375 @@ public class testNew {
 	public void testEachSetup() {
 	// do something before each test
 	    System.out.println("Prepping Test....");
-	    gui.clipBoard="0";
+	    _ui.clipBoard="0";
 	  }
 	  
 	@After
 	public void testEachCleanup() {
 		  // do something after each test
 		  System.out.println("Test Completed!");
-		  gui.clipBoard="0";
+		  _ui.clipBoard="0";
 	}
 
   
 	/**
-	 * testing newSpreadsheet1()
+	 * test: newSpreadsheet1()
 	 * robot moves the mouse to click the btnNew from the toolbar
 	 */
 	
-	@Test
+/*	@Test
 	public void testNewSpreadSheet1() {
 		
 		// enter the value in A1 cell, value = 23
-		Rectangle rect = gui.tblGrid.getCellRect(0, 0, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
         Point pCell = rect.getLocation();
-        Point pTable = gui.tblGrid.getLocationOnScreen();
+        Point pTable = _ui.tblGrid.getLocationOnScreen();
         Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-        robot.mouseMove(mMouse.x, mMouse.y);
+        _rob.mouseMove(mMouse.x, mMouse.y);
         click();
         inputString("23");
 		
 		  
 		// use the robot to click the "New" button
-		robot.mouseMove(gui.btnNew.getLocationOnScreen().x , gui.btnNew.getLocationOnScreen().y);
+        _rob.mouseMove(_ui.btnNew.getLocationOnScreen().x , _ui.btnNew.getLocationOnScreen().y);
 		click();
 		
 		waiting();
 		
 		// test if the value of A1 is cleared
 		Object expected = null;
-	    Object result = gui.tblGrid.getValueAt(0, 0); 
+	    Object result = _ui.tblGrid.getValueAt(0, 0); 
 	    assertEquals(expected, result);
-	}
+	}*/
 	
 	
 	/**
-	 * testing newSpreadsheet2()
+	 * test: newSpreadsheet2()
 	 * robot moves the mouse to click the menu "File" (mnuFile) 
 	 * then moves the mouse to click menu item "New" (mniNew)
 	 */
 
-	@Test
+/*	@Test
 	public void testNewSpreadSheet2() {
 		
 		// enter the value in A1 cell, value = 23
-		Rectangle rect = gui.tblGrid.getCellRect(0, 0, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
 		Point pCell = rect.getLocation();
-		Point pTable = gui.tblGrid.getLocationOnScreen();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		inputString("23");
 		  
 		// use the robot to click the "File" menu
-		robot.mouseMove(gui.mnuFile.getLocationOnScreen().x , gui.mnuFile.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.mnuFile.getLocationOnScreen().x , _ui.mnuFile.getLocationOnScreen().y);
 		click();
 	    
 		// use the robot to click the "New" menu item
-	    robot.mouseMove(gui.mniNew.getLocationOnScreen().x , gui.mniNew.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.mniNew.getLocationOnScreen().x , _ui.mniNew.getLocationOnScreen().y);
 		click();
 		
 		waiting();
 		
 		// test if the value of A1 is cleared
 		Object expected = null;
-	    Object result = gui.tblGrid.getValueAt(0, 0); 
+	    Object result = _ui.tblGrid.getValueAt(0, 0); 
 	    assertEquals(expected, result);
-	} 
+	} */
+	
+
+	
+	
+	/**
+	 * test: can we input numbers from the input box
+	 * type a number and then click the "update" button
+	 */
+	 
+/*	@Test
+	public void testInputbox1(){
+		// select a cell
+		Rectangle rect = _ui.tblGrid.getCellRect(2, 2, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		click();
+		
+		// move the robot to the input box and type a number (35)
+		_rob.mouseMove(_ui.txtInputBox.getLocationOnScreen().x , _ui.txtInputBox.getLocationOnScreen().y);
+		click();	
+		inputString("35.0");
+		
+		// move the robot to click the "update" button
+		_rob.mouseMove(_ui.btnUpdate.getLocationOnScreen().x , _ui.btnUpdate.getLocationOnScreen().y);
+		click();
+		
+		waiting();
+		// test if the value of the cell equals the number we typed
+		String expected = "35.0";
+	    String result = _ui.tblGrid.getValueAt(2, 2).toString(); 
+	    assertEquals(expected, result);
+	}  
+	*/
+	
+	/**
+	 * test: can we input numbers from the input box
+	 * type a number and then click "enter" key
+	 */
+	 
+/*	@Test
+	public void testInputbox2(){
+		// select a cell
+		Rectangle rect = _ui.tblGrid.getCellRect(3, 2, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		click();
+		
+		
+		// move the robot to the input box and type a number (35)
+		_rob.mouseMove(_ui.txtInputBox.getLocationOnScreen().x , _ui.txtInputBox.getLocationOnScreen().y);
+		click();	
+		inputString("35.0");
+		
+		// and then hit the "enter" key
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		waiting();
+				
+		// test if the value of the cell equals the number we typed
+		String expected = "35.0";
+	    String result = _ui.tblGrid.getValueAt(3, 2).toString(); 
+	    assertEquals(expected, result);
+		
+	}  */
+	
+	
 	
 	/** 
-	 * testing; can we copy and paste from the toolbar
+	 * test: can we copy number from the toolbar
 	 * int value
 	 */
-	@Test
+/*	@Test
 	public void testNumberCopyToolbar1(){
 		
 		// enter the value in A1 cell, value = 23
-		Rectangle rect = gui.tblGrid.getCellRect(1, 1, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(1, 1, true);
 		Point pCell = rect.getLocation();
-		Point pTable = gui.tblGrid.getLocationOnScreen();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
 		inputString("23");
 		
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
-		rect = gui.tblGrid.getCellRect(1, 1, true);
+		rect = _ui.tblGrid.getCellRect(1, 1, true);
 		pCell = rect.getLocation();
-		pTable = gui.tblGrid.getLocationOnScreen();
+		pTable = _ui.tblGrid.getLocationOnScreen();
 		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
 		// use the robot to click the "Copy" button
-		robot.mouseMove(gui.btnCopy.getLocationOnScreen().x , gui.btnCopy.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.btnCopy.getLocationOnScreen().x , _ui.btnCopy.getLocationOnScreen().y);
 		click();	
 			
 		waiting();  
 				
 		// to check if the value of the clipboard = the value we input
 		String expected = "23";
-	    String result = gui.clipBoard; 
+	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}
+	}*/
 	
 	/**
-	 * testing; can we copy and paste from the toolbar
+	 * test: can we copy number from the toolbar
 	 * double value
 	 */
-	@Test
+/*	@Test
 	public void testNumberCopyToolbar2(){
 			
 		// enter the value in A1 cell, value = 23.65
-		Rectangle rect = gui.tblGrid.getCellRect(2, 0, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(2, 0, true);
 		Point pCell = rect.getLocation();
-		Point pTable = gui.tblGrid.getLocationOnScreen();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 			
 		inputString("23.65");
 
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
 			
-		rect = gui.tblGrid.getCellRect(2, 0, true);
+		rect = _ui.tblGrid.getCellRect(2, 0, true);
 		pCell = rect.getLocation();
-		pTable = gui.tblGrid.getLocationOnScreen();
+		pTable = _ui.tblGrid.getLocationOnScreen();
 		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 			
 		// use the robot to click the "Copy" button
-		robot.mouseMove(gui.btnCopy.getLocationOnScreen().x , gui.btnCopy.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.btnCopy.getLocationOnScreen().x , _ui.btnCopy.getLocationOnScreen().y);
 		click();	
 
 		waiting();  
 			
 		// to check if the value of the clipboard = the value we input
 		String expected = "23.65";
-	    String result = gui.clipBoard; 
+	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}
+	}*/
 		 
 	/**
-	 * testing; can we copy and paste from the menu
+	 * test: can we copy number from the menu
 	 * int value
 	 */
-	 
+/*	 
 	@Test
 	public void testNumberCopyMenu1(){
 
 		// enter the value in A1 cell, value = 123
-		Rectangle rect = gui.tblGrid.getCellRect(3, 0, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(3, 0, true);
 		Point pCell = rect.getLocation();
-		Point pTable = gui.tblGrid.getLocationOnScreen();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
 		inputString("123");
 
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
-		rect = gui.tblGrid.getCellRect(3, 0, true);
+		rect = _ui.tblGrid.getCellRect(3, 0, true);
 		pCell = rect.getLocation();
-		pTable = gui.tblGrid.getLocationOnScreen();
+		pTable = _ui.tblGrid.getLocationOnScreen();
 		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
 		// use the robot to click the "Copy" button
-		robot.mouseMove(gui.mnuEdit.getLocationOnScreen().x , gui.mnuEdit.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.mnuEdit.getLocationOnScreen().x , _ui.mnuEdit.getLocationOnScreen().y);
 		click();	
-		robot.mouseMove(gui.mniCopy.getLocationOnScreen().x , gui.mniCopy.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.mniCopy.getLocationOnScreen().x , _ui.mniCopy.getLocationOnScreen().y);
 		click();
 			
 		waiting();  
 				
 		// to check if the value of the clipboard = the value we input
 		String expected = "123";
-	    String result = gui.clipBoard; 
+	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}
+	}*/
 	
 	
 	/**
-	 * testing; can we copy and paste from the menu
+	 * test: can we copy number from the menu
 	 * double value
 	 */
 	 
-	 
+/*	 
 	@Test
 	public void testNumberCopyMenu2(){
 
 		// enter the value in A1 cell, value = 12.3
-		Rectangle rect = gui.tblGrid.getCellRect(4, 1, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(4, 1, true);
 		Point pCell = rect.getLocation();
-		Point pTable = gui.tblGrid.getLocationOnScreen();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
 		inputString("12.3");
 		
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
-		rect = gui.tblGrid.getCellRect(4, 1, true);
+		rect = _ui.tblGrid.getCellRect(4, 1, true);
 		pCell = rect.getLocation();
-		pTable = gui.tblGrid.getLocationOnScreen();
+		pTable = _ui.tblGrid.getLocationOnScreen();
 		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
-		robot.mouseMove(mMouse.x, mMouse.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
 		// use the robot to click the "Copy" button
-		robot.mouseMove(gui.mnuEdit.getLocationOnScreen().x , gui.mnuEdit.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.mnuEdit.getLocationOnScreen().x , _ui.mnuEdit.getLocationOnScreen().y);
 		click();	
-		robot.mouseMove(gui.mniCopy.getLocationOnScreen().x , gui.mniCopy.getLocationOnScreen().y);
+		_rob.mouseMove(_ui.mniCopy.getLocationOnScreen().x , _ui.mniCopy.getLocationOnScreen().y);
 		click();
 			
 		waiting();  
 				
 		// to check if the value of the clipboard = the value we input
 		String expected = "12.3";
-	    String result = gui.clipBoard; 
+	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}
+	}*/
+	
 	
 	
 	/**
-	 * testing; can we input numbers into the cell
-	 * 
+	 * test: can we copy formula from the menu
+	 * double value
 	 */
-	 /*
+	 
+
 	@Test
-	public void testNumberInput(){
-		
-		robot.mouseMove(350 , 120);
+	public void testNumberCopyFormula(){
+
+		// input number 12 into cell A1 
+		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
 		click();
-	}  */
-	
-	
+		
+		inputString("10");
+		_rob.waitForIdle();
+		
+		//input number 23 into cell B1
+		rect = _ui.tblGrid.getCellRect(0, 1, true);
+		pCell = rect.getLocation();
+		pTable = _ui.tblGrid.getLocationOnScreen();
+		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("20");
+		_rob.waitForIdle();
+		
+		rect = _ui.tblGrid.getCellRect(0, 2, true);
+		pCell = rect.getLocation();
+		pTable = _ui.tblGrid.getLocationOnScreen();
+		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("=A1+B1+30/2"); // = 10+ 20+ 15 = 45
+		_rob.waitForIdle();
+		
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		_rob.waitForIdle();
+		
+		waiting();
+		
+		String expected = "45.0";
+		String result = _ui.tblGrid.getValueAt(0, 2).toString();
+		
+		assertEquals( expected, result);
+	}
 }
