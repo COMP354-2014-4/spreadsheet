@@ -1,4 +1,11 @@
-import static org.junit.Assert.*;
+
+  /*************************/
+  /**** Testing Methods ****/
+  /*************************/
+  
+  /*** Waiting for implementation ***/
+  /**********************************/
+  import static org.junit.Assert.*;
 import spreadsheet.*;
 
 import org.junit.After;
@@ -137,7 +144,15 @@ public class testNew {
 		  _ui.clipBoard="0";
 	}
 
-  
+	/*************************/
+	/**** Testing Methods ****/
+	/*************************/
+
+
+	  
+	/*** Equals Tests ***/
+	/********************/
+	
 	/**
 	 * test: newSpreadsheet1()
 	 * robot moves the mouse to click the btnNew from the toolbar
@@ -146,15 +161,16 @@ public class testNew {
 	@Test
 	public void testNewSpreadSheet1() {
 		
-		// enter the value in A1 cell, value = 23
+		// get the coordinates of A1 and move the cursor to the cell A1
 		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
         Point pCell = rect.getLocation();
         Point pTable = _ui.tblGrid.getLocationOnScreen();
         Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
         _rob.mouseMove(mMouse.x, mMouse.y);
+        
+        //click on the cell and enter the value: 23
         click();
         inputString("23");
-		
 		  
 		// use the robot to click the "New" button
         _rob.mouseMove(_ui.btnNew.getLocationOnScreen().x , _ui.btnNew.getLocationOnScreen().y);
@@ -173,17 +189,21 @@ public class testNew {
 	 * test: newSpreadsheet2()
 	 * robot moves the mouse to click the menu "File" (mnuFile) 
 	 * then moves the mouse to click menu item "New" (mniNew)
+	 * the A1 is set value 23, after click the "new" button,
+	 * the A1 will become null
 	 */
 
 	@Test
 	public void testNewSpreadSheet2() {
 		
-		// enter the value in A1 cell, value = 23
+		// get the coordinates of A1 and move the cursor to the cell A1
 		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
 		_rob.mouseMove(mMouse.x, mMouse.y);
+		
+		// click on A1 and enter the value: 23
 		click();
 		inputString("23");
 		  
@@ -213,7 +233,7 @@ public class testNew {
 	 
 	@Test
 	public void testInputbox1(){
-		// select a cell
+		// get the coordinates of C3, move the cursor to C3 and click it 
 		Rectangle rect = _ui.tblGrid.getCellRect(2, 2, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
@@ -221,7 +241,7 @@ public class testNew {
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
-		// move the robot to the input box and type a number (35)
+		// move the robot to the input box and type a number:35
 		_rob.mouseMove(_ui.txtInputBox.getLocationOnScreen().x , _ui.txtInputBox.getLocationOnScreen().y);
 		click();	
 		inputString("35.0");
@@ -245,7 +265,7 @@ public class testNew {
 	 
 	@Test
 	public void testInputbox2(){
-		// select a cell
+		// get the coordinates of C4, move the cursor to C4 and click it 
 		Rectangle rect = _ui.tblGrid.getCellRect(3, 2, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
@@ -280,7 +300,7 @@ public class testNew {
 	@Test
 	public void testNumberCopyToolbar1(){
 		
-		// enter the value in A1 cell, value = 23
+		// get the coordinates of B2 move the cursor to B2 and click
 		Rectangle rect = _ui.tblGrid.getCellRect(1, 1, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
@@ -288,11 +308,14 @@ public class testNew {
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
+		// enter the value: 23
 		inputString("23");
 		
+		//press "ENTER" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
+		// get the coordinates of B2 move the cursor to B2 and click
 		rect = _ui.tblGrid.getCellRect(1, 1, true);
 		pCell = rect.getLocation();
 		pTable = _ui.tblGrid.getLocationOnScreen();
@@ -320,19 +343,22 @@ public class testNew {
 	@Test
 	public void testNumberCopyToolbar2(){
 			
-		// enter the value in A1 cell, value = 23.65
+		// get the coordinates of B2 move the cursor to A3 and click
 		Rectangle rect = _ui.tblGrid.getCellRect(2, 0, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
-			
+		
+		// enter the value in A3 cell, value = 23.65
 		inputString("23.65");
 
+		// press the "enter" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 			
+		// get the coordinates of B2 move the cursor to A3 and click
 		rect = _ui.tblGrid.getCellRect(2, 0, true);
 		pCell = rect.getLocation();
 		pTable = _ui.tblGrid.getLocationOnScreen();
@@ -361,7 +387,7 @@ public class testNew {
 	@Test
 	public void testNumberCopyMenu1(){
 
-		// enter the value in A1 cell, value = 123
+		// get the coordinates of D1, move the cursor to D1 and click
 		Rectangle rect = _ui.tblGrid.getCellRect(3, 0, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
@@ -369,11 +395,14 @@ public class testNew {
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
+		// enter the value: 123
 		inputString("123");
 
+		// press the "ENTER" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
+		// get the coordinates of D1, move the cursor to D1 and click
 		rect = _ui.tblGrid.getCellRect(3, 0, true);
 		pCell = rect.getLocation();
 		pTable = _ui.tblGrid.getLocationOnScreen();
@@ -404,7 +433,7 @@ public class testNew {
 	@Test
 	public void testNumberCopyMenu2(){
 
-		// enter the value in A1 cell, value = 12.3
+		// get the coordinates of E2, move the cursor to it an click
 		Rectangle rect = _ui.tblGrid.getCellRect(4, 1, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
@@ -412,11 +441,14 @@ public class testNew {
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		
+		// enter the value: 12.3
 		inputString("12.3");
 		
+		// press the "ENTER" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
+		// get the coordinates of E2, move the cursor to it an click
 		rect = _ui.tblGrid.getCellRect(4, 1, true);
 		pCell = rect.getLocation();
 		pTable = _ui.tblGrid.getLocationOnScreen();
@@ -450,7 +482,7 @@ public class testNew {
 	@Test
 	public void testNumberCopyFormula(){
 
-		// input number 12 into cell A1 
+		// get the coordinates of A1, move the cursor to it an click
 		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
@@ -459,10 +491,11 @@ public class testNew {
 		_rob.waitForIdle();
 		click();
 		
+		// input number 10 into cell A1 
 		inputString("10");
 		_rob.waitForIdle();
 		
-		//input number 23 into cell B1
+		// get the coordinates of B1, move the cursor to it an click
 		rect = _ui.tblGrid.getCellRect(0, 1, true);
 		pCell = rect.getLocation();
 		pTable = _ui.tblGrid.getLocationOnScreen();
@@ -470,10 +503,12 @@ public class testNew {
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		_rob.waitForIdle();
 		click();
-		
+
+		//input number 20 into cell B1
 		inputString("20");
 		_rob.waitForIdle();
 		
+		// get the coordinates of C1, move the cursor to it an click
 		rect = _ui.tblGrid.getCellRect(0, 2, true);
 		pCell = rect.getLocation();
 		pTable = _ui.tblGrid.getLocationOnScreen();
@@ -482,18 +517,23 @@ public class testNew {
 		_rob.waitForIdle();
 		click();
 		
-		inputString("=A1+B1+30/2"); // = 10+ 20+ 15 = 45
+		// input formula: =A1+B1+30/2
+		// the expected value is: 45
+		inputString("=A1+B1+30/2"); 
 		_rob.waitForIdle();
 		
+		// press the "ENTER" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		_rob.waitForIdle();
 		
 		waiting();
 		
+		// test if the expected value equals the actual result
 		String expected = "45.0";
 		String result = _ui.tblGrid.getValueAt(0, 2).toString();
-		
 		assertEquals( expected, result);
 	}
+	
+
 }
