@@ -22,11 +22,18 @@ import spreadsheet.SSGUI;
 
 public class SSGUITestMAXIME {
 	
-private static Robot _rob;
-private static Grid _grid;
-private static SSGUI _ui; 
+private static Robot _rob;	//The robot used to test the GUI
+private static Grid _grid;	//The grid on which we test
+private static SSGUI _ui; 	//The UI
 
-	//string input
+	/**
+	 * Function that inputs a string with the virtual keyboard
+	 * Robot crashes when you try to input from the numpad, thus
+	 * for the test to run successfully, 
+	 * you need to set your keyboard to "EN CANADA"
+	 * 
+	 * @param s the string to input with robot
+	 */
 	public static void inputString(String s){
 		char[] charArray = s.toCharArray();
 		_rob.waitForIdle();
@@ -36,7 +43,7 @@ private static SSGUI _ui;
 	        }
 			
 			
-			
+			//manages the numpad keys
 			switch(c){
 				case '+':
 					_rob.keyPress(KeyEvent.VK_EQUALS);
@@ -71,7 +78,9 @@ private static SSGUI _ui;
 		
 	}
 
-	//Robot click
+	/**
+	 * Default function to simulate a click
+	 */
 	public static void click(){
 		_rob.waitForIdle();
 		_rob.mousePress(InputEvent.BUTTON1_MASK);
@@ -79,9 +88,10 @@ private static SSGUI _ui;
 		_rob.mouseRelease(InputEvent.BUTTON1_MASK);
 		
 	}
-
+	
+	
 	/**** Before and After methods ****/
-	  
+	
 	@BeforeClass
 	public static void testSetup() {
 		//Create the test ui		
@@ -123,7 +133,18 @@ private static SSGUI _ui;
 	//**********
 	// TESTS
 	//**********
-
+	
+	/**
+	 * file>save - Check if the save file is created
+	 * 
+	 * purpose: test to make sure that the save menu
+	 * 			call the backend save
+	 * 
+	 * dependent on:
+	 * 	mnuFile
+	 * 	mniSave
+	 * 	saveSpreadsheet()
+	 */
 	@Test
 	public void testSaveSpreadsheetMenu() {
 		System.out.println(" SaveSpreadsheet from Menu");
@@ -157,6 +178,16 @@ private static SSGUI _ui;
 		assertTrue(assertValue);
 	}
 	
+	/**
+	 * Toolbar>save - Check if the save file is created
+	 * 
+	 * purpose: test to make sure that the save btn
+	 * 			call the backend save
+	 * 
+	 * dependent on:
+	 * 	btnSave
+	 * 	saveSpreadsheet()
+	 */
 	@Test
 	public void testSaveSpreadsheetTB() {
 		System.out.println(" SaveSpreadsheet from ToolBar"+_ui.strFileLocation);
@@ -184,7 +215,18 @@ private static SSGUI _ui;
 		if(assertValue) saveFile.delete();
 		assertTrue(assertValue);
 	}
-
+	
+	/**
+	 * File>save As - Check if the save file is created
+	 * 
+	 * purpose: test to make sure that the save as menu
+	 * 			call the backend save
+	 * 
+	 * dependent on:
+	 *  mnuFile
+	 * 	mniSaveAs
+	 * 	saveAsSpreadsheet()
+	 */
 	@Test
 	public void testSaveAsSpreadsheetMenu() {
 		System.out.println(" SaveAsSpreadsheet from Menu");
@@ -218,6 +260,16 @@ private static SSGUI _ui;
 		assertTrue(assertValue);
 	}
 	
+	/**
+	 * Toolbar>save As - Check if the save file is created
+	 * 
+	 * purpose: test to make sure that the save as btn
+	 * 			call the backend save
+	 * 
+	 * dependent on:
+	 * 	btnSaveAs
+	 * 	saveAsSpreadsheet()
+	 */
 	@Test
 	public void testSaveAsSpreadsheetTB() {
 		System.out.println(" SaveAsSpreadsheet from Toolbar");
@@ -245,7 +297,18 @@ private static SSGUI _ui;
 		if(assertValue) saveFile.delete();
 		assertTrue(assertValue);
 	}
-
+	
+	/**
+	 * Edit>cut - Check if the clipboard gets the right value and if the cell is emptied
+	 * 
+	 * purpose: Test to make sure that the cut menu actually
+	 * 			cut the cell
+	 * 
+	 * dependent on:
+	 *  mnuEdit
+	 * 	mniCut
+	 * 	cut()
+	 */
 	@Test
 	public void testCutMenu() {
 		System.out.println("Test Cut from menu");
@@ -293,6 +356,17 @@ private static SSGUI _ui;
 		assertTrue(_ui.clipBoard.equals("12.0") && _ui.tblGrid.getValueAt(0, 3).toString().equals(""));
 	}
 	
+
+	/**
+	 * Toolbar>cut - Check if the clipboard gets the right value and if the cell is emptied
+	 * 
+	 * purpose: Test to make sure that the cut toolbar actually
+	 * 			cut the cell
+	 * 
+	 * dependent on:
+	 * 	btnCut
+	 * 	cut()
+	 */
 	@Test
 	public void testCutTB() {
 		System.out.println("Test Cut from toolbar");
@@ -332,6 +406,16 @@ private static SSGUI _ui;
 		assertTrue(_ui.clipBoard.equals("13.0") && _ui.tblGrid.getValueAt(1, 3).toString().equals("") );
 	}
 	
+
+	/**
+	 * cut() - Check if the clipboard gets the formula and not the evaluated value
+	 * 
+	 * purpose: Test to make sure that the cut takes the right value
+	 * 
+	 * dependent on:
+	 * 	btnCut
+	 * 	cut()
+	 */
 	@Test
 	public void testCutFormula() {
 		System.out.println("Test Cut from toolbar");
@@ -371,6 +455,16 @@ private static SSGUI _ui;
 		assertTrue(_ui.clipBoard.equals("=A1+3"));
 	}
 	
+	/**
+	 * Input directly in a cell - Check if the value is entered in the cell
+	 * 
+	 * purpose: Test to make sure that it is possible to input
+	 * 			some values inside of a cell by simply clicking on it
+	 * 			and that the value gets registered in the backend
+	 * 
+	 * dependent on:
+	 * 	tableChanged()
+	 */
 	@Test
 	public void testInputFromGrid(){
 		System.out.println("Test Input from grid");
@@ -404,6 +498,15 @@ private static SSGUI _ui;
 		
 	}
 	
+	/**
+	 * Input a circular formula - Check if a circular formula display the right error message
+	 * 
+	 * purpose: Test to make sure that the user gets a feedback on the error
+	 * 
+	 * dependent on:
+	 * 	tableChanged()
+	 *  displayMessage()
+	 */
 	@Test
 	public void testInputCircularFormula(){
 		System.out.println("Test Input Circular formula");
@@ -448,7 +551,15 @@ private static SSGUI _ui;
 	
 	}
 	
-	
+	/**
+	 * Input a string - Check if a string display the right error message
+	 * 
+	 * purpose: Test to make sure that the user gets a feedback on the error
+	 * 
+	 * dependent on:
+	 * 	tableChanged()
+	 *  displayMessage()
+	 */
 	@Test
 	public void testInputStrings(){
 		System.out.println("Test Input String in the grid");
@@ -480,6 +591,15 @@ private static SSGUI _ui;
 	
 	}
 	
+	/**
+	 * Input a complex formula - Check if a complex formula display the right evaluated value
+	 * 
+	 * purpose: Test to make sure that the user gets the evaluated value from a complex formula
+	 * 			is displayed to the user. Thus testing the link between the frontend/backend
+	 * 
+	 * dependent on:
+	 * 	tableChanged()
+	 */
 	@Test
 	public void testInputComplexFormula(){
 		System.out.println("Test Input Formula in the grid");
