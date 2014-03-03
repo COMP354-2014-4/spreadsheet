@@ -69,7 +69,7 @@ public class testPaste {
 	 */
 	public static void click () {
 		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.delay(2000); // Click 2 seconds
+		robot.delay(100); // Click 2 seconds
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
@@ -114,7 +114,7 @@ public class testPaste {
 		gui.clipBoard = "123";
 		robot.mouseMove(gui.btnPaste.getLocationOnScreen().x , gui.btnPaste.getLocationOnScreen().y);
 		 click(); 
-		 robot.delay(1000);
+		 robot.delay(100);
 		 double input = 123.0;
 		 assertEquals(input, gui.tblGrid.getValueAt(0, 3));
 	}
@@ -132,7 +132,7 @@ public class testPaste {
 		click();
 		robot.mouseMove(gui.mniPaste.getLocationOnScreen().x , gui.mniPaste.getLocationOnScreen().y);
 		 click(); 
-		 robot.delay(1000);
+		 robot.delay(100);
 		 double input = 99.0;
 		 assertEquals(input, gui.tblGrid.getValueAt(1, 3));
 	}
@@ -146,7 +146,7 @@ public class testPaste {
 		SelectCellAndWrite(2,3);
 		robot.mouseMove(gui.btnPaste.getLocationOnScreen().x , gui.btnPaste.getLocationOnScreen().y);
 		click(); 
-		robot.delay(1000);
+		robot.delay(100);
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class testPaste {
 		click();
 		robot.mouseMove(gui.mniPaste.getLocationOnScreen().x , gui.mniPaste.getLocationOnScreen().y);
 		 click(); 
-		 robot.delay(2000);
+		 robot.delay(100);
 		 boolean input = true;
 		 assertEquals(input, gui.clipBoard.equals("0"));
 	}
@@ -174,7 +174,7 @@ public class testPaste {
 		gui.clipBoard = "=123*2";
 		robot.mouseMove(gui.btnPaste.getLocationOnScreen().x , gui.btnPaste.getLocationOnScreen().y);
 		 click(); 
-		 robot.delay(1000);
+		 robot.delay(100);
 		 double input = 246.0;
 		 assertEquals(input, gui.tblGrid.getValueAt(3, 3));
 	}

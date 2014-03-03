@@ -46,7 +46,7 @@ public class testLoad {
 	 */
 	public static void click () {
 		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.delay(2000); // Click 2 seconds
+		robot.delay(100);
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 	
@@ -130,7 +130,7 @@ public class testLoad {
 		robot.mouseMove(gui.mniLoad.getLocationOnScreen().x , gui.mniLoad.getLocationOnScreen().y);
 		click();
 		 inputString("myfilefile.sav");
-		 robot.delay(2000); 
+		 robot.delay(100); 
 		 robot.keyPress(KeyEvent.VK_ENTER);
 		 robot.keyRelease(KeyEvent.VK_ENTER);
 		 robot.delay(2000); 

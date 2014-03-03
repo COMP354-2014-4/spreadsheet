@@ -35,9 +35,9 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 
 	//Top Panel Components
 	JPanel panNorthPanel;
-	JTextField txtInputBox;
+	public JTextField txtInputBox;	//PRIVATE, is now public for test only
 	JLabel lblInput;
-	JButton btnUpdate;
+	public JButton btnUpdate;		//PRIVATE, is now public for test only
 
 	//Control components
 	private JMenuBar mnbMenu;
