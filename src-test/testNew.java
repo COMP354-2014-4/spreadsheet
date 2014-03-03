@@ -143,7 +143,7 @@ public class testNew {
 	 * robot moves the mouse to click the btnNew from the toolbar
 	 */
 	
-/*	@Test
+	@Test
 	public void testNewSpreadSheet1() {
 		
 		// enter the value in A1 cell, value = 23
@@ -166,7 +166,7 @@ public class testNew {
 		Object expected = null;
 	    Object result = _ui.tblGrid.getValueAt(0, 0); 
 	    assertEquals(expected, result);
-	}*/
+	}
 	
 	
 	/**
@@ -175,7 +175,7 @@ public class testNew {
 	 * then moves the mouse to click menu item "New" (mniNew)
 	 */
 
-/*	@Test
+	@Test
 	public void testNewSpreadSheet2() {
 		
 		// enter the value in A1 cell, value = 23
@@ -201,7 +201,7 @@ public class testNew {
 		Object expected = null;
 	    Object result = _ui.tblGrid.getValueAt(0, 0); 
 	    assertEquals(expected, result);
-	} */
+	} 
 	
 
 	
@@ -211,7 +211,7 @@ public class testNew {
 	 * type a number and then click the "update" button
 	 */
 	 
-/*	@Test
+	@Test
 	public void testInputbox1(){
 		// select a cell
 		Rectangle rect = _ui.tblGrid.getCellRect(2, 2, true);
@@ -236,14 +236,14 @@ public class testNew {
 	    String result = _ui.tblGrid.getValueAt(2, 2).toString(); 
 	    assertEquals(expected, result);
 	}  
-	*/
+	
 	
 	/**
 	 * test: can we input numbers from the input box
 	 * type a number and then click "enter" key
 	 */
 	 
-/*	@Test
+	@Test
 	public void testInputbox2(){
 		// select a cell
 		Rectangle rect = _ui.tblGrid.getCellRect(3, 2, true);
@@ -269,7 +269,7 @@ public class testNew {
 	    String result = _ui.tblGrid.getValueAt(3, 2).toString(); 
 	    assertEquals(expected, result);
 		
-	}  */
+	}  
 	
 	
 	
@@ -277,7 +277,7 @@ public class testNew {
 	 * test: can we copy number from the toolbar
 	 * int value
 	 */
-/*	@Test
+	@Test
 	public void testNumberCopyToolbar1(){
 		
 		// enter the value in A1 cell, value = 23
@@ -311,13 +311,13 @@ public class testNew {
 	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}*/
+	}
 	
 	/**
 	 * test: can we copy number from the toolbar
 	 * double value
 	 */
-/*	@Test
+	@Test
 	public void testNumberCopyToolbar2(){
 			
 		// enter the value in A1 cell, value = 23.65
@@ -351,13 +351,13 @@ public class testNew {
 	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}*/
+	}
 		 
 	/**
 	 * test: can we copy number from the menu
 	 * int value
 	 */
-/*	 
+	 
 	@Test
 	public void testNumberCopyMenu1(){
 
@@ -394,15 +394,13 @@ public class testNew {
 	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}*/
+	}
 	
 	
 	/**
 	 * test: can we copy number from the menu
 	 * double value
-	 */
-	 
-/*	 
+	 */	 
 	@Test
 	public void testNumberCopyMenu2(){
 
@@ -439,7 +437,7 @@ public class testNew {
 	    String result = _ui.clipBoard; 
 	    System.out.println(result);
 	    assertEquals(expected, result);
-	}*/
+	}
 	
 	
 	
