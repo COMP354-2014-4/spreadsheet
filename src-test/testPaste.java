@@ -116,6 +116,12 @@ public class testPaste {
 		 click(); 
 		 robot.delay(100);
 		 double input = 123.0;
+		 int i = 0;
+		 while( gui.tblGrid.getValueAt(0, 3) == null && i < 100){
+			robot.delay(10);	
+			i++;
+		 }
+		 
 		 assertEquals(input, gui.tblGrid.getValueAt(0, 3));
 	}
 	
@@ -134,6 +140,12 @@ public class testPaste {
 		 click(); 
 		 robot.delay(100);
 		 double input = 99.0;
+		 int i = 0;
+		 while( gui.tblGrid.getValueAt(1, 3) == null && i < 100){
+			robot.delay(10);	
+			i++;
+		 }
+		 
 		 assertEquals(input, gui.tblGrid.getValueAt(1, 3));
 	}
 	
@@ -176,6 +188,12 @@ public class testPaste {
 		 click(); 
 		 robot.delay(100);
 		 double input = 246.0;
+		 int i = 0;
+		 while( gui.tblGrid.getValueAt(3, 3) == null && i < 100){
+			robot.delay(10);	
+			i++;
+		 }
+		 
 		 assertEquals(input, gui.tblGrid.getValueAt(3, 3));
 	}
 	
