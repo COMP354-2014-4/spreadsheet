@@ -1,0 +1,5 @@
+For the test to work properly, you should put you keyboard in "EN Canada"
+It's a problem that come from the fact that robot cannot use the numpad thus we press
+on shift+3 to similate the "/" from the numpad.
+This is true for the "/", "*", "-" and "+".
+Thus some test WILL fail if your keyboard isn't in "EN CANADA"
