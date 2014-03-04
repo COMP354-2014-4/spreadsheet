@@ -271,6 +271,44 @@ private static SSGUI _ui; 	//The UI
 	}
 	
 	/**
+	 * Input an invalid formula - Check if the right error message is being displayed
+	 * 
+	 * purpose: Test to make sure that the user gets a meaningfull error message when an error
+	 * 			occurs
+	 * 
+	 * dependent on:
+	 * 	tableChanged()
+	 */
+	@Test
+	public void testInvalidFormula() {
+		System.out.println("Test Input Invalid Formula in the grid");
+		
+		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("==12A+");
+		_rob.delay(1000);
+		
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		_rob.waitForIdle();
+	
+		int i = 0;
+		while( _ui.txtMessageBox.getText().isEmpty() && i < 100){
+			_rob.delay(10);	
+			i++;
+		}
+		
+		assertTrue(_ui.txtMessageBox.getText().equals("That is not valid input, please type either a formula or a number."));
+		
+	}
+	
+	/**
 	 * Input a complex formula - Check if a complex formula display the right evaluated value
 	 * 
 	 * purpose: Test to make sure that the user gets the evaluated value from a complex formula
