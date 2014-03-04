@@ -28,6 +28,20 @@ public class testLoad {
 	private static SSGUI gui;
 	private static Grid grid;
 	
+	
+@Rule
+ public TemporaryFolder folder = new TemporaryFolder();
+
+/**
+ * method for simulating mouse click
+ */
+public static void click () {
+	robot.mousePress(InputEvent.BUTTON1_MASK);
+	robot.delay(1000); // Click 2 seconds
+	robot.mouseRelease(InputEvent.BUTTON1_MASK);
+}
+	
+	/**** Before and After methods ****/
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -37,39 +51,46 @@ public class testLoad {
 		grid = new Grid ();
 		gui = new SSGUI(grid);
 		}
-	
-@Rule
- public TemporaryFolder folder = new TemporaryFolder();
-	
-	/**
-	 * method for simulating mouse click
-	 */
-	public static void click () {
-		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.delay(100);
-		robot.mouseRelease(InputEvent.BUTTON1_MASK);
-	}
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		// do something before each test
+	    System.out.println("Prepping Test....");
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown(){
+		   // do something after each test
+	    System.out.println("Test Completed!");
 	}
+	
+	/**
+	  * method to input a file name using robot
+	  * @param s   String name of the file
+	  */
+	public static void inputString(String s){
+       char[] charArray = s.toCharArray();
+      robot.waitForIdle();
+       for(char c : charArray){
+               if (Character.isUpperCase(c)) {
+           robot.keyPress(KeyEvent.VK_SHIFT);
+       }
+               robot.keyPress(Character.toUpperCase(c));
+               robot.keyRelease(Character.toUpperCase(c));
+
+       if (Character.isUpperCase(c)) {
+               robot.keyRelease(KeyEvent.VK_SHIFT);
+       }
+       robot.waitForIdle();
+       }
+      
+	}
+	
+	
+	 /*************************/
+	  /**** Testing Methods ****/
+	  /*************************/
 	
 	/**
 	 * create temp file to check the load function
@@ -82,45 +103,23 @@ public class testLoad {
 	  }
 	
 
-	 /**
-	  * method to input a file name using robot
-	  * @param s   String name of the file
-	  */
-	public static void inputString(String s){
-        char[] charArray = s.toCharArray();
-       robot.waitForIdle();
-        for(char c : charArray){
-                if (Character.isUpperCase(c)) {
-            robot.keyPress(KeyEvent.VK_SHIFT);
-        }
-                robot.keyPress(Character.toUpperCase(c));
-                robot.keyRelease(Character.toUpperCase(c));
-
-        if (Character.isUpperCase(c)) {
-                robot.keyRelease(KeyEvent.VK_SHIFT);
-        }
-        robot.waitForIdle();
-        }
-       
-	}
-
 
 	/**
-	 * load test for testing from direct location for Load
+	 * load test for testing from Toolbar
 	*/
 	@Test
 	public void testLoad1() {
 		  robot.mouseMove(gui.btnLoad.getLocationOnScreen().x , gui.btnLoad.getLocationOnScreen().y);
 		 click();
 		 inputString("myfilefile.sav");
-		 robot.delay(2000); 
+		 robot.delay(100); 
 		 robot.keyPress(KeyEvent.VK_ENTER);
 		 robot.keyRelease(KeyEvent.VK_ENTER);
-		 robot.delay(2000); 
+		 robot.delay(100); 
 	}
 	 
 	/**
-	 * load test for testing from File --> Load
+	 * load test for testing from Edit Menu
 	 */
 	
 	@Test
@@ -133,7 +132,7 @@ public class testLoad {
 		 robot.delay(100); 
 		 robot.keyPress(KeyEvent.VK_ENTER);
 		 robot.keyRelease(KeyEvent.VK_ENTER);
-		 robot.delay(2000); 
+		 robot.delay(100); 
 		 
 	}
 

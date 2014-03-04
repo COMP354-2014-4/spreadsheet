@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
 import spreadsheet.*;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -14,9 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * 
- */
 
 /**
  * @author Jayanti Rani
@@ -31,6 +27,17 @@ public class testPaste {
 		private static Rectangle rect;
 		private Point pCell, pTable, mMouse;
 		
+		/**
+		 * method for simulating mouse click
+		 */
+		public static void click () {
+			robot.mousePress(InputEvent.BUTTON1_MASK);
+			robot.delay(1000); // Click 2 seconds
+			robot.mouseRelease(InputEvent.BUTTON1_MASK);
+		}
+		
+		/**** Before and After methods ****/
+		
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -41,37 +48,20 @@ public class testPaste {
 		gui = new SSGUI(grid);
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
+	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp(){
 		gui.clipBoard = "0";
+		  System.out.println("Prepping Test....");
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+	
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		gui.clipBoard = "0";
+		System.out.println("Test Completed!");
 	}
 	
-	/**
-	 * method for simulating mouse click
-	 */
-	public static void click () {
-		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.delay(100); // Click 2 seconds
-		robot.mouseRelease(InputEvent.BUTTON1_MASK);
-	}
 
 	public static void inputString(String s){
         char[] charArray = s.toCharArray();
@@ -105,8 +95,12 @@ public class testPaste {
 
 	}
 	
+	 /*************************/
+	  /**** Testing Methods ****/
+	  /*************************/
+	
 	/**
-	 *  test to check if Paste is working from the direct location
+	 *  test to check if Paste is working from the Toolbar
 	 */
 	@Test
 	public void testPaste1() {
@@ -126,7 +120,7 @@ public class testPaste {
 	}
 	
 	/**
-	 *  test to check if Paste is working from the edit --> paste
+	 *  test to check if Paste is working from the Edit menu
 	 */
 
 	@Test
@@ -163,7 +157,7 @@ public class testPaste {
 	
 	/**
 	 *  test to check whether Paste works with an empty clipboard 
-	 *  Paste from edit --> paste
+	 *  Paste from Edit menu
 	 */
 	@Test
 	public void testPaste4() {
