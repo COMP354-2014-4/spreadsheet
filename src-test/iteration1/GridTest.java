@@ -1,3 +1,4 @@
+package iteration1;
 import static org.junit.Assert.*;  //import assert methods
 import org.junit.*;                //import JUnit Annotations
 import java.io.File;
