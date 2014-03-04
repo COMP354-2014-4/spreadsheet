@@ -377,5 +377,91 @@ private static SSGUI _ui; 	//The UI
 		
 	
 	}
+	
+	
+	/**
+	 * Input and update a formula - Check if a complex formula display the right evaluated value after one of it's component has been edited
+	 * 
+	 * purpose: Test to make sure that the user gets the evaluated value from a complex formula
+	 * 			is displayed to the user even after editing one of its component cell.
+	 * 			Thus testing the link between the frontend/backend
+	 * 
+	 * dependent on:
+	 * 	tableChanged()
+	 */
+	@Test
+	public void testEditFormula(){
+		System.out.println("Test Input Formula in the grid");
+		
+		Rectangle rect = _ui.tblGrid.getCellRect(1, 0, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("20");
+		_rob.waitForIdle();
+		System.out.println("Input a value in A2 works");
+		
+		rect = _ui.tblGrid.getCellRect(2, 0, true);
+		pCell = rect.getLocation();
+		pTable = _ui.tblGrid.getLocationOnScreen();
+		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("42");
+		_rob.waitForIdle();
+		System.out.println("Input a value in A3 works");
+		
+		rect = _ui.tblGrid.getCellRect(3, 0, true);
+		pCell = rect.getLocation();
+		pTable = _ui.tblGrid.getLocationOnScreen();
+		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("=A2+A3+44/2");
+		_rob.waitForIdle();
+		System.out.println("Input a value in A4 works");
+		
+		rect = _ui.tblGrid.getCellRect(1, 0, true);
+		pCell = rect.getLocation();
+		pTable = _ui.tblGrid.getLocationOnScreen();
+		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		_rob.keyPress(KeyEvent.VK_DELETE);
+		_rob.keyRelease(KeyEvent.VK_DELETE);
+		_rob.waitForIdle();
+		inputString("36");
+		
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		_rob.waitForIdle();
+		
+		int i = 0;
+		while( ( _ui.tblGrid.grid.getCell("A", 4).getValue().isEmpty() || !_ui.tblGrid.getValueAt(3, 0).toString().equals("100.0") ) && i < 100){
+			_rob.delay(10);	
+			i++;
+		}
+		
+		double backendVal = _ui.tblGrid.grid.getCell("A", 4).getEvaluatedValue();
+		
+		System.out.println("Backend value: " + backendVal + "  ||  Frontend value: " + _ui.tblGrid.getValueAt(3, 0));
+		
+		System.out.println("Backend value: " + String.valueOf(backendVal) + "  ||  Frontend value: " + _ui.tblGrid.getValueAt(3, 0));
+		String backendValS = String.valueOf(backendVal);
+		boolean assertVal = ( backendVal == 100 && backendValS.equals( _ui.tblGrid.getValueAt(3, 0).toString()) );
+		
+		assertTrue( assertVal );
+		
+	
+	}
 
 }

@@ -65,7 +65,7 @@ public class testNew {
 		char[] charArray = s.toCharArray();
 		_rob.waitForIdle();
 		for(char c : charArray){
-			if (Character.isUpperCase(c) || c == '+' || c == '*' ) {//|| c == '/'
+			if (Character.isUpperCase(c) || c == '+' || c == '*' || c == '/') {
 	            _rob.keyPress(KeyEvent.VK_SHIFT);
 	        }
 			
@@ -84,10 +84,10 @@ public class testNew {
 					_rob.keyPress(KeyEvent.VK_8);
 					_rob.keyRelease(KeyEvent.VK_8);
 					break;
-			//	case '/':
-			//		_rob.keyPress(KeyEvent.VK_3);
-			//		_rob.keyRelease(KeyEvent.VK_3);
-			//		break;
+				case '/':
+					_rob.keyPress(KeyEvent.VK_3);
+					_rob.keyRelease(KeyEvent.VK_3);
+					break;
 			
 				default:
 					char C = Character.toUpperCase(c);
