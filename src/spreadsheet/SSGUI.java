@@ -83,6 +83,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	//Back-end data objects
 	private Grid grid;
 	public String clipBoard = "0"; //PRIVATE, is now public for test only
+	private int clip_x =-1;
+	private int clip_y =-1;
 
 	//Save location
 	public String strFileLocation = ""; //PRIVATE, is now public for test only
@@ -348,6 +350,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(tblGrid.getValueAt(row-1, col-1).equals("")){
 			return;
 		}
+		clip_x = col;
+		clip_y = row;
 		clipBoard = grid.getCell(colConvert, row).getValue();
 		grid.removeCell(colConvert, row);
 		tblGrid.setValueAt("", tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
@@ -370,6 +374,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(tblGrid.getValueAt(row-1, col-1).equals("")){
 			return;
 		}
+		clip_x = col;
+		clip_y = row;
 		clipBoard = grid.getCell(colConvert, row).getValue();
 	}
 
@@ -387,13 +393,13 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 			if(clipBoard.equals("0")){
 			}	
 			else{
-			grid.getCell(colConvert, row).setValue(clipBoard);
+			grid.getCell(colConvert, row).setValue(Formula.applyOffset(col - clip_x,row - clip_y, clipBoard));
 			}
 		}
 		if(clipBoard.equals("0")){
 		}
 		else{
-		grid.getCell(colConvert, row).setValue(clipBoard);
+		grid.getCell(colConvert, row).setValue(Formula.applyOffset(col - clip_x,row - clip_y, clipBoard));
 		}
 	}
 	

@@ -1,6 +1,8 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import utils.TokenStack;
 import spreadsheet.Grid;
@@ -180,6 +182,85 @@ public class Formula {
 		return val;
 
 	}
+	
+	/**
+	 * modifies a formula to account for cell offsets while pasting
+	 * @param 	x col offset
+	 * @param 	y row offset
+	 * @param 	formula the formula, i.e cell.getValue()
+	 * @return	the modified formula
+	 */
+	public static String applyOffset(int x, int y, String formula)
+	{
+		Pattern MY_PATTERN = Pattern.compile("@?[A-Z]+@?[1-9]+");
+		String out = "";
+		String[] split = formula.split("@?[A-Z]+@?[1-9]+");
+		Matcher m = MY_PATTERN.matcher(formula);
+		for(int i=0;i<split.length;++i)
+		{
+			out += split[i];
+			if(m.find())
+			{
+			    String s = m.group();
+			    if(s.matches("@.*"))
+			    {
+			    	out += "@";
+			    	int j = 1;
+			    	while((s.charAt(j)+"").matches("[A-Z]"))
+			    	{
+				    	out += s.charAt(j);
+				    	++j;
+			    		
+			    	}
+			    	s = s.substring(j, s.length());
+			    	System.out.println(s);
+			    }else{
+			    	String scol = "";
+			    	int icol =0;
+			    	int j = 0;
+			    	while((s.charAt(j)+"").matches("[A-Z]"))
+			    	{
+				    	scol += s.charAt(j);
+			    		icol = icol*26 + (s.charAt(j) - 'A');
+			    		++j;
+			    	}
+			    	s = s.replaceFirst(scol, "");
+			    	icol += x;
+			    	scol = "";
+			    	while(icol/26 > 0){
+			    		scol += (char)(icol%26 + 'A') + scol;
+			    		icol /=26;
+			    	}
+		    		scol += (char)(icol + 'A') + scol;
+			    	out+= scol;
+			    }
+			    if(s.matches("@.*"))
+			    {
+			    	out += "@";
+			    	int j = 1;
+			    	while(j < s.length())
+			    	{
+				    	out += s.charAt(j);
+				    	++j;
+			    	}
+				}else{
+					String srow = "";
+					int irow = 0;
+					int j = 0;
+			    	while(j < s.length())
+			    	{
+				    	srow += s.charAt(j);
+			    		irow += irow*10 + (s.charAt(j) - '0');
+			    		++j;
+			    	}
+			    	irow += y;
+			    	out+= String.valueOf(irow);
+					
+				}
+			}
+		}
+		return out;
+	}
 
 	/**
 	 * Transform a formula string into a Token list
@@ -248,7 +329,7 @@ public class Formula {
 					if(expectedOperator)
 						return false;
 					String s = String.valueOf(character);
-					if( s.matches("[A-Z]") ){
+					if( s.matches("[@A-Z]") ){
 						String tokenColValue = "";
 						tokenColValue += s;
 						String TokenRowValue = "";
@@ -257,6 +338,14 @@ public class Formula {
 							String s2= String.valueOf(formulaChars[c]);
 							while( s2.matches("[A-Z]")){//Get the column name
 								tokenColValue += s2;
+								if(++c < formulaChars.length)
+									s2 = String.valueOf(formulaChars[c]);
+								else
+									break;
+							}
+							if(s2.equals("@"))
+							{
+								TokenRowValue += s2;
 								if(++c < formulaChars.length)
 									s2 = String.valueOf(formulaChars[c]);
 								else
@@ -271,7 +360,7 @@ public class Formula {
 							}
 							i = c-1;
 						}
-						tokens.add( new Token(TokenType.CEL, tokenColValue, Integer.parseInt(TokenRowValue)) );
+						tokens.add( new Token(TokenType.CEL, tokenColValue.matches("@.*")?tokenColValue.substring(1):tokenColValue, Integer.parseInt(TokenRowValue.matches("@.*")? TokenRowValue.substring(1):TokenRowValue)) );
 
 						//Double operand
 					}else if( s.matches("[0-9.]") ){

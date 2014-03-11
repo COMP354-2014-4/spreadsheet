@@ -197,7 +197,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 		
 			if( ('0'<=c && c<='9') ||( 'A'<=c && c<='Z' ) || 
 					c=='-' || c=='+'|| c=='*'||  c=='/'|| 
-					c=='(' || c==')' || c=='.' || c==' '){
+					c=='(' || c==')' || c=='.' || c==' ' || c=='@'){
 				
 				if(c=='(') {
 					counter ++;
