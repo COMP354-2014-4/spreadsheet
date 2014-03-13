@@ -274,12 +274,28 @@ public class SSGUI implements ActionListener, KeyListener{
 	public void displayMessage(String strMessage){
 		this.txtMessageBox.setText(strMessage);
 	}
+	
+ 	/**
+	 * Set up the GUI table
+	 */
+	public void initializeTable() {
+		tblGrid = new SSTable(grid);//uses the default values on load
+		tblGrid.setFillsViewportHeight(true);
+		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tblGrid.getSelectionModel().addListSelectionListener(rowListener);
+		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(colListener);
+		tblGrid.addKeyListener(this);
+		scrTblScrollPane.setViewportView(tblGrid);
+	}
+
+	/**
 
 	/**
 	 * Create a new spreadsheet
 	 */
 	public void newSpreadsheet(){
 		grid.clear();
+		initializeTable();
 		strFileLocation = ""; // clears the save file location
 	}
 
@@ -471,17 +487,15 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * KeyListener key press event handler
 	 */
 	public void keyPressed(KeyEvent e){
-		if(e.getKeyChar() == KeyEvent.VK_LEFT ||e.getKeyChar() == KeyEvent.VK_RIGHT
-				|| e.getKeyChar() == KeyEvent.VK_UP || e.getKeyChar() == KeyEvent.VK_DOWN){
-				valueChanged();
-				changed = false;
-		}
+		//Nothing required
 	}
 	/**
 	 * KeyListener key release event handler, not used.
 	 */
 	public void keyReleased(KeyEvent e){
-		//Nothing required
+		if(e.getKeyCode() >36 && e.getKeyCode() <41){
+			valueChanged();
+		}
 	}
 	
 	/**
@@ -492,10 +506,8 @@ public class SSGUI implements ActionListener, KeyListener{
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 
-		if(e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB){
-				valueChanged();
-				changed = false;
-		}
+		if(e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB)
+			valueChanged();
 		else if(e.getKeyChar() == KeyEvent.VK_DELETE){
 			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) //Only delete if cell is non-empty
 			{
@@ -532,7 +544,7 @@ public class SSGUI implements ActionListener, KeyListener{
 			{
 				txtInputBox.setText(txtInputBox.getText() + e.getKeyChar());
 				changed = true;
-			}
+			}else changed = true;
 		}
 	}
 
@@ -551,14 +563,13 @@ public class SSGUI implements ActionListener, KeyListener{
 		int col = tblGrid.getSelectedColumn()+1;
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
-
 		if(changed)
 		{
 			updateFromInput(oldSelectedRow,oldSelectedCol);
 			changed = false;
 		} else if(tblGrid.getValueAt(row-1, col-1)!=null && tblGrid.getValueAt(row-1, col-1).equals("#ERR"))
 		{
-			updateFromInput(row,col);
+			displayMessage(grid.getCell(Grid.numToCol(col), row).getError());
 		}
 		oldSelectedRow = row;
 		oldSelectedCol = col;
@@ -568,14 +579,6 @@ public class SSGUI implements ActionListener, KeyListener{
 		}
 		else{
 			txtInputBox.setText("" + grid.checkCell(colConvert, row).getValue());
-		}
-		if(tblGrid.getValueAt(row-1, col-1) == null)
-		{
-			return;
-		}
-		if(tblGrid.getValueAt(row-1, col-1).equals(""))
-		{
-			return;
 		}
 	}
 
