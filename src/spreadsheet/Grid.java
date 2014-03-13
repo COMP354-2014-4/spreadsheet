@@ -255,6 +255,8 @@ public class Grid implements  java.io.Serializable{
 	 * @return		the integer representation of the column
 	 */
 	public static int colToNumber(String str) {
+		if(str == null)
+			return 0;
 		char[] chars = str.toUpperCase().toCharArray();
 
 		int sum = 0;

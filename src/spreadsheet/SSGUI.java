@@ -21,9 +21,16 @@ import utils.Formula;
  * A grid must be passed to create the object, but it can be blank
  *
  */
-public class SSGUI implements ActionListener, ListSelectionListener, TableModelListener, KeyListener{
+public class SSGUI implements ActionListener, KeyListener{
 	//Constants
 	public final String NOTANEXCEPTIONALINPUT = "0";
+	
+	//event stuff
+	ColEventListener colListener = new ColEventListener();
+	RowEventListener rowListener = new RowEventListener();
+	int lastCol = 0;
+	int lastRow =0;
+	boolean typingInTable = false;
 	
 	//Tools
 	private Toolkit toolKit;
@@ -85,6 +92,9 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	public String clipBoard = "0"; //PRIVATE, is now public for test only
 	private int clip_x =-1;
 	private int clip_y =-1;
+	private int oldSelectedRow = 1;
+	private int oldSelectedCol = 1;
+	private boolean changed = false;
 
 	//Save location
 	public String strFileLocation = ""; //PRIVATE, is now public for test only
@@ -180,9 +190,8 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		tblGrid = new SSTable(grid);//uses the default values on load
 		tblGrid.setFillsViewportHeight(true);
 		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblGrid.getModel().addTableModelListener(this);
-		tblGrid.getSelectionModel().addListSelectionListener(this);
-		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
+		tblGrid.getSelectionModel().addListSelectionListener(rowListener);
+		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(colListener);
 		this.tblGrid.addKeyListener(this);
 
 		//Build Scrollbars
@@ -258,20 +267,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	}
 
 	/**
-	 * Set up the GUI table
-	 */
-	public void initializeTable() {
-		tblGrid = new SSTable(grid);//uses the default values on load
-		tblGrid.setFillsViewportHeight(true);
-		tblGrid.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tblGrid.getModel().addTableModelListener(this);
-		tblGrid.getSelectionModel().addListSelectionListener(this);
-		tblGrid.getColumnModel().getSelectionModel().addListSelectionListener(this);
-		tblGrid.addKeyListener(this);
-		scrTblScrollPane.setViewportView(tblGrid);
-	}
-
-	/**
 	 * Display a message in the message bar
 	 *  
 	 * @param strMessage The message to display
@@ -285,7 +280,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	 */
 	public void newSpreadsheet(){
 		grid.clear();
-		initializeTable();
 		strFileLocation = ""; // clears the save file location
 	}
 
@@ -330,7 +324,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			strFileLocation = fc.getSelectedFile().getAbsolutePath();
-			grid.save(strFileLocation + ".sav"); // Also different from loadSpreadsheet()
+			grid.save(strFileLocation.matches(".*\\.sav")? strFileLocation: strFileLocation+ ".sav"); // Also different from loadSpreadsheet()
 		}
 	}
 
@@ -455,35 +449,32 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 			cut();
 
 		}else if(objSourceClass.equals(this.btnUpdate)){
-			updateFromInput();
+			updateFromInput(tblGrid.getSelectedRow()+1,tblGrid.getSelectedColumn()+1);
 		}
 	}
 
 	/**
 	 * Update the currently selected cell to whatever text is typed into the input box
 	 */
-	private void updateFromInput(){
-		tblGrid.setValueAt(this.txtInputBox.getText(), tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
+	private void updateFromInput(int row,int col){
+		grid.getCell(Grid.numToCol(col), row).setValue(txtInputBox.getText());
+		if(grid.getCell(Grid.numToCol(col), row).isValidValue())
+			tblGrid.setValueAt(grid.getCell(Grid.numToCol(col), row).getEvaluatedValue(), row-1, col-1);
+		else
+		{
+			tblGrid.setValueAt("#ERR", row-1, col-1);
+			displayMessage(grid.getCell(Grid.numToCol(col), row).getError());
+		}
 	}
 	
 	/**
 	 * KeyListener key press event handler
 	 */
 	public void keyPressed(KeyEvent e){
-
-		int col = tblGrid.getSelectedColumn()+1;
-		String colConvert = Grid.numToCol(col);
-		int row = tblGrid.getSelectedRow()+1;
-
-		if(e.getKeyChar() == KeyEvent.VK_ENTER){
-			updateFromInput();
-		}
-		
-		if(e.getKeyChar() == KeyEvent.VK_DELETE){
-			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) //Only delete if cell is non-empty
-			{
-				deleteCell();
-			}
+		if(e.getKeyChar() == KeyEvent.VK_LEFT ||e.getKeyChar() == KeyEvent.VK_RIGHT
+				|| e.getKeyChar() == KeyEvent.VK_UP || e.getKeyChar() == KeyEvent.VK_DOWN){
+				valueChanged();
+				changed = false;
 		}
 	}
 	/**
@@ -497,7 +488,52 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	 * KeyListener key typed event handler, not used.
 	 */
 	public void keyTyped(KeyEvent e){
-		//Nothing required
+		int col = tblGrid.getSelectedColumn()+1;
+		String colConvert = Grid.numToCol(col);
+		int row = tblGrid.getSelectedRow()+1;
+
+		if(e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB){
+				valueChanged();
+				changed = false;
+		}
+		else if(e.getKeyChar() == KeyEvent.VK_DELETE){
+			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) //Only delete if cell is non-empty
+			{
+				deleteCell();
+			}
+		}
+		else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE){
+			if(e.getSource().getClass() == SSTable.class)
+			{
+				if(changed)
+				{
+					if(txtInputBox.getText() != null && !txtInputBox.getText().equals(""))
+					{
+						txtInputBox.setText(txtInputBox.getText().substring(0,txtInputBox.getText().length()-1));
+					}
+				}
+				else{
+					txtInputBox.setText("");
+					tblGrid.setValueAt("",row-1,col-1);
+					changed = true;
+				}
+			}
+			else changed = true;
+		}
+		else{
+			if(!changed && e.getSource().getClass() == SSTable.class)
+			{
+				txtInputBox.setText(e.getKeyChar()+"");
+				tblGrid.setValueAt("",row-1,col-1);
+				changed = true;
+				oldSelectedCol = col;
+				oldSelectedRow = row;
+			}else if(e.getSource().getClass() == SSTable.class)
+			{
+				txtInputBox.setText(txtInputBox.getText() + e.getKeyChar());
+				changed = true;
+			}
+		}
 	}
 
 
@@ -507,7 +543,7 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	 * 
 	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
 	 */
-	public void valueChanged(ListSelectionEvent e) {
+	public void valueChanged() {
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 			return;
 		}
@@ -516,6 +552,16 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 
+		if(changed)
+		{
+			updateFromInput(oldSelectedRow,oldSelectedCol);
+			changed = false;
+		} else if(tblGrid.getValueAt(row-1, col-1)!=null && tblGrid.getValueAt(row-1, col-1).equals("#ERR"))
+		{
+			updateFromInput(row,col);
+		}
+		oldSelectedRow = row;
+		oldSelectedCol = col;
 		Cell x = grid.checkCell(colConvert, row);
 		if(x == null){
 			txtInputBox.setText("");
@@ -534,60 +580,6 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 	}
 
 	/**
-	 * Handles changes in cell selection, etc...
-	 */
-	public void tableChanged(TableModelEvent e) {
-		tblGrid.getModel().removeTableModelListener(this);
-		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
-			tblGrid.getModel().addTableModelListener(this);
-			return;
-		}
-
-		int col = tblGrid.getSelectedColumn()+1;
-		String colConvert = Grid.numToCol(col);
-		int row = tblGrid.getSelectedRow()+1;		
-		if(tblGrid.getValueAt(row-1, col-1) == null)
-		{
-			tblGrid.getModel().addTableModelListener(this);
-			return;
-		}
-		if(tblGrid.getValueAt(row-1, col-1).equals(""))
-		{
-			//If the user removes the content of a cell, the backend grid is checked
-			//and if that cell had a value, it is deleted.
-			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0)
-			{
-				deleteCell();
-			}
-			tblGrid.getModel().addTableModelListener(this);
-			return;
-		}
-		boolean isANumber = Cell.isNumeric(""+tblGrid.getValueAt(row-1, col-1));
-		boolean isAcceptedChar = Cell.isValidChar(""+tblGrid.getValueAt(row-1, col-1));
-		
-
-		if(!((""+tblGrid.getValueAt(row-1, col-1)).equals(""+(grid.getCell(colConvert, row).getEvaluatedValue()))))
-		{
-			if(isANumber||isAcceptedChar){
-				grid.getCell(colConvert, row).setValue(""+tblGrid.getValueAt(row-1, col-1));
-			}
-			else{
-			txtMessageBox.setText("That is not valid input, please type either a formula or a number.");
-			}
-			if(isAcceptedChar){
-				try{
-				Formula.listReferencedCells(grid.getCell(colConvert, row));
-				}
-				catch(Exception a){
-				txtMessageBox.setText(a.getMessage());
-				}
-			}
-		}
-
-		tblGrid.getModel().addTableModelListener(this);
-	}
-
-	/**
 	 * Sets the look and feel to the current OS
 	 */
 	private void setLookAndFeel(){
@@ -595,6 +587,31 @@ public class SSGUI implements ActionListener, ListSelectionListener, TableModelL
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}catch(Exception e){
 			//Doesn't matter if it doesn't work, the spreadsheet will simply have a different aesthetic
+		}
+	}
+	
+	private class ColEventListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(tblGrid.getSelectedColumn() == lastCol && tblGrid.getSelectedRow() == lastRow)
+			{
+				SSGUI.this.valueChanged();	
+			}
+			lastCol = tblGrid.getSelectedColumn();
+			
+		}
+	}
+	
+	private class RowEventListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(tblGrid.getSelectedColumn() == lastCol && tblGrid.getSelectedRow() == lastRow && tblGrid.getSelectedColumn()+1 == oldSelectedCol)
+			{
+				SSGUI.this.valueChanged();
+			}
+			lastRow = tblGrid.getSelectedRow();
 		}
 	}
 

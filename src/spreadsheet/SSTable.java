@@ -19,6 +19,7 @@ public class SSTable extends JTable {
 	final int intCellHeight = 21;
 
 	SSCellRenderer cellSelected = null;
+	SSCellEditor cellEditor = null;
 
 	JViewport vptRowHeaderViewPort;
 	JViewport vptColumnHeaderViewPort;
@@ -98,8 +99,10 @@ public class SSTable extends JTable {
 		try {
 			cellSelected = new SSCellRenderer(this.intCellHeight,this.intCellWidth);
 			setDefaultRenderer(Class.forName("java.lang.Object" ), cellSelected );
+			setDefaultEditor(Class.forName("java.lang.Object" ), cellEditor );
+			
 		} catch (ClassNotFoundException e) {
-			System.out.println("ERROR: Renderer could not be set");
+			System.out.println("ERROR: Renderer or Editor could not be set");
 		}
 
 	}

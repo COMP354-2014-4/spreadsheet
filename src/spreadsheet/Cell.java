@@ -25,6 +25,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	private Grid _grid;
 	private boolean _validValue = true;		//states if the value can be computed
 	private ArrayList<Cell> _observedCells;
+	private String _error ="";
     
 	/**
 	 * Parameterized constructor
@@ -60,10 +61,16 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * @param value	The new value
 	 */
 	public void setValue(String value){
+		if(value == null || value.length() == 0)
+		{
+			_value = "0";
+			return;
+		}
+		
 		_value = value;
 		if(validateValue()){//Validate the value
 			_validValue = true;
-			if(!this.isNumeric(_value)){
+			if(!Cell.isNumeric(_value)){
 				try{
 					for(Cell cell : _observedCells){//Stops observing old cells
 						cell.deleteObserver(this);
@@ -75,12 +82,14 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 				}catch(Exception e){//Circular reference or invalid formula
 					System.out.println(e.getMessage());
 					_validValue = false;
+					_error = e.getMessage();
 				}
 			}
 			this.evaluate();//Start the evaluation of the cell value
 		}else{
 			_validValue = false;
-		}
+			_error = "INVALID VALUE:" + _value;
+		} 
 	}
     
     /**
@@ -113,7 +122,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	public double evaluate(){
 		if(_validValue){
 			//if the string is an integer
-			if (this.isNumeric(_value)){
+			if (Cell.isNumeric(_value)){
 				_evaluatedValue = Double.parseDouble(_value);
 				_validValue = true;
 				this.setChangeAndNotify();
@@ -128,6 +137,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 				}catch(Exception e){
 					System.out.println(e.getMessage());
 					_validValue = false;
+					_error = e.getMessage();
 					_evaluatedValue = 0;
 					this.setChangeAndNotify();
 					return _evaluatedValue;
@@ -243,4 +253,6 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	public ArrayList<Cell> getObservedCells(){return _observedCells;}
 	
 	public boolean isValidValue(){return _validValue;}	
+	
+	public String getError(){return _error;}
 }

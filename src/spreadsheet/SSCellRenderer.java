@@ -20,7 +20,6 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
     private int cellSelected_Row = 0;
     private Integer cellSelected_Col = 0;
     private String cellContents;
-    private Grid dummyGrid;
 
     /**
      * Constructor that accepts the height and width of the cells for rendering
@@ -79,7 +78,7 @@ public class SSCellRenderer extends JLabel implements TableCellRenderer  {
     
     public  String getSelected_Col()
     {
-    	return dummyGrid.numToCol(cellSelected_Col);
+    	return Grid.numToCol(cellSelected_Col);
     }
     
     public int getSelected_Row()
