@@ -22,6 +22,7 @@ public class CellTest {
   @BeforeClass
   public static void testSetup() {
     // do something before all test
+	  test_Grid = new Grid();
   }
 
   @AfterClass

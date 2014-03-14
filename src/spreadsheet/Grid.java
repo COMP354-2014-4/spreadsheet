@@ -18,6 +18,10 @@ import spreadsheet.Cell;
  */
 public class Grid implements  java.io.Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Attributes
 	private Hashtable<String, Cell> _cells;
 	private Cell _selectedCell;
@@ -44,6 +48,7 @@ public class Grid implements  java.io.Serializable{
 		_maxHeight = 10;
 		_currentWidth = 1;
 		_currentHeight = 1;
+		tblInterface = new SSTable(this);
 	}
 
 	/**
@@ -61,6 +66,7 @@ public class Grid implements  java.io.Serializable{
 		_maxHeight = maxHeight;
 		_currentWidth = 1;
 		_currentHeight = 1;
+		tblInterface = new SSTable(this);
 	}
 
 	public void setSSTable(SSTable s){

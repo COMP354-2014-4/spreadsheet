@@ -15,6 +15,10 @@ import javax.swing.table.*;
  * Included all inhereted constructors just in case...
  */
 public class SSTable extends JTable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	final int intCellWidth = 60;
 	final int intCellHeight = 21;
 
