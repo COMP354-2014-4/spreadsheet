@@ -24,6 +24,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	private int _row;
 	private Grid _grid;
 	private boolean _validValue = true;		//states if the value can be computed
+	private boolean _stringValue = false;
 	private ArrayList<Cell> _observedCells;
 	private String _error ="";
     
@@ -66,11 +67,15 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 			_value = "0";
 			return;
 		}
-		
+		_stringValue = false;
 		_value = value;
 		if(validateValue()){//Validate the value
 			_validValue = true;
-			if(!Cell.isNumeric(_value)){
+			if(_stringValue){
+				_evaluatedValue = 0;
+				return;
+			}
+			else if(!Cell.isNumeric(_value)){
 				try{
 					for(Cell cell : _observedCells){//Stops observing old cells
 						cell.deleteObserver(this);
@@ -103,7 +108,11 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 
 		if( isNumeric(str) ){
 			return true;
-		}else{
+		}else if( str.charAt(0) != '='){
+			//if the first character is not "="
+			_stringValue = true;
+			return true;
+	    }else{
 			return isValidChar(str) ;
 		}
 	}
@@ -196,10 +205,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 		
 		int len = temp.length();
 		char c = temp.charAt(0);
-		if( c != '='){
-			//if the first character is not "="
-			return false;
-	    }
+		
 		
 		for(int i=1;i<len;i++) {
 		    c = temp.charAt(i);
@@ -253,6 +259,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	public ArrayList<Cell> getObservedCells(){return _observedCells;}
 	
 	public boolean isValidValue(){return _validValue;}	
+	public boolean isStringValue(){return _stringValue;}	
 	
 	public String getError(){return _error;}
 }

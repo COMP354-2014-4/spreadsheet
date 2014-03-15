@@ -474,13 +474,19 @@ public class SSGUI implements ActionListener, KeyListener{
 	 */
 	private void updateFromInput(int row,int col){
 		grid.getCell(Grid.numToCol(col), row).setValue(txtInputBox.getText());
-		if(grid.getCell(Grid.numToCol(col), row).isValidValue())
-			tblGrid.setValueAt(grid.getCell(Grid.numToCol(col), row).getEvaluatedValue(), row-1, col-1);
+		String output = "";
+		if(grid.getCell(Grid.numToCol(col), row).isValidValue()){
+			System.out.println("is string:" + grid.getCell(Grid.numToCol(col), row).isStringValue());
+			if(grid.getCell(Grid.numToCol(col), row).isStringValue())
+				output = grid.getCell(Grid.numToCol(col), row).getValue();
+			else
+				output = grid.getCell(Grid.numToCol(col), row).getEvaluatedValue() + "";}
 		else
 		{
-			tblGrid.setValueAt("#ERR", row-1, col-1);
+			output = "#ERR";
 			displayMessage(grid.getCell(Grid.numToCol(col), row).getError());
 		}
+		tblGrid.setValueAt(output, row-1, col-1);
 	}
 	
 	/**
