@@ -460,6 +460,42 @@ public class SSGUI implements ActionListener, KeyListener{
 		grid.removeCell(colConvert, row);
 		tblGrid.setValueAt("", tblGrid.getSelectedRow(), tblGrid.getSelectedColumn());
 	}
+	
+	
+/**
+ * set format for selected cell
+ */
+/*
+public void setCellFormat(?String? format){
+  //check if selected cell contains negative col or row
+  if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+    return;
+  }
+  
+  //get the column integer
+  int col = tblGrid.getSelectedColumn()+1;
+  //convert column integer to string
+  String colConvert = Grid.numToCol(col);
+  //get the row integer
+  int row = tblGrid.getSelectedRow()+1;
+
+  //if value of this cell is null return
+  if(tblGrid.getValueAt(row-1, col-1) == null){
+    return;
+  }
+  
+  //if value of this cell is empty, set format? 
+  if(tblGrid.getValueAt(row-1, col-1).equals("")){
+    return;
+  }
+  
+  //set the format for the cell
+  tblGrid.getCell();
+}
+*/
+
+
+	
 
 	/**
 	 * Capture GUI interactions. need to add the actionlistener to anything that triggers events

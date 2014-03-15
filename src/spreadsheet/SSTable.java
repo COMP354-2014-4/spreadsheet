@@ -12,7 +12,7 @@ import javax.swing.table.*;
  *
  * Represents the GUI table used to render the grid
  * 
- * Included all inhereted constructors just in case...
+ * Included all inherited constructors just in case...
  */
 public class SSTable extends JTable {
 	/**
