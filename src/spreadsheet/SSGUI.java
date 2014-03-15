@@ -468,33 +468,31 @@ public class SSGUI implements ActionListener, KeyListener{
    * set format for selected cell
    */
 	public void setCellFormat(String format){
-  //check if selected cell contains negative col or row
-  if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
-    return;
-  }
+    //check if selected cell contains negative col or row
+    if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+      return;
+    }
+    
+    //get the column integer
+    int col = tblGrid.getSelectedColumn()+1;
+    //convert column integer to string
+    String colConvert = Grid.numToCol(col);
+    //get the row integer
+    int row = tblGrid.getSelectedRow()+1;
   
-  //get the column integer
-  int col = tblGrid.getSelectedColumn()+1;
-  //convert column integer to string
-  String colConvert = Grid.numToCol(col);
-  //get the row integer
-  int row = tblGrid.getSelectedRow()+1;
-
-  //if value of this cell is null return
-  if(tblGrid.getValueAt(row-1, col-1) == null){
-    return;
-  }
-  
-  //if value of this cell is empty, set format? 
-  if(tblGrid.getValueAt(row-1, col-1).equals("")){
-    return;
-  }
-  
-  //set the format for the cell
-  grid.getCell(colConvert, row).setCellFormat(Formatting.valueOf(format));
-}
-
-
+    //if value of this cell is null return
+    if(tblGrid.getValueAt(row-1, col-1) == null){
+      return;
+    }
+    
+    //if value of this cell is empty, set format? 
+    if(tblGrid.getValueAt(row-1, col-1).equals("")){
+      return;
+    }
+    
+    //set the format for the cell
+    grid.getCell(colConvert, row).setCellFormat(Formatting.valueOf(format.toUpperCase()));
+	}
 
 	
 
@@ -541,12 +539,16 @@ public class SSGUI implements ActionListener, KeyListener{
 		//Format menu operations - UNCOMMENT Button Actions WHEN Buttons are created
 	  }else if(/*objSourceClass.equals(this.btnFormatReal) || */ objSourceClass.equals(this.mniReal)){
       setCellFormat("Real");
+      
     }else if(/*objSourceClass.equals(this.btnFormatMonetary) || */ objSourceClass.equals(this.mniMonetary)){
       setCellFormat("Monetary");
+      
     }else if(/*objSourceClass.equals(this.btnFormatScientific) || */ objSourceClass.equals(this.mniScientific)){
       setCellFormat("Scientific");
+      
     }else if(/*objSourceClass.equals(this.btnFormatInteger) || */ objSourceClass.equals(this.mniInteger)){
       setCellFormat("Integer");
+      
     //}else if(/*objSourceClass.equals(this.btnFormatText) || */ objSourceClass.equals(this.mniText)){
       //setCellFormat("Test");
 			
