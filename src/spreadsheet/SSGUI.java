@@ -564,11 +564,10 @@ public class SSGUI implements ActionListener, KeyListener{
 		grid.getCell(Grid.numToCol(col), row).setValue(txtInputBox.getText());
 		String output = "";
 		if(grid.getCell(Grid.numToCol(col), row).isValidValue()){
-			System.out.println("is string:" + grid.getCell(Grid.numToCol(col), row).isStringValue());
 			if(grid.getCell(Grid.numToCol(col), row).isStringValue())
 				output = grid.getCell(Grid.numToCol(col), row).getValue();
 			else
-				output = grid.getCell(Grid.numToCol(col), row).getEvaluatedValue() + "";}
+				output = grid.getCell(Grid.numToCol(col), row).getFormatedValue();}
 		else
 		{
 			output = "#ERR";
