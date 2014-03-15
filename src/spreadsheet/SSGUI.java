@@ -10,6 +10,8 @@ import java.awt.event.*;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
+
+import spreadsheet.Cell.Formatting;
 import utils.Formula;
 
 
@@ -462,11 +464,10 @@ public class SSGUI implements ActionListener, KeyListener{
 	}
 	
 	
-/**
- * set format for selected cell
- */
-/*
-	public void setCellFormat(?String? format){
+  /**
+   * set format for selected cell
+   */
+	public void setCellFormat(String format){
   //check if selected cell contains negative col or row
   if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
     return;
@@ -490,9 +491,9 @@ public class SSGUI implements ActionListener, KeyListener{
   }
   
   //set the format for the cell
-  grid.getCell(colConvert, row).setCellFormat();
+  grid.getCell(colConvert, row).setCellFormat(Formatting.valueOf(format));
 }
-*/
+
 
 
 	
@@ -537,19 +538,17 @@ public class SSGUI implements ActionListener, KeyListener{
 		}else if(objSourceClass.equals(this.btnCut) || objSourceClass.equals(this.mniCut)){
 			cut();
 
-		//Format menu operations - UNCOMMENT WHEN METHODS ARE COMPLETED
-	  /*
-    }else if(objSourceClass.equals(this.btnFormatReal) || objSourceClass.equals(this.mniReal)){
+		//Format menu operations - UNCOMMENT Button Actions WHEN Buttons are created
+	  }else if(/*objSourceClass.equals(this.btnFormatReal) || */ objSourceClass.equals(this.mniReal)){
       setCellFormat("Real");
-    }else if(objSourceClass.equals(this.btnFormatMonetary) || objSourceClass.equals(this.mniMonetary)){
+    }else if(/*objSourceClass.equals(this.btnFormatMonetary) || */ objSourceClass.equals(this.mniMonetary)){
       setCellFormat("Monetary");
-    }else if(objSourceClass.equals(this.btnFormatScientific) || objSourceClass.equals(this.mniScientific)){
+    }else if(/*objSourceClass.equals(this.btnFormatScientific) || */ objSourceClass.equals(this.mniScientific)){
       setCellFormat("Scientific");
-    }else if(objSourceClass.equals(this.btnFormatInteger) || objSourceClass.equals(this.mniInteger)){
+    }else if(/*objSourceClass.equals(this.btnFormatInteger) || */ objSourceClass.equals(this.mniInteger)){
       setCellFormat("Integer");
-    //}else if(objSourceClass.equals(this.btnFormatText) || objSourceClass.equals(this.mniText)){
+    //}else if(/*objSourceClass.equals(this.btnFormatText) || */ objSourceClass.equals(this.mniText)){
       //setCellFormat("Test");
-	  */
 			
     //Button bar update button operation
 		}else if(objSourceClass.equals(this.btnUpdate)){
