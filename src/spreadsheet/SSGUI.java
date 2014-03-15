@@ -485,13 +485,12 @@ public class SSGUI implements ActionListener, KeyListener{
       return;
     }
     
-    //if value of this cell is empty, set format? 
-    if(tblGrid.getValueAt(row-1, col-1).equals("")){
-      return;
-    }
-    
     //set the format for the cell
     grid.getCell(colConvert, row).setCellFormat(Formatting.valueOf(format.toUpperCase()));
+    
+    //this.changed = true;
+    //valueChanged();
+    updateFromInput(row,col);
 	}
 
 	
