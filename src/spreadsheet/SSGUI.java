@@ -47,23 +47,23 @@ public class SSGUI implements ActionListener, KeyListener{
 	public JButton btnUpdate;		//PRIVATE, is now public for test only
 
 	//Control components
-	private JMenuBar mnbMenu;
+	private JMenuBar mnbMenu; // See Menus.java
 	private JToolBar tbrToolBar;
 
-	//File Menu
+	//File Menu -- See MenuFile.java
 	public JMenu mnuFile;		//PRIVATE, is now public for test only
 	public JMenuItem mniNew;	//PRIVATE, is now public for test only
 	public JMenuItem mniLoad;	//PRIVATE, is now public for test only
 	public JMenuItem mniSave;	//PRIVATE, is now public for test only
 	public JMenuItem mniSaveAs;	//PRIVATE, is now public for test only
 
-	//Edit Menu
+	//Edit Menu-- See MenuEdit.java
 	public JMenu mnuEdit;		//PRIVATE, is now public for test only
 	public JMenuItem mniCut;	//PRIVATE, is now public for test only
 	public JMenuItem mniCopy;	//PRIVATE, is now public for test only
 	public JMenuItem mniPaste;	//PRIVATE, is now public for test only
 
-	//Help Menu
+	//Help Menu -- See MenuHelp.java
 	private JMenu mnuHelp;
 	private JMenuItem mniAbout;
 
@@ -130,23 +130,23 @@ public class SSGUI implements ActionListener, KeyListener{
 		btnUpdate = new JButton("Update");
 		panNorthPanel = new JPanel();
 
-		//Menu Bar
+		//Menu Bar -- See Menus.java
 		mnbMenu = new JMenuBar();	//Menu Items
 
-		//File Menu
+		//File Menu -- See MenuFile.java
 		mnuFile = new JMenu("File");
 		mniNew = new JMenuItem("New");
 		mniLoad = new JMenuItem("Load");
 		mniSave = new JMenuItem("Save");
 		mniSaveAs = new JMenuItem("Save As");
 
-		//Edit Menu
+		//Edit Menu -- See MenuEdit.java
 		mnuEdit = new JMenu("Edit");
 		mniCut = new JMenuItem("Cut");
 		mniCopy = new JMenuItem("Copy");
 		mniPaste = new JMenuItem("Paste");
 
-		//Help Menu
+		//Help Menu -- See MenuHelp.java
 		mnuHelp = new JMenu("Help");
 		mniAbout = new JMenuItem("About");
 
@@ -216,22 +216,22 @@ public class SSGUI implements ActionListener, KeyListener{
 		//setup menu
 		mnbMenu.setPreferredSize(new Dimension(this.intScreenWidth,30));
 
-		//build file menu
+		//build file menu -- See MenuFile.java
 		mnuFile.add(mniNew);
 		mnuFile.add(mniLoad);
 		mnuFile.add(mniSave);
 		mnuFile.add(mniSaveAs);
 
-		//build edit menu
+		//build edit menu -- See MenuEdit.java
 		mnuEdit.add(mniCut);
 		mnuEdit.add(mniCopy);
 		mnuEdit.add(mniPaste);
 
-		//build help menu
+		//build help menu -- See MenuHelp.java
 		mnuHelp.add(mniAbout);
 		mniAbout.addActionListener(this);
 
-		//add menus to menu bar
+		//add menus to menu bar  -- See Menus.java
 		mnbMenu.add(mnuFile);
 		mnbMenu.add(mnuEdit);
 		mnbMenu.add(mnuHelp);
