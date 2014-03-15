@@ -63,6 +63,14 @@ public class SSGUI implements ActionListener, KeyListener{
 	public JMenuItem mniCopy;	//PRIVATE, is now public for test only
 	public JMenuItem mniPaste;	//PRIVATE, is now public for test only
 
+  //Format Menu -- See MenuFormat.java
+  private JMenu mnuFormat;
+  private JMenuItem mniReal;
+  private JMenuItem mniMonetary;
+  private JMenuItem mniScientific;
+  private JMenuItem mniInteger;
+  //private JMenuItem mniText;
+	
 	//Help Menu -- See MenuHelp.java
 	private JMenu mnuHelp;
 	private JMenuItem mniAbout;
@@ -145,6 +153,14 @@ public class SSGUI implements ActionListener, KeyListener{
 		mniCut = new JMenuItem("Cut");
 		mniCopy = new JMenuItem("Copy");
 		mniPaste = new JMenuItem("Paste");
+		
+    //Format Menu -- See MenuFormat.java
+    mnuFormat = new JMenu("Edit");
+    mniReal = new JMenuItem("Real");
+    mniMonetary = new JMenuItem("Monetary");
+    mniScientific = new JMenuItem("Scientific");
+    mniInteger = new JMenuItem("Integer");
+    //mniText = new JMenuItem("Text");
 
 		//Help Menu -- See MenuHelp.java
 		mnuHelp = new JMenu("Help");
@@ -160,13 +176,22 @@ public class SSGUI implements ActionListener, KeyListener{
 		btnPaste = new JButton("Paste");
 
 		// Add all listeners
+		////File Menu
 		mniNew.addActionListener(this);
 		mniLoad.addActionListener(this);
 		mniSave.addActionListener(this);
 		mniSaveAs.addActionListener(this);
+		////Edit Menu
 		mniCut.addActionListener(this);
 		mniCopy.addActionListener(this);
 		mniPaste.addActionListener(this);
+		////Format Menu
+		mniReal.addActionListener(this);
+		mniMonetary.addActionListener(this);
+		mniScientific.addActionListener(this);
+		mniInteger.addActionListener(this);
+		//mniText.addActionListener(this);
+		////ButtonBar
 		btnNew.addActionListener(this);
 		btnLoad.addActionListener(this);
 		btnSave.addActionListener(this);
@@ -226,6 +251,13 @@ public class SSGUI implements ActionListener, KeyListener{
 		mnuEdit.add(mniCut);
 		mnuEdit.add(mniCopy);
 		mnuEdit.add(mniPaste);
+		
+    //build format menu -- See MenuFormat.java
+    mnuFormat.add(mniReal);
+    mnuFormat.add(mniMonetary);
+    mnuFormat.add(mniScientific);
+    mnuFormat.add(mniInteger);
+    //mnuFormat.add(mniText);
 
 		//build help menu -- See MenuHelp.java
 		mnuHelp.add(mniAbout);
@@ -436,6 +468,7 @@ public class SSGUI implements ActionListener, KeyListener{
 	public void actionPerformed(ActionEvent e){
 		final Object objSourceClass = e.getSource(); //store the class of the source
 
+		//File menu operations
 		if(objSourceClass.equals(this.btnNew) || objSourceClass.equals(this.mniNew)){
 			newSpreadsheet();
 
@@ -448,6 +481,7 @@ public class SSGUI implements ActionListener, KeyListener{
 		}else if(objSourceClass.equals(this.btnSaveAs) || objSourceClass.equals(this.mniSaveAs)){
 			saveAsSpreadsheet();
 
+	  //Help menu operations
 		}else if(objSourceClass.equals(this.mniAbout)){
 			JOptionPane.showMessageDialog(new JFrame(),
 				"This is Team 3's Spreadsheet.  We have included a number of features for manipulating spreadsheet data.\n"
@@ -455,6 +489,8 @@ public class SSGUI implements ActionListener, KeyListener{
 				+ "Please enjoy the functionality!", "Team 3, 2014, proprietary copyright all rights included.",
 				JOptionPane.PLAIN_MESSAGE);
 
+		
+	  //Edit menu operations
 		}else if(objSourceClass.equals(this.btnCopy) || objSourceClass.equals(this.mniCopy)){
 			copy();
 
@@ -464,6 +500,21 @@ public class SSGUI implements ActionListener, KeyListener{
 		}else if(objSourceClass.equals(this.btnCut) || objSourceClass.equals(this.mniCut)){
 			cut();
 
+		//Format menu operations - UNCOMMENT WHEN METHODS ARE COMPLETED
+	  /*
+    }else if(objSourceClass.equals(this.btnFormatReal) || objSourceClass.equals(this.mniReal)){
+      setCellFormat("Real");
+    }else if(objSourceClass.equals(this.btnFormatMonetary) || objSourceClass.equals(this.mniMonetary)){
+      setCellFormat("Monetary");
+    }else if(objSourceClass.equals(this.btnFormatScientific) || objSourceClass.equals(this.mniScientific)){
+      setCellFormat("Scientific");
+    }else if(objSourceClass.equals(this.btnFormatInteger) || objSourceClass.equals(this.mniInteger)){
+      setCellFormat("Integer");
+    //}else if(objSourceClass.equals(this.btnFormatText) || objSourceClass.equals(this.mniText)){
+      //setCellFormat("Test");
+	  */
+			
+    //Button bar update button operation
 		}else if(objSourceClass.equals(this.btnUpdate)){
 			updateFromInput(tblGrid.getSelectedRow()+1,tblGrid.getSelectedColumn()+1);
 		}
