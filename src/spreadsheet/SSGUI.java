@@ -108,7 +108,7 @@ public class SSGUI implements ActionListener, KeyListener{
 	public String strFileLocation = ""; //PRIVATE, is now public for test only
 
 	/**
-	 * Default constructor, which acccepts the grid to be displayed
+	 * Default constructor, which accepts the grid to be displayed
 	 * 
 	 * @param gridObject The back-end data stored in the grid
 	 */
@@ -466,7 +466,7 @@ public class SSGUI implements ActionListener, KeyListener{
  * set format for selected cell
  */
 /*
-public void setCellFormat(?String? format){
+	public void setCellFormat(?String? format){
   //check if selected cell contains negative col or row
   if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
     return;
@@ -490,7 +490,7 @@ public void setCellFormat(?String? format){
   }
   
   //set the format for the cell
-  tblGrid.getCell();
+  grid.getCell(colConvert, row).setCellFormat();
 }
 */
 
