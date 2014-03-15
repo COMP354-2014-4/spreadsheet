@@ -11,7 +11,11 @@ import javax.swing.*;
  *
  * Used for formatting the table
  */
-class SSTableRenderer implements TableCellRenderer {
+class SSTableRenderer implements TableCellRenderer, java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	DefaultTableCellRenderer renderer;
 	Font fntHeader;
 
