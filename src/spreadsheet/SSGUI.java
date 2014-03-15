@@ -155,7 +155,7 @@ public class SSGUI implements ActionListener, KeyListener{
 		mniPaste = new JMenuItem("Paste");
 		
     //Format Menu -- See MenuFormat.java
-    mnuFormat = new JMenu("Edit");
+    mnuFormat = new JMenu("Format");
     mniReal = new JMenuItem("Real");
     mniMonetary = new JMenuItem("Monetary");
     mniScientific = new JMenuItem("Scientific");
@@ -266,6 +266,7 @@ public class SSGUI implements ActionListener, KeyListener{
 		//add menus to menu bar  -- See Menus.java
 		mnbMenu.add(mnuFile);
 		mnbMenu.add(mnuEdit);
+		mnbMenu.add(mnuFormat);
 		mnbMenu.add(mnuHelp);
 
 		//Setup center panel
