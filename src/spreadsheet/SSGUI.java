@@ -488,6 +488,7 @@ public class SSGUI implements ActionListener, KeyListener{
     //set the format for the cell
     grid.getCell(colConvert, row).setCellFormat(Formatting.valueOf(format.toUpperCase()));
     
+    //update GUI
     updateFromInput(row,col);
 	}
 
