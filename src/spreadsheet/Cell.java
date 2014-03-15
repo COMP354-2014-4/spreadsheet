@@ -21,10 +21,10 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	enum Formatting {INTEGER,MOENTARY,SCIENTIFIC,DEFAULT}
+	enum Formatting {INTEGER,MONETARY,SCIENTIFIC,REAL}
 	
 	//Attributes
-	private Formatting _format = Formatting.DEFAULT;
+	private Formatting _format = Formatting.SCIENTIFIC;
 	private String _value = "0";			//The value is stored as a string to keep track of both formulas and integer
 	private double _evaluatedValue = 0.0;	//Hold the value after the evaluation is completed
 	private String _col;
@@ -249,16 +249,16 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 */
 	public String getFormatedValue()
 	{
-		if(_format == Formatting.MOENTARY)
+		if(_format == Formatting.MONETARY)
 		{
-			return (_evaluatedValue - _evaluatedValue %0.01) + "$";
+			return (Math.floor(_evaluatedValue*100)/100) + "$";
 		}else if(_format == Formatting.INTEGER)//integer
 		{
-			return Math.floor(_evaluatedValue) + "";
+			return (int)_evaluatedValue + "";
 		}else if (_format == Formatting.SCIENTIFIC)//scientific
 		{
 			int exp = (int)Math.floor((Math.log10(_evaluatedValue)));
-			return _evaluatedValue/Math.pow(10, exp) %0.00001 + "E" + exp;
+			return Math.floor(_evaluatedValue/Math.pow(10, exp -5))/100000 + "E" + exp;
 		}
 		return _evaluatedValue + "";
 	}
