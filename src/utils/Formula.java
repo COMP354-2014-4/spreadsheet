@@ -38,12 +38,13 @@ public class Formula {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		ArrayList<Cell> origin = new ArrayList<Cell>(); //Used to check if those cells contains circular ref
 		origin.add(originCell);
-
 		if(Formula.tokenize(tokens, formula)){//Convert the string in a list of token
 			for(Token tok : tokens){
 				if(tok.getType() == TokenType.CEL){//extract the cell from the list of token
 					Cell cell = grid.getCell(tok.getCol(), tok.getRow());
 					cells.add(cell);
+				}else if((tok.getType() == TokenType.SUM)){
+					getCellReferencesFromRange(cells, grid, tok.getParams());
 				}
 			}
 			if( !Formula.isCircular(origin, cells) ){//checks for circularity
@@ -95,7 +96,6 @@ public class Formula {
 		double res = 0;
 		ArrayList<Token> tokens = new ArrayList<Token>();
 
-
 		//parsing the formula into tokens
 		if(Formula.tokenize(tokens, formula)){
 
@@ -133,6 +133,9 @@ public class Formula {
 							originCell.getGrid().getGUI().displayMessage(message);
 							throw new Exception(message);
 						}
+					}else if(tok.getType() == TokenType.SUM){
+						System.out.println("before evaluateSum");
+						tok = new Token(TokenType.NUM,evaluateSum(tok.getParams(),originCell.getGrid()));
 					}
 					operandStack.push(tok);//push the operand on the stack
 				}
@@ -270,7 +273,7 @@ public class Formula {
 	 * @param formula	The formula to tokenize
 	 * @return			returns false if the formula is invalid, True otherwise
 	 */
-	private static boolean tokenize(ArrayList<Token> tokens, String formula){
+	private static boolean tokenize(ArrayList<Token> tokens, String formula) throws Exception{
 		boolean expectedOperator = false;
 		int openParenthesis = 0;
 		char[] formulaChars = formula.toCharArray();
@@ -343,25 +346,45 @@ public class Formula {
 								else
 									break;
 							}
-							if(s2.equals("@"))
-							{
-								TokenRowValue += s2;
-								if(++c < formulaChars.length)
-									s2 = String.valueOf(formulaChars[c]);
-								else
-									break;
+							if(s2.equals("(")){
+								Pattern pattern = Pattern.compile("\\(@?[A-Z]+@?[1-9]+-@?[A-Z]+@?[1-9]+\\)");
+								Matcher matcher = pattern.matcher(formula.substring(c));
+								if(tokenColValue.equals("SUM"))
+								{
+									String sum;
+									if (matcher.find())
+									{
+									    sum = matcher.group();
+									    tokens.add(new Token(TokenType.SUM, 9,sum));
+									    c += sum.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
+								}
 							}
-							while(  s2.matches("[0-9]") ){//get the row num
-								TokenRowValue += s2;
-								if(++c < formulaChars.length)
-									s2 = String.valueOf(formulaChars[c]);
-								else
-									break;
+							else 
+							{
+								if(s2.equals("@"))
+								{
+									TokenRowValue += s2;
+									if(++c < formulaChars.length)
+										s2 = String.valueOf(formulaChars[c]);
+									else
+										break;
+								}
+								while(  s2.matches("[0-9]") ){//get the row num
+									TokenRowValue += s2;
+									if(++c < formulaChars.length)
+										s2 = String.valueOf(formulaChars[c]);
+									else
+										break;
+								}	
+								tokens.add( new Token(TokenType.CEL, tokenColValue.matches("@.*")?tokenColValue.substring(1):tokenColValue, Integer.parseInt(TokenRowValue.matches("@.*")? TokenRowValue.substring(1):TokenRowValue)) );
 							}
 							i = c-1;
 						}
-						tokens.add( new Token(TokenType.CEL, tokenColValue.matches("@.*")?tokenColValue.substring(1):tokenColValue, Integer.parseInt(TokenRowValue.matches("@.*")? TokenRowValue.substring(1):TokenRowValue)) );
-
 						//Double operand
 					}else if( s.matches("[0-9.]") ){
 						String tokenValue = "";
@@ -385,9 +408,7 @@ public class Formula {
 
 					}
 					expectedOperator = true;
-
 					break;
-
 				}
 				i++;
 			}
@@ -398,5 +419,55 @@ public class Formula {
 			return false;
 
 		return true;
+	}
+	
+	private static void getCellReferencesFromRange(ArrayList<Cell> cells, Grid grid, String range)
+	{
+		Pattern pattern = Pattern.compile("[A-Z]+@?[1-9]+");
+		Matcher matcher = pattern.matcher(range);
+		int[][] coords = {{0,0},{0,0}};
+		for(int i=0;i<coords.length;++i)
+		{
+			if(matcher.find())
+			{
+				String cell =matcher.group();
+				String col = "";
+				for(int j=0;j<cell.length();++j)
+				{
+					if(Character.isAlphabetic(cell.charAt(j)))
+					{
+						col += cell.charAt(j);
+					}
+					else 
+					{
+						if(cell.charAt(j) == '@')
+							coords[i][1] = Integer.parseInt(cell.substring(j+1));
+						else 
+							coords[i][1] = Integer.parseInt(cell.substring(j));
+						break;
+					}
+				}
+				coords[i][0] = Grid.colToNumber(col);
+			}
+		}
+		for(int i = Math.min(coords[0][0], coords[1][0]);i<=Math.max(coords[0][0], coords[1][0]);++i)
+		{
+			for(int j = Math.min(coords[0][1], coords[1][1]);j<=Math.max(coords[0][1], coords[1][1]);++j)
+			{
+				cells.add(grid.getCell(Grid.numToCol(i), j));
+			}
+		}
+	}
+	
+	private static double evaluateSum(String args,Grid grid)
+	{
+		ArrayList<Cell> cell = new ArrayList<>();
+		getCellReferencesFromRange(cell, grid, args);
+		double sum =0;
+		for(Cell c : cell)
+		{
+			sum += c.getEvaluatedValue();
+		}
+		return sum;
 	}
 }

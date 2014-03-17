@@ -7,7 +7,6 @@ import javax.swing.filechooser.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Set;
 
 import javax.swing.JFileChooser;
 
@@ -584,7 +583,7 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * KeyListener key release event handler, not used.
 	 */
 	public void keyReleased(KeyEvent e){
-		if(e.getKeyCode() >36 && e.getKeyCode() <41){
+		if(e.getSource().getClass() == SSTable.class && e.getKeyCode() >36 && e.getKeyCode() <41){
 			valueChanged();
 		}
 	}
