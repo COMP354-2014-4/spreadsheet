@@ -97,6 +97,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 					_error = e.getMessage();
 				}
 			}
+			System.out.println("evaluate");
 			this.evaluate();//Start the evaluation of the cell value
 		}else{
 			_validValue = false;
@@ -136,6 +137,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * @see		Formula
 	 */
 	public double evaluate(){
+		System.out.println("test9:" + _validValue);
 		if(_validValue){
 			//if the string is an integer
 			if (Cell.isNumeric(_value)){
@@ -146,12 +148,16 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 			}else{//else call the formula function
 				// call the Formula.evaluateFormula function
 				try{
+					System.out.println("test7");
 					_evaluatedValue = Formula.evaluateFormula(this);
+					System.out.println("test8");
 					this.setChangeAndNotify();
 					_validValue = true;
 					return _evaluatedValue;
 				}catch(Exception e){
+					System.out.println("test5");
 					System.out.println(e.getMessage());
+					System.out.println("test6");
 					_validValue = false;
 					_error = e.getMessage();
 					_evaluatedValue = 0;
