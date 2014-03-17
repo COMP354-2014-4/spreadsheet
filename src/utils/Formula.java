@@ -45,6 +45,8 @@ public class Formula {
 					cells.add(cell);
 				}else if((tok.getType() == TokenType.SUM)){
 					getCellReferencesFromRange(cells, grid, tok.getParams());
+				}else if((tok.getType() == TokenType.AVG)){
+					getCellReferencesFromRange(cells, grid, tok.getParams());
 				}
 			}
 			if( !Formula.isCircular(origin, cells) ){//checks for circularity
@@ -134,8 +136,9 @@ public class Formula {
 							throw new Exception(message);
 						}
 					}else if(tok.getType() == TokenType.SUM){
-						System.out.println("before evaluateSum");
 						tok = new Token(TokenType.NUM,evaluateSum(tok.getParams(),originCell.getGrid()));
+					}else if(tok.getType() == TokenType.AVG){
+						tok = new Token(TokenType.NUM,evaluateAvg(tok.getParams(),originCell.getGrid()));
 					}
 					operandStack.push(tok);//push the operand on the stack
 				}
@@ -362,6 +365,19 @@ public class Formula {
 										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
 										throw new Exception(message);
 									}
+								} else if(tokenColValue.equals("AVG"))
+								{
+									String avg;
+									if (matcher.find())
+									{
+									    avg = matcher.group();
+									    tokens.add(new Token(TokenType.AVG, 9,avg));
+									    c += avg.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
 								}
 							}
 							else 
@@ -468,6 +484,19 @@ public class Formula {
 		{
 			sum += c.getEvaluatedValue();
 		}
+		return sum;
+	}
+	
+	private static double evaluateAvg(String args,Grid grid)
+	{
+		ArrayList<Cell> cell = new ArrayList<>();
+		getCellReferencesFromRange(cell, grid, args);
+		double sum =0;
+		for(Cell c : cell)
+		{
+			sum += c.getEvaluatedValue();
+		}
+		sum /= cell.size();
 		return sum;
 	}
 }
