@@ -8,7 +8,7 @@ package utils;
  * @author Comp354 Team 3
  */
 public class Token {
-	public enum TokenType{PLU, MIN, MUL, DIV, MOD, LPA, RPA, NUM, CEL,SUM}
+	public enum TokenType{PLU, MIN, MUL, DIV, MOD, LPA, RPA, NUM, CEL,SUM,AVG}
 
 	private TokenType _type;
 	private double _value;
