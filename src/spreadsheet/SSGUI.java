@@ -63,6 +63,8 @@ public class SSGUI implements ActionListener, KeyListener{
 	public JMenuItem mniCut;	//PRIVATE, is now public for test only
 	public JMenuItem mniCopy;	//PRIVATE, is now public for test only
 	public JMenuItem mniPaste;	//PRIVATE, is now public for test only
+	public JMenuItem mniUndo; //PRIVATE, is now public for test only
+	public JMenuItem mniRedo; //PRIVATE, is now public for test only
 
   //Format Menu -- See MenuFormat.java
   private JMenu mnuFormat;
@@ -84,6 +86,8 @@ public class SSGUI implements ActionListener, KeyListener{
 	public JButton btnCopy;		//PRIVATE, is now public for test only
 	public JButton btnCut;		//PRIVATE, is now public for test only
 	public JButton btnPaste;	//PRIVATE, is now public for test only
+	public JButton btnUndo; //PRIVATE, is now public for test only
+	public JButton btnRedo; //PRIVATE, is now public for test only
 
 	//Center panel components
 	JScrollPane scrTblScrollPane;
@@ -104,6 +108,7 @@ public class SSGUI implements ActionListener, KeyListener{
 	private int oldSelectedRow = 1;
 	private int oldSelectedCol = 1;
 	private boolean changed = false;
+	private UndoRedo undoRedoStacks = new UndoRedo();
 
 	//Save location
 	public String strFileLocation = ""; //PRIVATE, is now public for test only
@@ -154,6 +159,8 @@ public class SSGUI implements ActionListener, KeyListener{
 		mniCut = new JMenuItem("Cut");
 		mniCopy = new JMenuItem("Copy");
 		mniPaste = new JMenuItem("Paste");
+		mniUndo = new JMenuItem("Undo");
+		mniRedo = new JMenuItem("Redo");
 		
     //Format Menu -- See MenuFormat.java
     mnuFormat = new JMenu("Format");
@@ -175,6 +182,8 @@ public class SSGUI implements ActionListener, KeyListener{
 		btnCopy = new JButton("Copy");
 		btnCut = new JButton("Cut");
 		btnPaste = new JButton("Paste");
+		btnUndo = new JButton("Undo");
+		btnRedo = new JButton("Redo");
 
 		// Add all listeners
 		////File Menu
@@ -186,6 +195,8 @@ public class SSGUI implements ActionListener, KeyListener{
 		mniCut.addActionListener(this);
 		mniCopy.addActionListener(this);
 		mniPaste.addActionListener(this);
+    mniUndo.addActionListener(this);
+    mniRedo.addActionListener(this);
 		////Format Menu
 		mniReal.addActionListener(this);
 		mniMonetary.addActionListener(this);
@@ -200,6 +211,8 @@ public class SSGUI implements ActionListener, KeyListener{
 		btnCopy.addActionListener(this);
 		btnCut.addActionListener(this);
 		btnPaste.addActionListener(this);
+		btnUndo.addActionListener(this);
+		btnRedo.addActionListener(this);
 		btnUpdate.addActionListener(this);
 
 		//Allows keyboard input to be captured (ex: enter key)
@@ -252,6 +265,10 @@ public class SSGUI implements ActionListener, KeyListener{
 		mnuEdit.add(mniCut);
 		mnuEdit.add(mniCopy);
 		mnuEdit.add(mniPaste);
+		//-added undo/redo options (NM - 2014-03-19)
+    mnuEdit.add(mniUndo);
+    mnuEdit.add(mniRedo);
+
 		
     //build format menu -- See MenuFormat.java
     mnuFormat.add(mniReal);
@@ -490,6 +507,84 @@ public class SSGUI implements ActionListener, KeyListener{
     //update GUI
     updateFromInput(row,col);
 	}
+	
+	/**
+	 * Method to handle undo action listener
+	 */
+	public void undo() {
+    //perform undo action
+    System.out.println("Performing Undo");
+    Cell undoneCell = new Cell(undoRedoStacks.undoAction());
+    
+    if(undoneCell != null) {
+      //get the cell column integer
+      int col = grid.colToNumber(undoneCell.getCol());
+      //get the cell row integer
+      int row = undoneCell.getRow();
+      //get the cell value string
+      String value = undoneCell.getValue();
+      
+      //show that col and row were pulled correctly from stack
+      System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
+      
+      //set focus of cursor to cell that was just undone
+      tblGrid.changeSelection(row-1, col-1, false, false);
+      
+      //update GUI
+      updateFromInput(row,col);
+    } else {
+      return;
+    }
+	}
+	
+  /**
+   * Method to handle redo action listener
+   */
+	public void redo() {
+    //perform redo action
+    System.out.println("Performing Redo");
+    Cell redoneCell = new Cell(undoRedoStacks.redoAction());
+    
+    if(redoneCell != null) {
+      //get the column integer
+      int col = grid.colToNumber(redoneCell.getCol());
+      //get the row integer
+      int row = redoneCell.getRow();
+      //get the cell value string
+      String value = redoneCell.getValue();
+      
+      //show that col and row were pulled correctly from stack
+      System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
+      
+      //set focus of cursor to cell that was just redone
+      tblGrid.changeSelection(row-1, col-1, false, false);
+      
+      //update GUI
+      updateFromInput(row,col);
+    } else {
+      return;
+    }
+  }
+  
+	 /**
+   * Method to handle no undo redo action listener
+   */
+  public void noUndoRedo() {
+    //check if selected cell contains negative col or row
+    if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+      return;
+    }
+    
+    //get the column integer
+    int col = tblGrid.getSelectedColumn()+1;
+    //convert column integer to string
+    String colConvert = Grid.numToCol(col);
+    //get the row integer
+    int row = tblGrid.getSelectedRow()+1;
+    
+    //perform default action
+    undoRedoStacks.noUndoRedoAction(grid.getCell(colConvert, row));
+  }
 
 	
 
@@ -500,6 +595,15 @@ public class SSGUI implements ActionListener, KeyListener{
 	 */
 	public void actionPerformed(ActionEvent e){
 		final Object objSourceClass = e.getSource(); //store the class of the source
+		
+		//Undo/Redo actions
+		if(objSourceClass.equals(this.btnUndo) || objSourceClass.equals(this.mniUndo)) {
+		  undo();
+		} else if(objSourceClass.equals(this.btnRedo) || objSourceClass.equals(this.mniRedo)) {
+		  redo();
+		} else {
+		  noUndoRedo();
+		}
 
 		//File menu operations
 		if(objSourceClass.equals(this.btnNew) || objSourceClass.equals(this.mniNew)){
@@ -647,6 +751,9 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
 	 */
 	public void valueChanged() {
+    //record cell update to Undo/redo stack (Added-NM-2014-03-19)
+    noUndoRedo();
+	  
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 			return;
 		}

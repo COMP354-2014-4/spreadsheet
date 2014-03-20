@@ -49,6 +49,25 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 		_grid = grid;
 		
 	}
+	
+	/**
+	 * Copy constructor
+	 * @param cellOriginal
+	 */
+	public Cell(Cell cellOriginal) {
+		//copy all immutable objects from originalCell
+		this._format = cellOriginal._format;
+		this._value = cellOriginal._value;
+		this._evaluatedValue = cellOriginal._evaluatedValue;
+		this._col = cellOriginal._col;
+		this._row = cellOriginal._row;
+		this._validValue = cellOriginal._validValue;
+		this._stringValue = cellOriginal._stringValue;
+		this._observedCells = cellOriginal._observedCells;
+		this._error = cellOriginal._error;
+		//copy mutable objects
+		this._grid = cellOriginal._grid;
+	}
     
 	/**
 	 * When an observed cell changes, call evaluate()
@@ -292,4 +311,5 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	public boolean isStringValue(){return _stringValue;}	
 	
 	public String getError(){return _error;}
+	
 }
