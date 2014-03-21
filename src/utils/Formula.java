@@ -47,6 +47,10 @@ public class Formula {
 					getCellReferencesFromRange(cells, grid, tok.getParams());
 				}else if((tok.getType() == TokenType.AVG)){
 					getCellReferencesFromRange(cells, grid, tok.getParams());
+				}else if((tok.getType() == TokenType.MIN2)){
+					getCellReferencesFromRange(cells, grid, tok.getParams());
+				}else if((tok.getType() == TokenType.MAX)){
+					getCellReferencesFromRange(cells, grid, tok.getParams());
 				}
 			}
 			if( !Formula.isCircular(origin, cells) ){//checks for circularity
@@ -139,6 +143,10 @@ public class Formula {
 						tok = new Token(TokenType.NUM,evaluateSum(tok.getParams(),originCell.getGrid()));
 					}else if(tok.getType() == TokenType.AVG){
 						tok = new Token(TokenType.NUM,evaluateAvg(tok.getParams(),originCell.getGrid()));
+					}else if(tok.getType() == TokenType.MIN2){
+						tok = new Token(TokenType.NUM,evaluateMin(tok.getParams(),originCell.getGrid()));
+					}else if(tok.getType() == TokenType.MAX){
+						tok = new Token(TokenType.NUM,evaluateMax(tok.getParams(),originCell.getGrid()));
 					}
 					operandStack.push(tok);//push the operand on the stack
 				}
@@ -378,7 +386,34 @@ public class Formula {
 										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
 										throw new Exception(message);
 									}
+								}else if(tokenColValue.equals("MIN"))
+								{
+									String min;
+									if (matcher.find())
+									{
+									    min = matcher.group();
+									    tokens.add(new Token(TokenType.MIN2, 9,min));
+									    c += min.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
+								}else if(tokenColValue.equals("MAX"))
+								{
+									String max;
+									if (matcher.find())
+									{
+									    max = matcher.group();
+									    tokens.add(new Token(TokenType.MAX, 9,max));
+									    c += max.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
 								}
+								
 							}
 							else 
 							{
@@ -479,6 +514,8 @@ public class Formula {
 	{
 		ArrayList<Cell> cell = new ArrayList<>();
 		getCellReferencesFromRange(cell, grid, args);
+		if(cell.size() == 0)
+			return 0;
 		double sum =0;
 		for(Cell c : cell)
 		{
@@ -491,6 +528,8 @@ public class Formula {
 	{
 		ArrayList<Cell> cell = new ArrayList<>();
 		getCellReferencesFromRange(cell, grid, args);
+		if(cell.size() == 0)
+			return 0;
 		double sum =0;
 		for(Cell c : cell)
 		{
@@ -498,5 +537,33 @@ public class Formula {
 		}
 		sum /= cell.size();
 		return sum;
+	}
+	
+	private static double evaluateMin(String args,Grid grid)
+	{
+		ArrayList<Cell> cell = new ArrayList<>();
+		getCellReferencesFromRange(cell, grid, args);
+		if(cell.size() == 0)
+			return 0;
+		double min =cell.get(0).getEvaluatedValue();
+		for(Cell c : cell)
+		{
+			min = c.getEvaluatedValue() < min ? c.getEvaluatedValue(): min;
+		}
+		return min;
+	}
+	
+	private static double evaluateMax(String args,Grid grid)
+	{
+		ArrayList<Cell> cell = new ArrayList<>();
+		getCellReferencesFromRange(cell, grid, args);
+		if(cell.size() == 0)
+			return 0;
+		double max =cell.get(0).getEvaluatedValue();
+		for(Cell c : cell)
+		{
+			max = c.getEvaluatedValue() > max ? c.getEvaluatedValue(): max;
+		}
+		return max;
 	}
 }
