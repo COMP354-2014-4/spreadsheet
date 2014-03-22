@@ -317,7 +317,11 @@ public class SSGUI implements ActionListener, KeyListener{
 
 		//display
 		frmWindow.pack();
-		frmWindow.setVisible(true);		
+		frmWindow.setVisible(true);
+		
+    //set application focus to cell A1
+		tblGrid.requestFocus();
+    tblGrid.changeSelection(0, 0, false, false);
 	}
 
 	/**
@@ -544,10 +548,8 @@ public class SSGUI implements ActionListener, KeyListener{
       
       //if value of cell is 0
       if(value.equalsIgnoreCase("0")) {
-        //remove cell from hashtable
-        grid.removeCell(colString, row);
-        //change cell display to ""
-        tblGrid.setValueAt("", row, col);
+        //delete cell from hashtable
+        deleteCell();
         //set txtInputBox text to empty
         txtInputBox.setText("");
       } else {
@@ -599,15 +601,10 @@ public class SSGUI implements ActionListener, KeyListener{
       //set focus of cursor to cell that was just redone
       tblGrid.changeSelection(row-1, col-1, false, false);
       
-      //set txtInputBox text to value that was returned
-      txtInputBox.setText(value);
-      
       //if value of cell is 0
       if(value.equalsIgnoreCase("0")) {
-        //remove cell from hashtable
-        grid.removeCell(colString, row);
-        //change cell display to ""
-        tblGrid.setValueAt("", row, col);
+        //delete cell from hashtable
+        deleteCell();
         //set txtInputBox text to empty
         txtInputBox.setText("");
       } else {
