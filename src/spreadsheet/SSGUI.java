@@ -515,13 +515,18 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * Method to handle undo action listener
 	 */
 	public void undo() {
-    //perform undo action
 	  //DEBUG -
 	  System.out.println("Performing Undo");
     
-	  Cell undoneCell = new Cell(undoRedoStacks.undoAction());
+	  //perform undo, send grid to trap current state of cell for redo stack and get previous state of cell from undo stack
+	  Cell undoneCell = new Cell(undoRedoStacks.undoAction(grid));
+	  
+	  //DEBUG -
+    System.out.println("Checking values of returned cell: " + undoneCell.getCol() + " " + undoneCell.getRow() + " " + undoneCell.getValue());
     
-    if(undoneCell != null) {
+    if(undoneCell.getRow() != -1) {  //-1 is returned if there are no more cells in undostack
+      //get the cell column string
+      String colString = undoneCell.getCol();
       //get the cell column integer
       int col = Grid.colToNumber(undoneCell.getCol());
       //get the cell row integer
@@ -532,11 +537,19 @@ public class SSGUI implements ActionListener, KeyListener{
       //DEBUG - show that col and row were pulled correctly from stack
       System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
       
+      //restore cell's data from undo stack
+      grid.selectCell(colString, row).setValue(value);
+      //DEBUG -
+      System.out.println("UNDO - Restored Value: " + value + ", to cell " + colString + "," + row);
+      
       //set focus of cursor to cell that was just undone
       tblGrid.changeSelection(row-1, col-1, false, false);
       
       //update GUI
       updateFromInput(row,col);
+    } else {
+      String noUndoMessage = "Sorry, no more undos.";
+      this.txtMessageBox.setText(noUndoMessage);
     }
 	}
 	
@@ -544,13 +557,18 @@ public class SSGUI implements ActionListener, KeyListener{
    * Method to handle redo action listener
    */
 	public void redo() {
-    //perform redo action
 	  //DEBUG -
 	  System.out.println("Performing Redo");
     
-	  Cell redoneCell = new Cell(undoRedoStacks.redoAction());
+	  //perform redo, send grid to trap current state of cell for undo stack and get previous state of cell from redo stack
+	  Cell redoneCell = new Cell(undoRedoStacks.redoAction(grid));
+	  
+    //DEBUG -
+    System.out.println("Checking values of returned cell: " + redoneCell.getCol() + " " + redoneCell.getRow() + " " + redoneCell.getValue());
     
-    if(redoneCell != null) {
+    if(redoneCell.getRow() != -1) {  //-1 is returned if there are no more cells in redostack
+      //get the cell column string
+      String colString = redoneCell.getCol();
       //get the column integer
       int col = Grid.colToNumber(redoneCell.getCol());
       //get the row integer
@@ -560,12 +578,21 @@ public class SSGUI implements ActionListener, KeyListener{
       
       //DEBUG - show that col and row were pulled correctly from stack
       System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
+
+      //restore cell's data from redo stack
+      grid.selectCell(colString, row).setValue(value);
+      
+      //DEBUG -
+      System.out.println("REDO - Restored Value: " + value + ", to cell " + colString + "," + row);
       
       //set focus of cursor to cell that was just redone
       tblGrid.changeSelection(row-1, col-1, false, false);
       
       //update GUI
       updateFromInput(row,col);
+    } else {
+      String noRedoMessage = "Sorry, no more redos.";
+      this.txtMessageBox.setText(noRedoMessage);
     }
   }
   
@@ -766,11 +793,11 @@ public class SSGUI implements ActionListener, KeyListener{
 		int row = tblGrid.getSelectedRow()+1;
 		if(changed)
 		{
+      //record cell state to Undo/redo stack before applying change (Added-NM-2014-03-19)
+      noUndoRedo();
+		  
 		  updateFromInput(oldSelectedRow,oldSelectedCol);
 			changed = false;
-
-			//record changed cell to Undo/redo stack (Added-NM-2014-03-19)
-      noUndoRedo();
 		} else if(tblGrid.getValueAt(row-1, col-1)!=null && tblGrid.getValueAt(row-1, col-1).equals("#ERR"))
 		{
 			displayMessage(grid.getCell(Grid.numToCol(col), row).getError());

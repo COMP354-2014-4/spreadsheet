@@ -19,14 +19,15 @@ public class UndoRedo {
 	
 	/**
 	 * Method that takes care of undo request
+	 * @param grid 
 	 * @return Cell
 	 */
-	public Cell undoAction() {
-	  Cell cellReturn = null;
+	public Cell undoAction(Grid grid) {
+	  Cell cellReturn = new Cell("-1", -1, null);
 	  
-	  if(!undoStackEmpty()) {
+	  if(!undoStackIsEmpty) {
       //pop from undo stack and return COPY of the cell
-      //make deep copy of cell
+      //make deep copy of cell from stack
       cellReturn = new Cell(undoStack.removeFirst());
       
       //DEBUG -
@@ -34,12 +35,19 @@ public class UndoRedo {
       
       //update state of undoStackIsEmpty
       undoStackEmpty();
+      
+      //get col and row from undo cell
+      String col = cellReturn.getCol();
+      int row = cellReturn.getRow();
+      
+      //get deep copy of the current state of the cell being undone
+      Cell cellCurrent = new Cell(grid.getCell(col, row));
   
-  	  //make copy of cell from undo and add to redo stack
-  	  //make deep copy of cell
-  	  Cell copyCell = new Cell(cellReturn);
+  	  //make copy of current cell and add to redo stack
+  	  //make deep copy of current cell
+  	  Cell copyCell = new Cell(cellCurrent);
   	  
-  	  //add COPY to redo stack
+  	  //add the copy to redo stack
   	  redoStack.addFirst(copyCell);
   	  
   	  //update state of redoStackIsEmpty
@@ -52,27 +60,37 @@ public class UndoRedo {
 	
 	/**
 	 * Method that takes care of redo request
+	 * @param grid 
    * @return Cell
 	 */
-	public Cell redoAction() {
-	  Cell cellReturn = null;
+	public Cell redoAction(Grid grid) {
+	  Cell cellReturn = new Cell("-1", -1, null);
     
-	  if(!redoStackEmpty()) {
+	  if(!redoStackIsEmpty) {
       //pop from redo stack and return COPY of the cell
       //make deep copy of cell
       cellReturn = new Cell(redoStack.removeFirst());
       
       //DEBUG - 
-      System.out.println("Pulled from Redo " + redoStack.size());
+      System.out.println("Pulled from Redo " + redoStack.size() + ", value: " + cellReturn.getValue());
       
       //update state of redoStackIsEmpty
       redoStackEmpty();
       
-  	  //take cell from redo and add COPY to undo stack
-  	  //make deep copy of cell
-  	  Cell copyCell = new Cell(cellReturn);
-  	  //add COPY to undo stack
+      //get col and row from redo cell
+      String col = cellReturn.getCol();
+      int row = cellReturn.getRow();
+      
+      //get deep copy of the current state of the cell being redone
+      Cell cellCurrent = new Cell(grid.getCell(col, row));
+      
+  	  //make copy of current cell and add to undo stack
+  	  //make deep copy of current cell
+  	  Cell copyCell = new Cell(cellCurrent);
+
+  	  //add the copy to undo stack
   	  undoStack.addFirst(copyCell);
+
   	  //update state of undoStackIsEmpty
   	  undoStackEmpty();
     }   
