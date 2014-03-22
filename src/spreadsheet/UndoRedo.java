@@ -20,7 +20,7 @@ public class UndoRedo {
 	/**
 	 * Method that takes care of undo request
 	 * @param grid 
-	 * @return Cell
+	 * @return Cell to be restored
 	 */
 	public Cell undoAction(Grid grid) {
 	  Cell cellReturn = new Cell("-1", -1, null);
@@ -30,13 +30,10 @@ public class UndoRedo {
       //make deep copy of cell from stack
       cellReturn = new Cell(undoStack.removeFirst());
       
-      //DEBUG -
-      System.out.println("Pulled from Undo " + undoStack.size() + ", value: " + cellReturn.getValue());
-      
       //update state of undoStackIsEmpty
       undoStackEmpty();
       
-      //get col and row from undo cell
+      //get col and row from cell popped from undo stack
       String col = cellReturn.getCol();
       int row = cellReturn.getRow();
       
@@ -61,7 +58,7 @@ public class UndoRedo {
 	/**
 	 * Method that takes care of redo request
 	 * @param grid 
-   * @return Cell
+   * @return Cell to be restored
 	 */
 	public Cell redoAction(Grid grid) {
 	  Cell cellReturn = new Cell("-1", -1, null);
@@ -71,12 +68,9 @@ public class UndoRedo {
       //make deep copy of cell
       cellReturn = new Cell(redoStack.removeFirst());
       
-      //DEBUG - 
-      System.out.println("Pulled from Redo " + redoStack.size() + ", value: " + cellReturn.getValue());
-      
       //update state of redoStackIsEmpty
       redoStackEmpty();
-      
+
       //get col and row from redo cell
       String col = cellReturn.getCol();
       int row = cellReturn.getRow();
@@ -111,22 +105,13 @@ public class UndoRedo {
       redoFlush();
     }
     
-    //DEBUG - output sent cells row and col and value
-    //System.out.println("Cell sent row: " + cell.getRow() + ", col: " + cell.getCol() + ", value: " + cell.getValue());
-    
     //add passed cell to undo stack
     //make deep copy of cell
     Cell copyCell = new Cell(cell);
 
-    //DEBUG - output copied cells row and col
-    //System.out.println("Cell sent row: " + copyCell.getRow() + ", col: " + copyCell.getCol() + ", value: " + copyCell.getValue());
-    
     //add to undo stack
     undoStack.addFirst(copyCell);
     
-    //DEBUG -
-    //System.out.println("Setting Undo " + undoStack.size());
-  	
     //update state of undoStackIsEmpty
   	undoStackEmpty();
   }

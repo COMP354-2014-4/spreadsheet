@@ -515,16 +515,15 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * Method to handle undo action listener
 	 */
 	public void undo() {
-	  //DEBUG -
-	  System.out.println("Performing Undo");
-    
-	  //perform undo, send grid to trap current state of cell for redo stack and get previous state of cell from undo stack
+    //message for status bar
+    String message = "Performing Undo";
+    this.txtMessageBox.setText(message);
+	  
+	  //send grid to trap current state of cell for redo stack and get previous state of cell from undo stack
 	  Cell undoneCell = new Cell(undoRedoStacks.undoAction(grid));
 	  
-	  //DEBUG -
-    System.out.println("Checking values of returned cell: " + undoneCell.getCol() + " " + undoneCell.getRow() + " " + undoneCell.getValue());
-    
-    if(undoneCell.getRow() != -1) {  //-1 is returned if there are no more cells in undostack
+	  //if -1 is returned if there are no more cells in undostack
+	  if(undoneCell.getRow() != -1) {  
       //get the cell column string
       String colString = undoneCell.getCol();
       //get the cell column integer
@@ -533,23 +532,39 @@ public class SSGUI implements ActionListener, KeyListener{
       int row = undoneCell.getRow();
       //get the cell value string
       String value = undoneCell.getValue();
+      //get the cell formatting
+      Formatting format= undoneCell.getCellFormat();
       
-      //DEBUG - show that col and row were pulled correctly from stack
-      System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
-      
-      //restore cell's data from undo stack
+      //restore cell's value and format from undo stack
       grid.selectCell(colString, row).setValue(value);
-      //DEBUG -
-      System.out.println("UNDO - Restored Value: " + value + ", to cell " + colString + "," + row);
-      
+      grid.selectCell(colString, row).setCellFormat(format);
+
       //set focus of cursor to cell that was just undone
       tblGrid.changeSelection(row-1, col-1, false, false);
+      
+      //if value of cell is 0
+      if(value.equalsIgnoreCase("0")) {
+        //remove cell from hashtable
+        grid.removeCell(colString, row);
+        //change cell display to ""
+        tblGrid.setValueAt("", row, col);
+        //set txtInputBox text to empty
+        txtInputBox.setText("");
+      } else {
+        //set txtInputBox text to value that was returned
+        txtInputBox.setText(value);
+      }
       
       //update GUI
       updateFromInput(row,col);
     } else {
-      String noUndoMessage = "Sorry, no more undos.";
-      this.txtMessageBox.setText(noUndoMessage);
+      message = "Sorry, no more undos :(";
+      this.txtMessageBox.setText(message);
+      //show popup with sound
+      Toolkit.getDefaultToolkit().beep();
+      JOptionPane.showMessageDialog(new JFrame(),
+          "Sorry, no more undos available", "Undo Limit Reached",
+          JOptionPane.WARNING_MESSAGE);
     }
 	}
 	
@@ -557,16 +572,15 @@ public class SSGUI implements ActionListener, KeyListener{
    * Method to handle redo action listener
    */
 	public void redo() {
-	  //DEBUG -
-	  System.out.println("Performing Redo");
-    
-	  //perform redo, send grid to trap current state of cell for undo stack and get previous state of cell from redo stack
+    //message for status bar
+	  String message = "Performing Redo";
+    this.txtMessageBox.setText(message);
+
+	  //send grid to trap current state of cell for undo stack and get previous state of cell from redo stack
 	  Cell redoneCell = new Cell(undoRedoStacks.redoAction(grid));
 	  
-    //DEBUG -
-    System.out.println("Checking values of returned cell: " + redoneCell.getCol() + " " + redoneCell.getRow() + " " + redoneCell.getValue());
-    
-    if(redoneCell.getRow() != -1) {  //-1 is returned if there are no more cells in redostack
+	  //if -1 is returned if there are no more cells in redostack
+    if(redoneCell.getRow() != -1) {  
       //get the cell column string
       String colString = redoneCell.getCol();
       //get the column integer
@@ -575,24 +589,42 @@ public class SSGUI implements ActionListener, KeyListener{
       int row = redoneCell.getRow();
       //get the cell value string
       String value = redoneCell.getValue();
-      
-      //DEBUG - show that col and row were pulled correctly from stack
-      System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
+      //get the cell formatting
+      Formatting format= redoneCell.getCellFormat();
 
-      //restore cell's data from redo stack
+      //restore cell's value and format from redo stack
       grid.selectCell(colString, row).setValue(value);
-      
-      //DEBUG -
-      System.out.println("REDO - Restored Value: " + value + ", to cell " + colString + "," + row);
+      grid.selectCell(colString, row).setCellFormat(format);
       
       //set focus of cursor to cell that was just redone
       tblGrid.changeSelection(row-1, col-1, false, false);
       
+      //set txtInputBox text to value that was returned
+      txtInputBox.setText(value);
+      
+      //if value of cell is 0
+      if(value.equalsIgnoreCase("0")) {
+        //remove cell from hashtable
+        grid.removeCell(colString, row);
+        //change cell display to ""
+        tblGrid.setValueAt("", row, col);
+        //set txtInputBox text to empty
+        txtInputBox.setText("");
+      } else {
+        //set txtInputBox text to value that was returned
+        txtInputBox.setText(value);
+      }
+      
       //update GUI
       updateFromInput(row,col);
     } else {
-      String noRedoMessage = "Sorry, no more redos.";
-      this.txtMessageBox.setText(noRedoMessage);
+      message = "Sorry, no more redos :(";
+      this.txtMessageBox.setText(message);
+      //show popup with sound
+      Toolkit.getDefaultToolkit().beep();
+      JOptionPane.showMessageDialog(new JFrame(),
+          "Sorry, no more redos available", "Redo Limit Reached",
+          JOptionPane.WARNING_MESSAGE);
     }
   }
   
