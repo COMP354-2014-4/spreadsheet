@@ -305,6 +305,9 @@ public class SSGUI implements ActionListener, KeyListener{
 		tbrToolBar.add(btnCopy);
 		tbrToolBar.add(btnCut);
 		tbrToolBar.add(btnPaste);
+    tbrToolBar.addSeparator();
+    tbrToolBar.add(btnUndo);
+    tbrToolBar.add(btnRedo);
 
 		//Add primary window sections to window
 		frmWindow.setJMenuBar(this.mnbMenu);
@@ -513,18 +516,20 @@ public class SSGUI implements ActionListener, KeyListener{
 	 */
 	public void undo() {
     //perform undo action
-    System.out.println("Performing Undo");
-    Cell undoneCell = new Cell(undoRedoStacks.undoAction());
+	  //DEBUG -
+	  System.out.println("Performing Undo");
+    
+	  Cell undoneCell = new Cell(undoRedoStacks.undoAction());
     
     if(undoneCell != null) {
       //get the cell column integer
-      int col = grid.colToNumber(undoneCell.getCol());
+      int col = Grid.colToNumber(undoneCell.getCol());
       //get the cell row integer
       int row = undoneCell.getRow();
       //get the cell value string
       String value = undoneCell.getValue();
       
-      //show that col and row were pulled correctly from stack
+      //DEBUG - show that col and row were pulled correctly from stack
       System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
       
       //set focus of cursor to cell that was just undone
@@ -532,8 +537,6 @@ public class SSGUI implements ActionListener, KeyListener{
       
       //update GUI
       updateFromInput(row,col);
-    } else {
-      return;
     }
 	}
 	
@@ -542,18 +545,20 @@ public class SSGUI implements ActionListener, KeyListener{
    */
 	public void redo() {
     //perform redo action
-    System.out.println("Performing Redo");
-    Cell redoneCell = new Cell(undoRedoStacks.redoAction());
+	  //DEBUG -
+	  System.out.println("Performing Redo");
+    
+	  Cell redoneCell = new Cell(undoRedoStacks.redoAction());
     
     if(redoneCell != null) {
       //get the column integer
-      int col = grid.colToNumber(redoneCell.getCol());
+      int col = Grid.colToNumber(redoneCell.getCol());
       //get the row integer
       int row = redoneCell.getRow();
       //get the cell value string
       String value = redoneCell.getValue();
       
-      //show that col and row were pulled correctly from stack
+      //DEBUG - show that col and row were pulled correctly from stack
       System.out.println("Col: " + col + " Row: " + row + " Value: " + value);
       
       //set focus of cursor to cell that was just redone
@@ -561,8 +566,6 @@ public class SSGUI implements ActionListener, KeyListener{
       
       //update GUI
       updateFromInput(row,col);
-    } else {
-      return;
     }
   }
   
@@ -570,19 +573,22 @@ public class SSGUI implements ActionListener, KeyListener{
    * Method to handle no undo redo action listener
    */
   public void noUndoRedo() {
-    //check if selected cell contains negative col or row
-    if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
+    //work with previously selected cell, not currently selected
+    Cell prevCell = grid.getCell(Grid.numToCol(oldSelectedCol), oldSelectedRow);
+    
+    //check if previously selected cell contains negative col or row
+    if(prevCell.getRow() < 0 || Grid.colToNumber(prevCell.getCol()) < 0){
       return;
     }
     
     //get the column integer
-    int col = tblGrid.getSelectedColumn()+1;
+    int col = Grid.colToNumber(prevCell.getCol());
     //convert column integer to string
     String colConvert = Grid.numToCol(col);
     //get the row integer
-    int row = tblGrid.getSelectedRow()+1;
+    int row = prevCell.getRow();
     
-    //perform default action
+    //perform default noUndoRedo action
     undoRedoStacks.noUndoRedoAction(grid.getCell(colConvert, row));
   }
 
@@ -751,9 +757,6 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
 	 */
 	public void valueChanged() {
-    //record cell update to Undo/redo stack (Added-NM-2014-03-19)
-    noUndoRedo();
-	  
 		if(tblGrid.getSelectedRow() < 0 || tblGrid.getSelectedColumn() < 0){
 			return;
 		}
@@ -763,7 +766,10 @@ public class SSGUI implements ActionListener, KeyListener{
 		int row = tblGrid.getSelectedRow()+1;
 		if(changed)
 		{
-			updateFromInput(oldSelectedRow,oldSelectedCol);
+      //record cell update to Undo/redo stack (Added-NM-2014-03-19)
+      noUndoRedo();
+		  
+		  updateFromInput(oldSelectedRow,oldSelectedCol);
 			changed = false;
 		} else if(tblGrid.getValueAt(row-1, col-1)!=null && tblGrid.getValueAt(row-1, col-1).equals("#ERR"))
 		{
