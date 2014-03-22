@@ -588,7 +588,7 @@ public class SSGUI implements ActionListener, KeyListener{
     //get the row integer
     int row = prevCell.getRow();
     
-    //perform default noUndoRedo action
+    //perform default noUndoRedo action on previous cell
     undoRedoStacks.noUndoRedoAction(grid.getCell(colConvert, row));
   }
 
@@ -766,11 +766,11 @@ public class SSGUI implements ActionListener, KeyListener{
 		int row = tblGrid.getSelectedRow()+1;
 		if(changed)
 		{
-      //record cell update to Undo/redo stack (Added-NM-2014-03-19)
-      noUndoRedo();
-		  
 		  updateFromInput(oldSelectedRow,oldSelectedCol);
 			changed = false;
+
+			//record changed cell to Undo/redo stack (Added-NM-2014-03-19)
+      noUndoRedo();
 		} else if(tblGrid.getValueAt(row-1, col-1)!=null && tblGrid.getValueAt(row-1, col-1).equals("#ERR"))
 		{
 			displayMessage(grid.getCell(Grid.numToCol(col), row).getError());

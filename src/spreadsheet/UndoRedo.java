@@ -30,7 +30,7 @@ public class UndoRedo {
       cellReturn = new Cell(undoStack.removeFirst());
       
       //DEBUG -
-      System.out.println("Pulled from Undo " + undoStack.size());
+      System.out.println("Pulled from Undo " + undoStack.size() + ", value: " + cellReturn.getValue());
       
       //update state of undoStackIsEmpty
       undoStackEmpty();
@@ -38,8 +38,10 @@ public class UndoRedo {
   	  //make copy of cell from undo and add to redo stack
   	  //make deep copy of cell
   	  Cell copyCell = new Cell(cellReturn);
+  	  
   	  //add COPY to redo stack
   	  redoStack.addFirst(copyCell);
+  	  
   	  //update state of redoStackIsEmpty
   	  redoStackEmpty();
 	  }
@@ -91,21 +93,21 @@ public class UndoRedo {
       redoFlush();
     }
     
-    //DEBUG - output cells row and col
-    System.out.println("Cell sent row: " + cell.getRow() + ", col: " + cell.getCol());
+    //DEBUG - output sent cells row and col and value
+    //System.out.println("Cell sent row: " + cell.getRow() + ", col: " + cell.getCol() + ", value: " + cell.getValue());
     
     //add passed cell to undo stack
     //make deep copy of cell
     Cell copyCell = new Cell(cell);
+
+    //DEBUG - output copied cells row and col
+    //System.out.println("Cell sent row: " + copyCell.getRow() + ", col: " + copyCell.getCol() + ", value: " + copyCell.getValue());
+    
     //add to undo stack
-    
-    //DEBUG - copied cells row and col
-    System.out.println("Cell sent row: " + copyCell.getRow() + ", col: " + copyCell.getCol());
-    
     undoStack.addFirst(copyCell);
     
     //DEBUG -
-    System.out.println("Setting Undo " + undoStack.size());
+    //System.out.println("Setting Undo " + undoStack.size());
   	
     //update state of undoStackIsEmpty
   	undoStackEmpty();
