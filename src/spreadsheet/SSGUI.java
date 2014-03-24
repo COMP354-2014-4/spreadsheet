@@ -768,7 +768,8 @@ public class SSGUI implements ActionListener, KeyListener{
 		else if(e.getKeyChar() == KeyEvent.VK_DELETE){
 			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) //Only delete if cell is non-empty
 			{
-				deleteCell();
+        noUndoRedo();
+			  deleteCell();
 			}
 		}
 		else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE){
