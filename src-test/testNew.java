@@ -223,7 +223,42 @@ public class testNew {
 	    assertEquals(expected, result);
 	} 
 	
+	/**
+	 * test: newSpreadsheet3()
+	 * robot enters the CTRL+N shortcut
+	 * the A1 is set value 23, after click the "new" button,
+	 * the A1 will become null
+	 */
 
+	@Test
+	public void testNewSpreadSheet3() {
+		
+		// get the coordinates of A1 and move the cursor to the cell A1
+		Rectangle rect = _ui.tblGrid.getCellRect(0, 0, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		
+		// click on A1 and enter the value: 23
+		click();
+		inputString("23");
+		  
+		// use the robot to enter the CTRL+N shortcut
+		_rob.waitForIdle();
+		_rob.keyPress(KeyEvent.VK_CONTROL);
+		_rob.keyPress(KeyEvent.VK_N);
+		_rob.keyRelease(KeyEvent.VK_N);
+		_rob.keyRelease(KeyEvent.VK_CONTROL);
+		
+		waiting();
+		
+		// test if the value of A1 is cleared
+		Object expected = null;
+	    Object result = _ui.tblGrid.getValueAt(0, 0); 
+	    assertEquals(expected, result);
+	} 
+	
 	
 	
 	/**
@@ -533,6 +568,54 @@ public class testNew {
 		String expected = "45.0";
 		String result = _ui.tblGrid.getValueAt(0, 2).toString();
 		assertEquals( expected, result);
+	}
+	
+	
+	/**
+	 * test: can we copy using the shortcut
+	 * int value
+	 */
+	 
+	@Test
+	public void testNumberCopyShortcut(){
+
+		// get the coordinates of D1, move the cursor to D1 and click
+		Rectangle rect = _ui.tblGrid.getCellRect(3, 0, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		click();
+		
+		// enter the value: 123
+		inputString("123");
+
+		// press the "ENTER" key
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		
+		// get the coordinates of D1, move the cursor to D1 and click
+		rect = _ui.tblGrid.getCellRect(3, 0, true);
+		pCell = rect.getLocation();
+		pTable = _ui.tblGrid.getLocationOnScreen();
+		mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		click();
+		
+		// use the robot to enter CTRL+C
+		_rob.waitForIdle();
+		_rob.keyPress(KeyEvent.VK_CONTROL);
+		_rob.keyPress(KeyEvent.VK_C);
+		_rob.keyRelease(KeyEvent.VK_C);
+		_rob.keyRelease(KeyEvent.VK_CONTROL);
+			
+		waiting();  
+				
+		// to check if the value of the clipboard = the value we input
+		String expected = "123";
+	    String result = _ui.clipBoard; 
+	    System.out.println(result);
+	    assertEquals(expected, result);
 	}
 	
 
