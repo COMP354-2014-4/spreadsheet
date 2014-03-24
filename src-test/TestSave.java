@@ -215,6 +215,50 @@ private static SSGUI _ui; 	//The UI
 		if(assertValue) saveFile.delete();
 		assertTrue(assertValue);
 	}
+
+	
+	/**
+	 * CTRL+S - Check if the save file is created
+	 * 
+	 * purpose: test to make sure that the save shortcut
+	 * 			calls the backend save
+	 * 
+	 * dependent on:
+	 * 	saveSpreadsheet()
+	 */
+	@Test
+	public void testSaveSpreadsheetSC() {
+		System.out.println(" SaveSpreadsheet using CTRL+S"+_ui.strFileLocation);
+		
+		// use the robot to enter CTRL+S
+		_rob.waitForIdle();
+		_rob.keyPress(KeyEvent.VK_CONTROL);
+		_rob.keyPress(KeyEvent.VK_S);
+		_rob.keyRelease(KeyEvent.VK_S);
+		_rob.keyRelease(KeyEvent.VK_CONTROL);
+		
+		System.out.println("\t CTRL+S Works");
+		inputString("TestSaveTB");
+		_rob.delay(100);
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		_rob.waitForIdle();
+		
+		int i = 0;
+		while(_ui.strFileLocation.isEmpty() && i < 100){
+			_rob.delay(10);	
+			i++;
+		}
+		
+		System.out.println("\tEntering the file name works: " + _ui.strFileLocation + ".sav");
+		File saveFile = new File(_ui.strFileLocation+".sav");
+		
+		boolean assertValue = saveFile.exists();
+		if(assertValue) saveFile.delete();
+		assertTrue(assertValue);
+	}
+	
+	
 	
 	/**
 	 * File>save As - Check if the save file is created
@@ -277,6 +321,51 @@ private static SSGUI _ui; 	//The UI
 		_rob.mouseMove(mMouse.x, mMouse.y);
 		click();
 		System.out.println("\tClick on btn SaveAs works");
+		
+		inputString("TestSaveAsTB");
+		_rob.delay(100);
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		_rob.waitForIdle();
+		
+		int i = 0;
+		while(_ui.strFileLocation.isEmpty() && i < 100){
+			_rob.delay(10);	
+			i++;
+		}
+		
+		System.out.println("\tEntering the file name works: " + _ui.strFileLocation + ".sav");
+		File saveFile = new File(_ui.strFileLocation+".sav");
+		
+		boolean assertValue = saveFile.exists();
+		if(assertValue) saveFile.delete();
+		assertTrue(assertValue);
+	}
+	
+	
+	/**
+	 * CTRL+SHIFT+S - Check if the save as file is created
+	 * 
+	 * purpose: test to make sure that the save as shortcut
+	 * 			calls the backend save
+	 * 
+	 * dependent on:
+	 * 	saveAsSpreadsheet()
+	 */
+	@Test
+	public void testSaveAsSpreadsheetSC() {
+		System.out.println(" SaveAsSpreadsheet from Toolbar");
+
+		// use the robot to enter CTRL+V
+		_rob.waitForIdle();
+		_rob.keyPress(KeyEvent.VK_CONTROL);
+		_rob.keyPress(KeyEvent.VK_SHIFT);
+		_rob.keyPress(KeyEvent.VK_S);
+		_rob.keyRelease(KeyEvent.VK_S);
+		_rob.keyRelease(KeyEvent.VK_SHIFT);
+		_rob.keyRelease(KeyEvent.VK_CONTROL);
+		
+		System.out.println("\t CTRL+SHIFT+S works");
 		
 		inputString("TestSaveAsTB");
 		_rob.delay(100);
