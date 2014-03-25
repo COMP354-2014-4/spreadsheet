@@ -355,6 +355,7 @@ public class SSGUI implements ActionListener, KeyListener{
 		grid.clear();
 		initializeTable();
 		strFileLocation = ""; // clears the save file location
+		undoRedoStacks.clearUndoRedo();  //clears the undo redo stacks
 	}
 
 	/**
@@ -369,6 +370,7 @@ public class SSGUI implements ActionListener, KeyListener{
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			newSpreadsheet();// To erase previous spreadsheet data before loading new data
+			undoRedoStacks.clearUndoRedo();  //clears the undo redo stacks
 			strFileLocation = fc.getSelectedFile().getAbsolutePath();
 			for(int i = 0; i != 10; ++i) // Looping ensures nested references get processed correctly
 				grid.load(strFileLocation);

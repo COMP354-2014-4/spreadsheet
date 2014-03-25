@@ -125,6 +125,22 @@ public class UndoRedo {
   }
   
   /**
+   * Method to reset undo stack to null values
+   */
+  private void undoFlush() {
+    undoStack.clear();
+    undoStackIsEmpty = true;
+  }
+  
+  /**
+   * Method to reset both undo and redo stacks to null values
+   */
+  public void clearUndoRedo() {
+    undoFlush();
+    redoFlush();
+  }
+  
+  /**
    * Updates and returns current state of redoStackIsEmpty
    * @return boolean redoStackIsEmpty
    */
