@@ -578,7 +578,7 @@ public class Formula {
 	
 	private static double evaluateSum(String args,Grid grid)
 	{
-		ArrayList<Cell> cell = new ArrayList<>();
+		ArrayList<Cell> cell = new ArrayList<Cell>();
 		getCellReferencesFromRange(cell, grid, args);
 		if(cell.size() == 0)
 			return 0;
@@ -592,7 +592,7 @@ public class Formula {
 	
 	private static double evaluateAvg(String args,Grid grid)
 	{
-		ArrayList<Cell> cell = new ArrayList<>();
+		ArrayList<Cell> cell = new ArrayList<Cell>();
 		getCellReferencesFromRange(cell, grid, args);
 		if(cell.size() == 0)
 			return 0;
@@ -607,7 +607,7 @@ public class Formula {
 	
 	private static double evaluateMin(String args,Grid grid)
 	{
-		ArrayList<Cell> cell = new ArrayList<>();
+		ArrayList<Cell> cell = new ArrayList<Cell>();
 		getCellReferencesFromRange(cell, grid, args);
 		if(cell.size() == 0)
 			return 0;
@@ -621,7 +621,7 @@ public class Formula {
 	
 	private static double evaluateMax(String args,Grid grid)
 	{
-		ArrayList<Cell> cell = new ArrayList<>();
+		ArrayList<Cell> cell = new ArrayList<Cell>();
 		getCellReferencesFromRange(cell, grid, args);
 		if(cell.size() == 0)
 			return 0;
