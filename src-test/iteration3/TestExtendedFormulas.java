@@ -68,6 +68,10 @@ public class TestExtendedFormulas {
 						_rob.keyPress(KeyEvent.VK_M);
 						_rob.keyRelease(KeyEvent.VK_M);
 						break;
+					case 'B':
+						_rob.keyPress(KeyEvent.VK_B);
+						_rob.keyRelease(KeyEvent.VK_B);
+						break;
 					case '=':
 						_rob.keyPress(KeyEvent.VK_EQUALS);
 						_rob.keyRelease(KeyEvent.VK_EQUALS);
@@ -108,6 +112,26 @@ public class TestExtendedFormulas {
 						_rob.keyPress(KeyEvent.VK_4);
 						_rob.keyRelease(KeyEvent.VK_4);
 						break;
+					case '5':
+						_rob.keyPress(KeyEvent.VK_5);
+						_rob.keyRelease(KeyEvent.VK_5);
+						break;
+					case '6':
+						_rob.keyPress(KeyEvent.VK_6);
+						_rob.keyRelease(KeyEvent.VK_6);
+						break;
+					case '7':
+						_rob.keyPress(KeyEvent.VK_7);
+						_rob.keyRelease(KeyEvent.VK_7);
+						break;
+					case '8':
+						_rob.keyPress(KeyEvent.VK_8);
+						_rob.keyRelease(KeyEvent.VK_8);
+						break;
+					case '9':
+						_rob.keyPress(KeyEvent.VK_9);
+						_rob.keyRelease(KeyEvent.VK_9);
+						break;
 					case 'I':
 						_rob.keyPress(KeyEvent.VK_I);
 						_rob.keyRelease(KeyEvent.VK_I);
@@ -119,6 +143,10 @@ public class TestExtendedFormulas {
 					case 'A':
 						_rob.keyPress(KeyEvent.VK_A);
 						_rob.keyRelease(KeyEvent.VK_A);
+						break;
+					case 'E':
+						_rob.keyPress(KeyEvent.VK_E);
+						_rob.keyRelease(KeyEvent.VK_E);
 						break;
 					case 'V':
 						_rob.keyPress(KeyEvent.VK_V);
@@ -555,5 +583,353 @@ public class TestExtendedFormulas {
 			_rob.delay(500);//delay to avoid double click.....
 			
 			assertTrue(_ui.tblGrid.getValueAt(3, 6).toString().equals("25.0"));
+		}
+		
+		@Test
+		public void testEvaluateBoxMaximum() {
+			System.out.println("Test the extended formula MAX.");
+			
+			Rectangle rect1 = _ui.tblGrid.getCellRect(5, 4, true);
+			Rectangle rect2 = _ui.tblGrid.getCellRect(5, 5, true);
+			Rectangle rect3 = _ui.tblGrid.getCellRect(6, 4, true);
+			Rectangle rect4 = _ui.tblGrid.getCellRect(6, 5, true);
+			Rectangle rect5 = _ui.tblGrid.getCellRect(6, 6, true);
+			
+			Point pCell1 = rect1.getLocation();
+			Point pCell2 = rect2.getLocation();
+			Point pCell3 = rect3.getLocation();
+			Point pCell4 = rect4.getLocation();
+			Point pCell5 = rect5.getLocation();
+			
+			Point pTable = _ui.tblGrid.getLocationOnScreen();
+			
+			Point mMouse1 = new Point(pCell1.x + 5 + pTable.x, pCell1.y + 5 + pTable.y);
+			Point mMouse2 = new Point(pCell2.x + 5 + pTable.x, pCell2.y + 5 + pTable.y);
+			Point mMouse3 = new Point(pCell3.x + 5 + pTable.x, pCell3.y + 5 + pTable.y);
+			Point mMouse4 = new Point(pCell4.x + 5 + pTable.x, pCell4.y + 5 + pTable.y);
+			Point mMouse5 = new Point(pCell5.x + 5 + pTable.x, pCell5.y + 5 + pTable.y);
+			
+			_rob.mouseMove(mMouse1.x, mMouse1.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("15.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in C4 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse2.x, mMouse2.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("10.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in D4 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse3.x, mMouse3.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("20.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in E4 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse4.x, mMouse4.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("25.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in F4 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse5.x, mMouse5.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("=MAX(E6-F7)");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println(_ui.txtInputBox.getText());
+			_rob.delay(500);//delay to avoid double click.....
+			
+			assertTrue(_ui.tblGrid.getValueAt(6, 6).toString().equals("25.0"));
+		}
+		
+		@Test
+		public void testEvaluateBoxMinimum() {
+			System.out.println("Test the extended formula MIN.");
+			
+			Rectangle rect1 = _ui.tblGrid.getCellRect(7, 4, true);
+			Rectangle rect2 = _ui.tblGrid.getCellRect(7, 5, true);
+			Rectangle rect3 = _ui.tblGrid.getCellRect(8, 4, true);
+			Rectangle rect4 = _ui.tblGrid.getCellRect(8, 5, true);
+			Rectangle rect5 = _ui.tblGrid.getCellRect(8, 6, true);
+			
+			Point pCell1 = rect1.getLocation();
+			Point pCell2 = rect2.getLocation();
+			Point pCell3 = rect3.getLocation();
+			Point pCell4 = rect4.getLocation();
+			Point pCell5 = rect5.getLocation();
+			
+			Point pTable = _ui.tblGrid.getLocationOnScreen();
+			
+			Point mMouse1 = new Point(pCell1.x + 5 + pTable.x, pCell1.y + 5 + pTable.y);
+			Point mMouse2 = new Point(pCell2.x + 5 + pTable.x, pCell2.y + 5 + pTable.y);
+			Point mMouse3 = new Point(pCell3.x + 5 + pTable.x, pCell3.y + 5 + pTable.y);
+			Point mMouse4 = new Point(pCell4.x + 5 + pTable.x, pCell4.y + 5 + pTable.y);
+			Point mMouse5 = new Point(pCell5.x + 5 + pTable.x, pCell5.y + 5 + pTable.y);
+			
+			_rob.mouseMove(mMouse1.x, mMouse1.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("15.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in C3 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse2.x, mMouse2.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("10.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in D3 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse3.x, mMouse3.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("20.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in E3 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse4.x, mMouse4.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("25.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in F3 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse5.x, mMouse5.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("=MIN(E8-F9)");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println(_ui.txtInputBox.getText());
+			_rob.delay(500);//delay to avoid double click.....
+			
+			assertTrue(_ui.tblGrid.getValueAt(8, 6).toString().equals("10.0"));
+		}
+		
+		@Test
+		public void testEvaluateBoxAverage() {
+			System.out.println("Test the extended formula AVG.");
+			
+			Rectangle rect1 = _ui.tblGrid.getCellRect(7, 1, true);
+			Rectangle rect2 = _ui.tblGrid.getCellRect(7, 2, true);
+			Rectangle rect3 = _ui.tblGrid.getCellRect(8, 1, true);
+			Rectangle rect4 = _ui.tblGrid.getCellRect(8, 2, true);
+			Rectangle rect5 = _ui.tblGrid.getCellRect(8, 3, true);
+			
+			Point pCell1 = rect1.getLocation();
+			Point pCell2 = rect2.getLocation();
+			Point pCell3 = rect3.getLocation();
+			Point pCell4 = rect4.getLocation();
+			Point pCell5 = rect5.getLocation();
+			
+			Point pTable = _ui.tblGrid.getLocationOnScreen();
+			
+			Point mMouse1 = new Point(pCell1.x + 5 + pTable.x, pCell1.y + 5 + pTable.y);
+			Point mMouse2 = new Point(pCell2.x + 5 + pTable.x, pCell2.y + 5 + pTable.y);
+			Point mMouse3 = new Point(pCell3.x + 5 + pTable.x, pCell3.y + 5 + pTable.y);
+			Point mMouse4 = new Point(pCell4.x + 5 + pTable.x, pCell4.y + 5 + pTable.y);
+			Point mMouse5 = new Point(pCell5.x + 5 + pTable.x, pCell5.y + 5 + pTable.y);
+			
+			_rob.mouseMove(mMouse1.x, mMouse1.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("15.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in C2 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse2.x, mMouse2.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("10.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in D2 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse3.x, mMouse3.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("20.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in E2 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse4.x, mMouse4.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("25.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in F2 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse5.x, mMouse5.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("=AVG(B8-C9)");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println(_ui.txtInputBox.getText());
+			_rob.delay(500);//delay to avoid double click.....
+			
+			assertTrue(_ui.tblGrid.getValueAt(8, 3).toString().equals("17.5"));
+		}
+		
+		@Test
+		public void testEvaluateBoxSum() {
+			System.out.println("Test the extended formula SUM.");
+			
+			Rectangle rect1 = _ui.tblGrid.getCellRect(5, 1, true);
+			Rectangle rect2 = _ui.tblGrid.getCellRect(5, 2, true);
+			Rectangle rect3 = _ui.tblGrid.getCellRect(6, 1, true);
+			Rectangle rect4 = _ui.tblGrid.getCellRect(6, 2, true);
+			Rectangle rect5 = _ui.tblGrid.getCellRect(6, 3, true);
+			
+			Point pCell1 = rect1.getLocation();
+			Point pCell2 = rect2.getLocation();
+			Point pCell3 = rect3.getLocation();
+			Point pCell4 = rect4.getLocation();
+			Point pCell5 = rect5.getLocation();
+			
+			Point pTable = _ui.tblGrid.getLocationOnScreen();
+			
+			Point mMouse1 = new Point(pCell1.x + 5 + pTable.x, pCell1.y + 5 + pTable.y);
+			Point mMouse2 = new Point(pCell2.x + 5 + pTable.x, pCell2.y + 5 + pTable.y);
+			Point mMouse3 = new Point(pCell3.x + 5 + pTable.x, pCell3.y + 5 + pTable.y);
+			Point mMouse4 = new Point(pCell4.x + 5 + pTable.x, pCell4.y + 5 + pTable.y);
+			Point mMouse5 = new Point(pCell5.x + 5 + pTable.x, pCell5.y + 5 + pTable.y);
+			
+			_rob.mouseMove(mMouse1.x, mMouse1.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("15.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in C1 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse2.x, mMouse2.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("10.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in D1 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse3.x, mMouse3.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("20.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in E1 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse4.x, mMouse4.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("25.0");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println("Input a value in F1 works");
+			_rob.delay(500);//delay to avoid double click.....
+			
+			_rob.mouseMove(mMouse5.x, mMouse5.y);
+			_rob.waitForIdle();
+			click();
+			
+			inputString("=SUM(B6-C7)");
+			_rob.waitForIdle();
+			_rob.keyPress(KeyEvent.VK_ENTER);
+			_rob.keyRelease(KeyEvent.VK_ENTER);
+			_rob.waitForIdle();
+			System.out.println(_ui.txtInputBox.getText());
+			_rob.delay(500);//delay to avoid double click.....
+			
+			assertTrue(_ui.tblGrid.getValueAt(6, 3).toString().equals("70.0"));
 		}
 }
