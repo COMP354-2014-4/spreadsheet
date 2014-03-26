@@ -43,14 +43,10 @@ public class Formula {
 				if(tok.getType() == TokenType.CEL){//extract the cell from the list of token
 					Cell cell = grid.getCell(tok.getCol(), tok.getRow());
 					cells.add(cell);
-				}else if((tok.getType() == TokenType.SUM)){
+				}else if(tok.getType() == TokenType.SUM || tok.getType() == TokenType.AVG || tok.getType() == TokenType.MIN2 || tok.getType() == TokenType.MAX){
 					getCellReferencesFromRange(cells, grid, tok.getParams());
-				}else if((tok.getType() == TokenType.AVG)){
-					getCellReferencesFromRange(cells, grid, tok.getParams());
-				}else if((tok.getType() == TokenType.MIN2)){
-					getCellReferencesFromRange(cells, grid, tok.getParams());
-				}else if((tok.getType() == TokenType.MAX)){
-					getCellReferencesFromRange(cells, grid, tok.getParams());
+				}else if(tok.getType() == TokenType.FLOOR || tok.getType() == TokenType.ROUND || tok.getType() == TokenType.CEIL){
+					cells.add(getCellReference(grid, tok.getParams()));
 				}
 			}
 			if( !Formula.isCircular(origin, cells) ){//checks for circularity
@@ -147,6 +143,12 @@ public class Formula {
 						tok = new Token(TokenType.NUM,evaluateMin(tok.getParams(),originCell.getGrid()));
 					}else if(tok.getType() == TokenType.MAX){
 						tok = new Token(TokenType.NUM,evaluateMax(tok.getParams(),originCell.getGrid()));
+					}else if(tok.getType() == TokenType.FLOOR){
+						tok = new Token(TokenType.NUM,evaluateFloor(tok.getParams(),originCell.getGrid()));
+					}else if(tok.getType() == TokenType.ROUND){
+						tok = new Token(TokenType.NUM,evaluateRound(tok.getParams(),originCell.getGrid()));
+					}else if(tok.getType() == TokenType.CEIL){
+						tok = new Token(TokenType.NUM,evaluateCeil(tok.getParams(),originCell.getGrid()));
 					}
 					operandStack.push(tok);//push the operand on the stack
 				}
@@ -413,7 +415,48 @@ public class Formula {
 										throw new Exception(message);
 									}
 								}
-								
+								pattern = Pattern.compile("\\(@?[A-Z]+@?[1-9]+\\)");
+								matcher = pattern.matcher(formula.substring(c));
+								if(tokenColValue.equals("FLOOR"))
+								{
+									String max;
+									if (matcher.find())
+									{
+									    max = matcher.group();
+									    tokens.add(new Token(TokenType.FLOOR, 9,max));
+									    c += max.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
+								} else if(tokenColValue.equals("ROUND"))
+								{
+									String max;
+									if (matcher.find())
+									{
+									    max = matcher.group();
+									    tokens.add(new Token(TokenType.ROUND, 9,max));
+									    c += max.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
+								} else if(tokenColValue.equals("CEIL"))
+								{
+									String max;
+									if (matcher.find())
+									{
+									    max = matcher.group();
+									    tokens.add(new Token(TokenType.CEIL, 9,max));
+									    c += max.length();
+									}else
+									{
+										String message = "Invalid formula. " + tokenColValue + " function has invalid parameters";
+										throw new Exception(message);
+									}
+								}
 							}
 							else 
 							{
@@ -470,6 +513,29 @@ public class Formula {
 			return false;
 
 		return true;
+	}
+	
+	private static  Cell getCellReference(Grid grid,String str)
+	{
+		str = str.substring(1, str.length()-1);
+		String col = "";
+		int row = 0;
+		for(int j=0;j<str.length();++j)
+		{
+			if(Character.isAlphabetic(str.charAt(j)))
+			{
+				col += str.charAt(j);
+			}
+			else 
+			{
+				if(str.charAt(j) == '@')
+					row = Integer.parseInt(str.substring(j+1));
+				else 
+					row = Integer.parseInt(str.substring(j));
+				break;
+			}
+		}
+		return grid.getCell(col, row);
 	}
 	
 	private static void getCellReferencesFromRange(ArrayList<Cell> cells, Grid grid, String range)
@@ -565,5 +631,20 @@ public class Formula {
 			max = c.getEvaluatedValue() > max ? c.getEvaluatedValue(): max;
 		}
 		return max;
+	}
+	
+	private static double evaluateFloor(String args,Grid grid)
+	{
+		return Math.floor(getCellReference(grid, args).getEvaluatedValue());
+	}
+
+	private static double evaluateRound(String args,Grid grid)
+	{
+		return Math.round(getCellReference(grid, args).getEvaluatedValue());
+	}
+
+	private static double evaluateCeil(String args,Grid grid)
+	{
+		return Math.ceil(getCellReference(grid, args).getEvaluatedValue());
 	}
 }
