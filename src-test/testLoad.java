@@ -18,7 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * @author Jayanti Rani
+ * @author Jayanti Rani, Justin Dupuis
  *
  */
 public class testLoad {
@@ -135,5 +135,26 @@ public static void click () {
 		 robot.delay(100); 
 		 
 	}
+	
+	/**
+	 * load test for testing from Load shortcut (CTRL+L)
+	 */
+	
+	@Test
+	public void testLoad3() {		
+		robot.waitForIdle();
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_L);
+		robot.keyRelease(KeyEvent.VK_L);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		
+		inputString("myfilefile.sav");
+		robot.delay(100); 
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+		robot.delay(100); 
+		 
+	}
+
 
 }

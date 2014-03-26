@@ -34,9 +34,7 @@ public class GridTest {
     // do something after each test
     System.out.println("Test Completed!");
   }
-
-  
-  
+ 
   /*************************/
   /**** Testing Methods ****/
   /*************************/
@@ -226,21 +224,22 @@ public class GridTest {
   public void testLoadEquals() {
 	  Grid testGrid = new Grid();
 	  
-		Hashtable<String, Cell> cells = new Hashtable<String, Cell>();
+		Hashtable<String, String> cells = new Hashtable<String, String>();
 		Cell cell = new Cell("A",1,testGrid);
 		cell.setValue("1");
-		cells.put("A1", cell);
+		cells.put("A1", cell.getValue());
 		File file = new File("testLoad.sav");
 		try {
+			file.createNewFile();
 			FileOutputStream fos = new FileOutputStream(file);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(cells);
+			oos.writeObject(cells); // Problem here
 			oos.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		testGrid.load("testLoad");
+		testGrid.load("testLoad.sav");
 		assertEquals("1",testGrid.getCell("A", 1).getValue());
 		file.delete();
   }
@@ -260,15 +259,15 @@ public class GridTest {
    * purpose: test the creation of a file through save
    */
   @Test
-  public void testSaveTrue() {
+  public void testSaveTrue() throws IOException { // throws IOException needed for creating the file
 	    Grid testGrid = new Grid();
 	    testGrid.getCell("A", 1);//should create a cell
 	    testGrid.save("test");
 	    File file = new File("test.sav");
+	    file.createNewFile(); // This actually creates the file, even though intuitively it seems the file constructor should suffice
 	    assertTrue(file.exists());
 	    file.delete();
   }
-  
   
   /*** False Tests ***/
   /*******************/

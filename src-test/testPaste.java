@@ -191,4 +191,36 @@ public class testPaste {
 		 assertEquals(input, gui.tblGrid.getValueAt(3, 3));
 	}
 	
+	 /*************************/
+	  /**** Testing Methods ****/
+	  /*************************/
+	
+	/**
+	 *  test to check if Paste is working using CTRL+V Shortcut
+	 */
+	@Test
+	public void testPaste6() {
+		SelectCellAndWrite(0,3);
+		gui.clipBoard = "123";
+		
+		// use the robot to enter CTRL+V
+		robot.waitForIdle();
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		
+		 robot.delay(100);
+		 double input = 123.0;
+		 int i = 0;
+		 while( gui.tblGrid.getValueAt(0, 3) == null && i < 100){
+			robot.delay(10);	
+			i++;
+		 }
+		 
+		 assertEquals(input, gui.tblGrid.getValueAt(0, 3));
+	}
+	
+	
+	
 }

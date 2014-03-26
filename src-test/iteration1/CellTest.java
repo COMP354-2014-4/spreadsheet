@@ -200,15 +200,15 @@ public class CellTest {
   public void testIsValidValueFalse(){
     //mixed alphanumeric
     Cell cell01 = new Cell("B", 4, test_Grid);
-    cell01.setValue("0a");
+    cell01.setValue("=0a"); // Changed to =0a since 0a is actually a valid input now
     assertFalse("Cell invalid value", cell01.isValidValue());
     //just alpha
     Cell cell02 = new Cell("B", 4, test_Grid);
-    cell02.setValue("aa");
+    cell02.setValue("=~-34B7H"); // Again, aa is now valid unless preceded with an equals sign
     assertFalse("Cell invalid value", cell02.isValidValue());
     //test circular reference
-    Cell cell03 = new Cell("B", 4, test_Grid);
-    cell03.setValue("=1+1+B4");
+    Cell cell03 = new Cell("A", 4, test_Grid);
+    cell03.setValue("=A4");
     assertFalse("Cell invalid value", cell03.isValidValue());
   }
   

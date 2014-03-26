@@ -20,6 +20,11 @@ import java.io.File;
 import spreadsheet.Grid;
 import spreadsheet.SSGUI;
 
+/**
+ * 
+ * @author Unknown Iteration 2 Author & Justin Dupuis
+ *
+ */
 public class TestCut {
 	
 private static Robot _rob;	//The robot used to test the GUI
@@ -227,6 +232,53 @@ private static SSGUI _ui; 	//The UI
 		_rob.waitForIdle();
 		click();
 		System.out.println("Clicking on Cut btn works");
+		
+		int i = 0;
+		while( ( _ui.clipBoard.equals("0") || !_ui.tblGrid.getValueAt(1, 3).toString().equals("") ) && i < 100){
+			_rob.delay(10);	
+			i++;
+		}
+		
+		assertTrue(_ui.clipBoard.equals("13.0") && _ui.tblGrid.getValueAt(1, 3).toString().equals("") );
+	}
+	
+	
+	/**
+	 * Shortcut: CTRL+X - Check if the clipboard receives the correct value and the cell is emptied
+	 * 
+	 * purpose: Ensures that the Cut shortcut activates the cut functionality
+	 */
+	@Test
+	public void testCutShortcut() {
+		System.out.println("Test Cut from toolbar");
+		
+		Rectangle rect = _ui.tblGrid.getCellRect(1, 3, true);
+		Point pCell = rect.getLocation();
+		Point pTable = _ui.tblGrid.getLocationOnScreen();
+		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		inputString("13.0");
+		_rob.waitForIdle();
+		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.keyRelease(KeyEvent.VK_ENTER);
+		_rob.waitForIdle();
+		System.out.println("Input a value in D2 works");
+		
+		_rob.delay(500);//delay to avoid double click.....
+		_rob.mouseMove(mMouse.x, mMouse.y);
+		_rob.waitForIdle();
+		click();
+		
+		_rob.waitForIdle();
+		_rob.keyPress(KeyEvent.VK_CONTROL);
+		_rob.keyPress(KeyEvent.VK_X);
+		_rob.keyRelease(KeyEvent.VK_X);
+		_rob.keyRelease(KeyEvent.VK_CONTROL);
+
+		System.out.println("CTRL+X Works");
 		
 		int i = 0;
 		while( ( _ui.clipBoard.equals("0") || !_ui.tblGrid.getValueAt(1, 3).toString().equals("") ) && i < 100){
