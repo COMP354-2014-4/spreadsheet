@@ -765,46 +765,40 @@ public class SSGUI implements ActionListener, KeyListener{
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 
-		if(e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB)
-			valueChanged();
-		else if(e.getKeyChar() == KeyEvent.VK_DELETE){
-			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) //Only delete if cell is non-empty
-			{
+		if(e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
+		  valueChanged();
+		} else if(e.getKeyChar() == KeyEvent.VK_DELETE) {
+			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) { //Only delete if cell is non-empty
         noUndoRedo();
 			  deleteCell();
 			}
-		}
-		else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-			if(e.getSource().getClass() == SSTable.class)
-			{
-				if(changed)
-				{
-					if(txtInputBox.getText() != null && !txtInputBox.getText().equals(""))
-					{
+		} else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
+			if(e.getSource().getClass() == SSTable.class) {
+				if(changed) {
+					if(txtInputBox.getText() != null && !txtInputBox.getText().equals("")) {
 						txtInputBox.setText(txtInputBox.getText().substring(0,txtInputBox.getText().length()-1));
 					}
-				}
-				else{
+				} else {
 					txtInputBox.setText("");
 					tblGrid.setValueAt("",row-1,col-1);
 					changed = true;
 				}
+			} else { 
+			  changed = true;
 			}
-			else changed = true;
-		}
-		else{
-			if(!changed && e.getSource().getClass() == SSTable.class)
-			{
+		} else {
+			if(!changed && e.getSource().getClass() == SSTable.class) {
 				txtInputBox.setText(e.getKeyChar()+"");
 				tblGrid.setValueAt("",row-1,col-1);
 				changed = true;
 				oldSelectedCol = col;
 				oldSelectedRow = row;
-			}else if(e.getSource().getClass() == SSTable.class)
-			{
+			} else if(e.getSource().getClass() == SSTable.class) {
 				txtInputBox.setText(txtInputBox.getText() + e.getKeyChar());
 				changed = true;
-			}else changed = true;
+			} else { 
+			  changed = true;
+			}
 		}
 	}
 
