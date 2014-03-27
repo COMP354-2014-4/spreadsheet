@@ -193,23 +193,23 @@ public class SSGUI implements ActionListener, KeyListener{
 		btnRedo = new JButton("Redo");
 
 		//Add menu shortcuts
-    //If CTRL+N  New
+    //CTRL+N  New
     mniNew.setAccelerator(KeyStroke.getKeyStroke('N',KeyEvent.CTRL_DOWN_MASK));
-    //If CTRL+L  Load
+    //CTRL+L  Load
     mniLoad.setAccelerator(KeyStroke.getKeyStroke('L',KeyEvent.CTRL_DOWN_MASK));
-    //If CTRL+S  Save
+    //CTRL+S  Save
     mniSave.setAccelerator(KeyStroke.getKeyStroke('S',KeyEvent.CTRL_DOWN_MASK));
-    //If CTRL+SHIFT+S  Save As
+    //CTRL+SHIFT+S  Save As
     mniSaveAs.setAccelerator(KeyStroke.getKeyStroke('S',KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
-    //If CTRL+C  Copy
+    //CTRL+C  Copy
     mniCopy.setAccelerator(KeyStroke.getKeyStroke('C',KeyEvent.CTRL_DOWN_MASK));		
-    //If CTRL+X  Cut
+    //CTRL+X  Cut
 		mniCut.setAccelerator(KeyStroke.getKeyStroke('X',KeyEvent.CTRL_DOWN_MASK));
-    //If CTRL+V  Paste
+    //CTRL+V  Paste
 		mniPaste.setAccelerator(KeyStroke.getKeyStroke('V',KeyEvent.CTRL_DOWN_MASK));
-    //If CTRL+Z  Undo
+    //CTRL+Z  Undo
 		mniUndo.setAccelerator(KeyStroke.getKeyStroke('Z',KeyEvent.CTRL_DOWN_MASK));
-    //If CTRL+Y  Redo
+    //CTRL+Y  Redo
 		mniRedo.setAccelerator(KeyStroke.getKeyStroke('Y',KeyEvent.CTRL_DOWN_MASK));
 		
 		// Add all listeners
@@ -818,11 +818,10 @@ public class SSGUI implements ActionListener, KeyListener{
 			}
 		//check for keybindings to menu items (CTRL+something)
 		} else if(e.isControlDown()) {
-		  System.out.println("CTRL+something  pressed");
+		  System.out.println("CTRL+something pressed");
 		//default case
 		} else {
-
-			if(!changed && e.getSource().getClass() == SSTable.class) {
+      if(!changed && e.getSource().getClass() == SSTable.class) {
 				txtInputBox.setText(e.getKeyChar()+"");
 				tblGrid.setValueAt("",row-1,col-1);
 				changed = true;
