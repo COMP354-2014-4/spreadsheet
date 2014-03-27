@@ -773,8 +773,16 @@ public class SSGUI implements ActionListener, KeyListener{
 	 * KeyListener key press event handler
 	 */
 	public void keyPressed(KeyEvent e){
-		//Nothing required
+		if(e.isControlDown()){
+			if(e.getKeyCode() == 67)
+		  		copy();
+			else if(e.getKeyCode() == 86)
+			  	paste();
+			else if(e.getKeyCode() == 88)
+			  	cut();
+		}
 	}
+	
 	/**
 	 * KeyListener key release event handler, not used.
 	 */
