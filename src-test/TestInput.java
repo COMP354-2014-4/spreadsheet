@@ -38,10 +38,9 @@ private static SSGUI _ui; 	//The UI
 		char[] charArray = s.toCharArray();
 		_rob.waitForIdle();
 		for(char c : charArray){
-			if (Character.isUpperCase(c) || c == '+' || c == '*' || c == '/') {
+			if (Character.isUpperCase(c) || c == '+' || c == '*') {
 	            _rob.keyPress(KeyEvent.VK_SHIFT);
 	        }
-			
 			
 			//manages the numpad keys
 			switch(c){
@@ -56,10 +55,6 @@ private static SSGUI _ui; 	//The UI
 				case '*':
 					_rob.keyPress(KeyEvent.VK_8);
 					_rob.keyRelease(KeyEvent.VK_8);
-					break;
-				case '/':
-					_rob.keyPress(KeyEvent.VK_3);
-					_rob.keyRelease(KeyEvent.VK_3);
 					break;
 			
 				default:
@@ -148,7 +143,7 @@ private static SSGUI _ui; 	//The UI
 	public void testInputFromGrid(){
 		System.out.println("Test Input from grid");
 		
-		Rectangle rect = _ui.tblGrid.getCellRect(0, 4, true);
+		Rectangle rect = _ui.tblGrid.getCellRect(5,5, true);
 		Point pCell = rect.getLocation();
 		Point pTable = _ui.tblGrid.getLocationOnScreen();
 		Point mMouse = new Point(pCell.x + 5 + pTable.x, pCell.y + 5 + pTable.y);
@@ -158,22 +153,21 @@ private static SSGUI _ui; 	//The UI
 		
 		inputString("12.0");
 		_rob.waitForIdle();
-		System.out.println("Input a value in E1 works");
+		System.out.println("Input a value in F6 works");
 		
 		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.delay(10);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		_rob.waitForIdle();
 		
 		int i = 0;
-		while( ( _ui.tblGrid.grid.getCell("E", 1).getValue().isEmpty() || _ui.tblGrid.getValueAt(0, 4) == null ) && i < 100){
+		while( ( _ui.tblGrid.grid.getCell("F", 6).getValue().isEmpty() || _ui.tblGrid.getValueAt(5, 5) == null ) && i < 100){
 			_rob.delay(10);	
 			i++;
 		}
 		
-		System.out.println("Backend value: " + _ui.tblGrid.grid.getCell("E", 1).getValue() + "  ||  Frontend value: " + _ui.tblGrid.getValueAt(0, 4));
-			
-		assertTrue(_ui.tblGrid.grid.getCell("E", 1).getValue().equals(_ui.tblGrid.getValueAt(0, 4).toString()));
-		
+		System.out.println("Backend value: " + _ui.tblGrid.grid.getCell("F", 6).getValue() + "  ||  Frontend value: " + _ui.tblGrid.getValueAt(5, 5));
+		assertTrue(_ui.tblGrid.grid.getCell("F", 6).getValue().equals(_ui.tblGrid.getValueAt(5, 5).toString()));
 		
 	}
 	
@@ -265,8 +259,7 @@ private static SSGUI _ui; 	//The UI
 			i++;
 		}
 		
-		assertTrue(_ui.txtMessageBox.getText().equals("That is not valid input, please type either a formula or a number."));
-		
+		assertEquals("asd",_ui.tblGrid.getValueAt(4, 3));
 	
 	}
 	
@@ -295,6 +288,7 @@ private static SSGUI _ui; 	//The UI
 		_rob.delay(1000);
 		
 		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.delay(10);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		_rob.waitForIdle();
 	
@@ -304,7 +298,7 @@ private static SSGUI _ui; 	//The UI
 			i++;
 		}
 		
-		assertTrue(_ui.txtMessageBox.getText().equals("That is not valid input, please type either a formula or a number."));
+		assertTrue(_ui.txtMessageBox.getText().equals("INVALID VALUE:==12A+"));
 		
 	}
 	
@@ -358,6 +352,7 @@ private static SSGUI _ui; 	//The UI
 		System.out.println("Input a value in D8 works");
 		
 		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.delay(1000);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		_rob.waitForIdle();
 		
@@ -377,7 +372,6 @@ private static SSGUI _ui; 	//The UI
 		
 	
 	}
-	
 	
 	/**
 	 * Input and update a formula - Check if a complex formula display the right evaluated value after one of it's component has been edited
@@ -461,7 +455,6 @@ private static SSGUI _ui; 	//The UI
 		
 		assertTrue( assertVal );
 		
-	
 	}
 
 }

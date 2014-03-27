@@ -65,7 +65,7 @@ public class testNew {
 		char[] charArray = s.toCharArray();
 		_rob.waitForIdle();
 		for(char c : charArray){
-			if (Character.isUpperCase(c) || c == '+' || c == '*' || c == '/') {
+			if (Character.isUpperCase(c) || c == '+' || c == '*') {
 	            _rob.keyPress(KeyEvent.VK_SHIFT);
 	        }
 			
@@ -84,10 +84,6 @@ public class testNew {
 					_rob.keyPress(KeyEvent.VK_8);
 					_rob.keyRelease(KeyEvent.VK_8);
 					break;
-				case '/':
-					_rob.keyPress(KeyEvent.VK_3);
-					_rob.keyRelease(KeyEvent.VK_3);
-					break;
 			
 				default:
 					char C = Character.toUpperCase(c);
@@ -95,9 +91,8 @@ public class testNew {
 					_rob.keyRelease(C);
 			
 			}
-			
 	
-	        if (Character.isUpperCase(c) || c == '+' || c == '*' || c == '/') {
+	        if (Character.isUpperCase(c) || c == '+' || c == '*') {
 	        	_rob.keyRelease(KeyEvent.VK_SHIFT);
 	        }
 	        _rob.waitForIdle();
@@ -559,6 +554,7 @@ public class testNew {
 		
 		// press the "ENTER" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.delay(10);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		_rob.waitForIdle();
 		
@@ -592,6 +588,7 @@ public class testNew {
 
 		// press the "ENTER" key
 		_rob.keyPress(KeyEvent.VK_ENTER);
+		_rob.delay(10);
 		_rob.keyRelease(KeyEvent.VK_ENTER);
 		
 		// get the coordinates of D1, move the cursor to D1 and click
@@ -605,8 +602,10 @@ public class testNew {
 		// use the robot to enter CTRL+C
 		_rob.waitForIdle();
 		_rob.keyPress(KeyEvent.VK_CONTROL);
+		_rob.delay(10);
 		_rob.keyPress(KeyEvent.VK_C);
 		_rob.keyRelease(KeyEvent.VK_C);
+		_rob.delay(10);
 		_rob.keyRelease(KeyEvent.VK_CONTROL);
 			
 		waiting();  
