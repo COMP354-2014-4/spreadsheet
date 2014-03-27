@@ -826,7 +826,7 @@ public class SSGUI implements ActionListener, KeyListener{
 			}
 		//check for keybindings to menu items (CTRL+something)
 		} else if(e.isControlDown()) {
-		  System.out.println("CTRL+something pressed");
+		  //Do nothing
 		//default case
 		} else {
       if(!changed && e.getSource().getClass() == SSTable.class) {
