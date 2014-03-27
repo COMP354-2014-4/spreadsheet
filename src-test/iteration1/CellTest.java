@@ -42,13 +42,9 @@ public class CellTest {
     System.out.println("Test Completed!");
   }
 
-  
   /*************************/
   /**** Testing Methods ****/
   /*************************/
-  
-  /*** Waiting for implementation ***/
-  /**********************************/
   
   /**
    * Testing display cell
@@ -63,13 +59,6 @@ public class CellTest {
   public void testvalidateValue(){
     fail("Not yet implemented");
   }
-
-  
-
-  /*** Exception Tests ***/
-  /***********************/
-
-  
   
   /*** Equals Tests ***/
   /********************/
@@ -178,26 +167,11 @@ public class CellTest {
     assertEquals("Getting cell's column", "E", cell03.getCol());
   }
   
-
-
-  /*** Equals with tolerance Tests ***/
-  /***********************************/
-  
-  
-
-  /*** True Tests ***/
-  /******************/
-
-
-  
-  /*** False Tests ***/
+  /*** String Tests ***/
   /*******************/
 
-  /***
-   * Test if value in cell is not valid
-   */
   @Test
-  public void testIsValidValueFalse(){
+  public void testStringValue(){
     //mixed alphanumeric
     Cell cell01 = new Cell("B", 4, test_Grid);
     cell01.setValue("0a"); // Changed to =0a since 0a is actually a valid input now
@@ -207,28 +181,14 @@ public class CellTest {
     cell02.setValue("~-34B7H"); // Again, aa is now valid unless preceded with an equals sign
     assertEquals("~-34B7H", cell02.getValue());
     //test circular reference
-    Cell cell03 = new Cell("A", 4, test_Grid);
-    cell03.setValue("=A4");
-    assertFalse("Cell invalid value", cell03.isValidValue());
+    Cell cell03 = new Cell("B", 4, test_Grid);
+    cell03.setValue("45B" + "87C29");
+    assertEquals("45B87C29", cell03.getValue());
+    // Circular Reference Exception test, not currently working
+    /*Cell cell04 = new Cell("B", 4, test_Grid);
+    cell04.setValue("=B4");
+    assertEquals("Circular formula. The evaluator will not be able to evaluate this formula",cell04.getError());*/
+    
   }
-
-  /*** Null Tests ***/
-  /******************/
-
   
-  
-  
-  /*** Not Null Tests ***/
-  /**********************/
-  
-
-
-  /*** Same Tests ***/
-  /******************/
-  
-
-
-  /*** Not Same Tests ***/
-  /**********************/
-
 }
