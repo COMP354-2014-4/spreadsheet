@@ -816,8 +816,12 @@ public class SSGUI implements ActionListener, KeyListener{
 			} else { 
 			  changed = true;
 			}
+		//check for keybindings to menu items (CTRL+something)
+		} else if(e.isControlDown()) {
+		  System.out.println("CTRL+something  pressed");
 		//default case
 		} else {
+
 			if(!changed && e.getSource().getClass() == SSTable.class) {
 				txtInputBox.setText(e.getKeyChar()+"");
 				tblGrid.setValueAt("",row-1,col-1);
