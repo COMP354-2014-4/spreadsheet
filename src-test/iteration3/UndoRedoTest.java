@@ -1,5 +1,6 @@
 package iteration3;
 import spreadsheet.*;
+import spreadsheet.Cell.Formatting;
 import static org.junit.Assert.*;
 
 import org.junit.*;      //import JUnit Annotations
@@ -68,33 +69,41 @@ public class UndoRedoTest {
 	@Test
 	public void testUndoAction() {
 
-		//Create 2 new cells with parameterized values
-		Cell testCell_1 = new Cell("A",5,testGrid);
-		Cell testCell_2 = new Cell("E",8,testGrid);
+		//Add the new cell to the undo stack to simulate what
+		//occurs during cell editing. Every change must be recorded so it can be undone
+		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("A",5));
+		//Update cell values, simulating user manual input
+		testGrid.selectCell("A",5).setValue("88");
 
-		testCell_1.setValue("88");
-		testCell_2.setValue("99");
+		//Add the new cell to the undo stack to simulate what
+		//occurs during cell editing. Every change must be recorded so it can be undone
+		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("E",8));
+		//Update cell value, simulating user manual input
+		testGrid.selectCell("E",8).setValue("99");
 
-		//Add the 2 new created cells to the undo stack to simulate what
-		//occurs during cell editing. Every change must be recorded so it can be undone.
-		undoRedo_TestStack.noUndoRedoAction(testCell_1);
-		undoRedo_TestStack.noUndoRedoAction(testCell_2);
 
 		//Simulate the undo action and keep that info
-		Cell result2 = undoRedo_TestStack.undoAction(testGrid);
-		Cell result1 = undoRedo_TestStack.undoAction(testGrid);
+		Cell result2_undo = undoRedo_TestStack.undoAction(testGrid);
+		testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setValue(result2_undo.getValue());
+		testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setCellFormat(result2_undo.getCellFormat());
+
+		Cell result1_undo = undoRedo_TestStack.undoAction(testGrid);
+		testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setValue(result1_undo.getValue());
+		testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setCellFormat(result1_undo.getCellFormat());
 
 		//Case when the undo stack is empty
 		Cell emptyStackCell = undoRedo_TestStack.undoAction(testGrid);
 
-		//Compare the edited cells with the results produced by the undo action
-		assertEquals(result2.getRow(), testCell_2.getRow());
-		assertEquals(result2.getCol(), testCell_2.getCol());
-		assertEquals(result2.getValue(), testCell_2.getValue());
+		//Compare the cells modified by the undo action and the expected value
+		assertEquals("E", result2_undo.getCol());
+		assertEquals(8, result2_undo.getRow());
+		assertEquals("0", result2_undo.getValue());
+		assertEquals(Formatting.REAL, result2_undo.getCellFormat());
 
-		assertEquals(result1.getRow(), testCell_1.getRow());
-		assertEquals(result1.getCol(), testCell_1.getCol());
-		assertEquals(result1.getValue(), testCell_1.getValue());
+		assertEquals("A", result1_undo.getCol());
+		assertEquals(5, result1_undo.getRow());
+		assertEquals("0", result1_undo.getValue());
+		assertEquals(Formatting.REAL, result1_undo.getCellFormat());
 
 		//Check that the undo stack is indeed empty
 		assertEquals(-1, emptyStackCell.getRow());
@@ -125,41 +134,37 @@ public class UndoRedoTest {
 	@Test
 	public void testRedoAction() {
 
-		//Create new cell with parameterized values
-    Cell testCell_1 = new Cell("A",5,testGrid);
-	  //Add the new cell to the undo stack to simulate what
-    //occurs during cell editing. Every change must be recorded so it can be undone and redone
+		//Add the new cell to the undo stack to simulate what
+		//occurs during cell editing. Every change must be recorded so it can be undone and redone
 		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("A",5));
-    //Update cell values, simulating user manual input
-    testGrid.selectCell("A",5).setValue("88");
+		//Update cell values, simulating user manual input
+		testGrid.selectCell("A",5).setValue("88");
 
-    //Create new cell with parameterized values
-    Cell testCell_2 = new Cell("E",8,testGrid);
-    //Add the new cell to the undo stack to simulate what
-    //occurs during cell editing. Every change must be recorded so it can be undone and redone
-    undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("E",8));
-    //Update cell value, simulating user manual input
-    testGrid.selectCell("E",8).setValue("99");
-		
+		//Add the new cell to the undo stack to simulate what
+		//occurs during cell editing. Every change must be recorded so it can be undone and redone
+		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("E",8));
+		//Update cell value, simulating user manual input
+		testGrid.selectCell("E",8).setValue("99");
+
 
 		//Simulate the undo action and keep that info
 		Cell result2_undo = undoRedo_TestStack.undoAction(testGrid);
-    testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setValue(result2_undo.getValue());
-    testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setCellFormat(result2_undo.getCellFormat());
+		testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setValue(result2_undo.getValue());
+		testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setCellFormat(result2_undo.getCellFormat());
 
-    Cell result1_undo = undoRedo_TestStack.undoAction(testGrid);
-    testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setValue(result1_undo.getValue());
-    testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setCellFormat(result1_undo.getCellFormat());
+		Cell result1_undo = undoRedo_TestStack.undoAction(testGrid);
+		testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setValue(result1_undo.getValue());
+		testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setCellFormat(result1_undo.getCellFormat());
 
 
 		//Now that undo action was performed, simulate the redo action and keep that info
 		Cell result1_redo = undoRedo_TestStack.redoAction(testGrid);
-    testGrid.selectCell(result1_redo.getCol(), result1_redo.getRow()).setValue(result1_redo.getValue());
-    testGrid.selectCell(result1_redo.getCol(), result1_redo.getRow()).setCellFormat(result1_redo.getCellFormat());
+		testGrid.selectCell(result1_redo.getCol(), result1_redo.getRow()).setValue(result1_redo.getValue());
+		testGrid.selectCell(result1_redo.getCol(), result1_redo.getRow()).setCellFormat(result1_redo.getCellFormat());
 
-    Cell result2_redo = undoRedo_TestStack.redoAction(testGrid);
-    testGrid.selectCell(result2_redo.getCol(), result2_redo.getRow()).setValue(result2_redo.getValue());
-    testGrid.selectCell(result2_redo.getCol(), result2_redo.getRow()).setCellFormat(result2_redo.getCellFormat());
+		Cell result2_redo = undoRedo_TestStack.redoAction(testGrid);
+		testGrid.selectCell(result2_redo.getCol(), result2_redo.getRow()).setValue(result2_redo.getValue());
+		testGrid.selectCell(result2_redo.getCol(), result2_redo.getRow()).setCellFormat(result2_redo.getCellFormat());
 
 		//Case when the redo stack is empty
 		Cell emptyRedoStackCell = undoRedo_TestStack.redoAction(testGrid);
@@ -168,12 +173,12 @@ public class UndoRedoTest {
 		assertEquals("E", result2_redo.getCol());
 		assertEquals(8, result2_redo.getRow());
 		assertEquals("99", result2_redo.getValue());
-		assertEquals("REAL", result2_redo.getCellFormat());
+		assertEquals(Formatting.REAL, result2_redo.getCellFormat());
 
-    assertEquals("A", result1_redo.getCol());
-    assertEquals(5, result1_redo.getRow());
-    assertEquals("88", result1_redo.getValue());
-    assertEquals("REAL", result1_redo.getCellFormat());
+		assertEquals("A", result1_redo.getCol());
+		assertEquals(5, result1_redo.getRow());
+		assertEquals("88", result1_redo.getValue());
+		assertEquals(Formatting.REAL, result1_redo.getCellFormat());
 
 		//Check that the undo stack is indeed empty
 		assertEquals(-1, emptyRedoStackCell.getRow());
@@ -191,34 +196,41 @@ public class UndoRedoTest {
 	@Test
 	public void testRedoAction_ClearStack() {
 
-		//Create 3 new cells with parameterized values for testing
-		Cell testCell_1 = new Cell("A",5,testGrid);
-		Cell testCell_2 = new Cell("E",8,testGrid);
-		Cell testCell_3 = new Cell("C",13,testGrid);
 
-		testCell_1.setValue("88");
-		testCell_2.setValue("99");
-		testCell_3.setValue("77");
-
-		//Add the 2 new created cells to the undo stack to simulate what
+		//Add the new cell to the undo stack to simulate what
 		//occurs during cell editing. Every change must be recorded so it can be undone and redone
-		undoRedo_TestStack.noUndoRedoAction(testCell_1);
-		undoRedo_TestStack.noUndoRedoAction(testCell_2);
+		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("A",5));
+		//Update cell values, simulating user manual input
+		testGrid.selectCell("A",5).setValue("88");
+
+		//Add the new cell to the undo stack to simulate what
+		//occurs during cell editing. Every change must be recorded so it can be undone and redone
+		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("E",8));
+		//Update cell value, simulating user manual input
+		testGrid.selectCell("E",8).setValue("99");
 
 
 		//Simulate the undo action and keep that info
-		undoRedo_TestStack.undoAction(testGrid);
-		undoRedo_TestStack.undoAction(testGrid);
+		Cell result2_undo = undoRedo_TestStack.undoAction(testGrid);
+		testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setValue(result2_undo.getValue());
+		testGrid.selectCell(result2_undo.getCol(), result2_undo.getRow()).setCellFormat(result2_undo.getCellFormat());
 
-		//Interrupt the undo sequence by "editing" a cell
-		undoRedo_TestStack.noUndoRedoAction(testCell_3);
+		Cell result1_undo = undoRedo_TestStack.undoAction(testGrid);
+		testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setValue(result1_undo.getValue());
+		testGrid.selectCell(result1_undo.getCol(), result1_undo.getRow()).setCellFormat(result1_undo.getCellFormat());
 
-		//Attempt a redo action
+		//Interrupt the undo actions by simulating cell editing
+		undoRedo_TestStack.noUndoRedoAction(testGrid.selectCell("C",13));
+		//Update cell value, simulating user manual input
+		testGrid.selectCell("C",13).setValue("77");
+
+		//The interrupted undo actions should cause the redo stack to be empty. Keep that info to test it.
 		Cell emptyRedoStackCell = undoRedo_TestStack.redoAction(testGrid);
 
-		//Verify that the redo stack is indeed empty
+		//Check that the undo stack is indeed empty
 		assertEquals(-1, emptyRedoStackCell.getRow());
 		assertEquals("-1", emptyRedoStackCell.getCol());
+		assertEquals("0", emptyRedoStackCell.getValue());
 
 	}
 

@@ -21,7 +21,7 @@ public class Cell extends Observable implements Observer, java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	enum Formatting {INTEGER,MONETARY,SCIENTIFIC,REAL}
+	public enum Formatting {INTEGER,MONETARY,SCIENTIFIC,REAL}
 	
 	//Attributes
 	private Formatting _format = Formatting.REAL;
