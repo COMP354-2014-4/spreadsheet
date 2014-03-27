@@ -173,6 +173,13 @@ public class SSGUI implements ActionListener, KeyListener{
 		//Help Menu -- See MenuHelp.java
 		mnuHelp = new JMenu("Help");
 		mniAbout = new JMenuItem("About");
+		
+		//Set menu Mnemonics
+		mnuFile.setMnemonic('F');
+		mnuEdit.setMnemonic('E');
+		mnuFormat.setMnemonic('M');
+		mnuHelp.setMnemonic('H');
+    
 
 		// Build toolbar buttons
 		btnNew = new JButton("New");
@@ -185,6 +192,26 @@ public class SSGUI implements ActionListener, KeyListener{
 		btnUndo = new JButton("Undo");
 		btnRedo = new JButton("Redo");
 
+		//Add menu shortcuts
+    //If CTRL+N  New
+    mniNew.setAccelerator(KeyStroke.getKeyStroke('N',KeyEvent.CTRL_DOWN_MASK));
+    //If CTRL+L  Load
+    mniLoad.setAccelerator(KeyStroke.getKeyStroke('L',KeyEvent.CTRL_DOWN_MASK));
+    //If CTRL+S  Save
+    mniSave.setAccelerator(KeyStroke.getKeyStroke('S',KeyEvent.CTRL_DOWN_MASK));
+    //If CTRL+SHIFT+S  Save As
+    mniSaveAs.setAccelerator(KeyStroke.getKeyStroke('S',KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK));
+    //If CTRL+C  Copy
+    mniCopy.setAccelerator(KeyStroke.getKeyStroke('C',KeyEvent.CTRL_DOWN_MASK));		
+    //If CTRL+X  Cut
+		mniCut.setAccelerator(KeyStroke.getKeyStroke('X',KeyEvent.CTRL_DOWN_MASK));
+    //If CTRL+V  Paste
+		mniPaste.setAccelerator(KeyStroke.getKeyStroke('V',KeyEvent.CTRL_DOWN_MASK));
+    //If CTRL+Z  Undo
+		mniUndo.setAccelerator(KeyStroke.getKeyStroke('Z',KeyEvent.CTRL_DOWN_MASK));
+    //If CTRL+Y  Redo
+		mniRedo.setAccelerator(KeyStroke.getKeyStroke('Y',KeyEvent.CTRL_DOWN_MASK));
+		
 		// Add all listeners
 		////File Menu
 		mniNew.addActionListener(this);
@@ -765,13 +792,16 @@ public class SSGUI implements ActionListener, KeyListener{
 		String colConvert = Grid.numToCol(col);
 		int row = tblGrid.getSelectedRow()+1;
 
+		//if ENTER or TAB
 		if(e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
 		  valueChanged();
+		//If DELETE  
 		} else if(e.getKeyChar() == KeyEvent.VK_DELETE) {
 			if(grid.getCell(colConvert, row).getEvaluatedValue() != 0.0) { //Only delete if cell is non-empty
         noUndoRedo();
 			  deleteCell();
 			}
+		//If BACKSPACE	
 		} else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
 			if(e.getSource().getClass() == SSTable.class) {
 				if(changed) {
@@ -786,6 +816,7 @@ public class SSGUI implements ActionListener, KeyListener{
 			} else { 
 			  changed = true;
 			}
+		//default case
 		} else {
 			if(!changed && e.getSource().getClass() == SSTable.class) {
 				txtInputBox.setText(e.getKeyChar()+"");
